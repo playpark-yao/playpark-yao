@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>プレーパーク八尾 | 子どもたちの遊び場</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green: #3a7d44;
+      --green-light: #6abf69;
+      --green-pale: #e8f5e9;
+      --earth: #8d6e47;
+      --earth-light: #c8a97a;
+      --sky: #87ceeb;
+      --sky-dark: #4a9ebe;
+      --sun: #f5c842;
+      --sun-dark: #e09b0a;
+      --red: #e05a44;
+      --bg: #fffef7;
+      --text: #2c2c2c;
+      --text-light: #666;
+      --shadow: 0 4px 20px rgba(0,0,0,0.08);
+      --radius: 20px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Zen Maru Gothic', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(255,255,247,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 2px solid var(--green-pale);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .logo-text {
+      line-height: 1.2;
+    }
+
+    .logo-text .main {
+      font-size: 15px;
+      font-weight: 900;
+      color: var(--green);
+      letter-spacing: 0.05em;
+    }
+
+    .logo-text .sub {
+      font-size: 10px;
+      color: var(--earth);
+      letter-spacing: 0.1em;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn-line {
+      background: #06C755;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 8px 14px;
+      font-size: 12px;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      text-decoration: none;
+    }
+
+    .hamburger {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2.5px;
+      background: var(--green);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ===== MOBILE NAV ===== */
+    .nav-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .nav-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .nav-drawer {
+      position: fixed;
+      top: 0; right: -280px;
+      width: 280px;
+      height: 100%;
+      background: var(--bg);
+      z-index: 201;
+      padding: 80px 30px 40px;
+      transition: right 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      overflow-y: auto;
+    }
+
+    .nav-drawer.open { right: 0; }
+
+    .nav-drawer nav a {
+      display: block;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--green-pale);
+      text-decoration: none;
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-drawer nav a span.icon { font-size: 20px; }
+
+    /* ===== HERO ===== */
+    .hero {
+      margin-top: 70px;
+      position: relative;
+      background: linear-gradient(160deg, #c8f0a0 0%, #87d4a8 40%, var(--sky) 100%);
+      min-height: 92vw;
+      max-height: 500px;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      padding: 0 20px 40px;
+    }
+
+    .hero-shapes {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .hero-sun {
+      position: absolute;
+      top: -30px; right: -30px;
+      width: 180px;
+      height: 180px;
+      background: var(--sun);
+      border-radius: 50%;
+      opacity: 0.7;
+    }
+
+    .hero-cloud {
+      position: absolute;
+      background: white;
+      border-radius: 50px;
+      opacity: 0.75;
+    }
+
+    .cloud1 { width: 120px; height: 40px; top: 60px; right: 80px; }
+    .cloud1::before {
+      content: '';
+      position: absolute;
+      width: 60px; height: 60px;
+      background: white;
+      border-radius: 50%;
+      top: -25px; left: 20px;
+    }
+    .cloud1::after {
+      content: '';
+      position: absolute;
+      width: 45px; height: 45px;
+      background: white;
+      border-radius: 50%;
+      top: -15px; left: 50px;
+    }
+
+    .cloud2 { width: 80px; height: 28px; top: 40px; left: 30px; opacity: 0.5; }
+    .cloud2::before {
+      content: '';
+      position: absolute;
+      width: 40px; height: 40px;
+      background: white;
+      border-radius: 50%;
+      top: -18px; left: 15px;
+    }
+
+    .hero-tree {
+      position: absolute;
+      bottom: 0; right: 20px;
+      font-size: 100px;
+      line-height: 1;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      background: var(--sun);
+      color: var(--earth);
+      font-size: 11px;
+      font-weight: 900;
+      padding: 4px 12px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 8px;
+      letter-spacing: 0.1em;
+    }
+
+    .hero h1 {
+      font-size: 32px;
+      font-weight: 900;
+      color: white;
+      text-shadow: 0 2px 12px rgba(0,100,0,0.3);
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .hero p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.9);
+      line-height: 1.6;
+      max-width: 280px;
+    }
+
+    .hero-cta {
+      margin-top: 18px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 22px;
+      font-size: 14px;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(58,125,68,0.35);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--green);
+      border: 2px solid var(--green);
+      border-radius: 50px;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* ===== SECTION COMMON ===== */
+    section {
+      padding: 40px 20px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--earth);
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--green);
+      line-height: 1.3;
+    }
+
+    .section-title span {
+      color: var(--earth);
+    }
+
+    /* ===== NEWS / NEXT EVENT ===== */
+    .next-event {
+      background: linear-gradient(135deg, var(--green) 0%, var(--sky-dark) 100%);
+      border-radius: var(--radius);
+      padding: 24px;
+      color: white;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .next-event::before {
+      content: '🌳';
+      position: absolute;
+      right: 16px;
+      bottom: -10px;
+      font-size: 80px;
+      opacity: 0.15;
+    }
+
+    .next-event .event-label {
+      background: var(--sun);
+      color: var(--earth);
+      font-size: 11px;
+      font-weight: 900;
+      padding: 3px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 10px;
+      letter-spacing: 0.1em;
+    }
+
+    .next-event h3 {
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .next-event .event-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
+    .next-event .event-meta span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .event-apply-btn {
+      margin-top: 16px;
+      background: white;
+      color: var(--green);
+      border: none;
+      border-radius: 50px;
+      padding: 12px 28px;
+      font-size: 14px;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-weight: 900;
+      cursor: pointer;
+      width: 100%;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    /* ===== POST FEED ===== */
+    .posts-section {
+      background: white;
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .tab-bar {
+      display: flex;
+      gap: 0;
+      margin-bottom: 24px;
+      background: var(--green-pale);
+      border-radius: 50px;
+      padding: 4px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 6px;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-light);
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+
+    .tab-btn.active {
+      background: white;
+      color: var(--green);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    /* ===== INSTAGRAM FEED ===== */
+    .instagram-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .instagram-item {
+      aspect-ratio: 1;
+      background: var(--green-pale);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .instagram-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .instagram-item .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(58,125,68,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .instagram-item:hover .overlay {
+      opacity: 1;
+    }
+
+    .instagram-item .overlay span {
+      color: white;
+      font-size: 20px;
+    }
+
+    .instagram-placeholder {
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, var(--green-pale), #d4edda);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      color: var(--green);
+      gap: 4px;
+    }
+
+    .instagram-placeholder small {
+      font-size: 9px;
+      color: var(--text-light);
+      font-family: 'Zen Maru Gothic', sans-serif;
+    }
+
+    .instagram-connect-banner {
+      margin-top: 16px;
+      background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+      color: white;
+    }
+
+    .instagram-connect-banner h4 {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .instagram-connect-banner p {
+      font-size: 11px;
+      opacity: 0.85;
+      margin-bottom: 12px;
+    }
+
+    .btn-instagram {
+      background: white;
+      color: #dc2743;
+      border: none;
+      border-radius: 50px;
+      padding: 9px 20px;
+      font-size: 13px;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    /* ===== VIDEO SECTION ===== */
+    .video-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .video-card {
+      background: #f8f8f8;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .video-thumb {
+      position: relative;
+      aspect-ratio: 16/9;
+      background: var(--green);
+      cursor: pointer;
+    }
+
+    .video-thumb iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    .video-thumb-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #2d5a27, var(--green));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .play-btn {
+      width: 56px;
+      height: 56px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .video-info {
+      padding: 14px 16px;
+    }
+
+    .video-info h4 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .video-info p {
+      font-size: 12px;
+      color: var(--text-light);
+    }
+
+    /* ===== NEWS POSTS ===== */
+    .post-card {
+      border: 1.5px solid var(--green-pale);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .post-card .post-tag {
+      font-size: 10px;
+      font-weight: 900;
+      padding: 2px 10px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    .tag-event { background: var(--sun); color: var(--earth); }
+    .tag-news { background: var(--sky); color: var(--sky-dark); }
+    .tag-report { background: var(--green-pale); color: var(--green); }
+
+    .post-card h4 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+
+    .post-card .post-date {
+      font-size: 11px;
+      color: var(--text-light);
+      margin-bottom: 8px;
+    }
+
+    .post-card p {
+      font-size: 13px;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    /* ===== EVENTS CALENDAR ===== */
+    .events-section {
+      background: var(--green-pale);
+    }
+
+    .event-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .event-item {
+      background: white;
+      border-radius: 14px;
+      padding: 16px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      box-shadow: var(--shadow);
+    }
+
+    .event-date-block {
+      min-width: 54px;
+      text-align: center;
+      background: var(--green);
+      border-radius: 12px;
+      padding: 8px 4px;
+      color: white;
+    }
+
+    .event-date-block .month {
+      font-size: 10px;
+      font-weight: 700;
+      opacity: 0.85;
+    }
+
+    .event-date-block .day {
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .event-date-block .weekday {
+      font-size: 11px;
+      opacity: 0.85;
+    }
+
+    .event-details h4 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .event-details p {
+      font-size: 12px;
+      color: var(--text-light);
+      line-height: 1.5;
+    }
+
+    .event-details .apply-link {
+      margin-top: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--green);
+      text-decoration: none;
+      border: 1.5px solid var(--green);
+      border-radius: 50px;
+      padding: 4px 12px;
+    }
+
+    /* ===== APPLICATION FORM ===== */
+    .apply-section {
+      background: white;
+    }
+
+    .form-card {
+      background: var(--green-pale);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 6px;
+    }
+
+    .form-group label .required {
+      color: var(--red);
+      font-size: 10px;
+      margin-left: 4px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      border: 2px solid #d4edda;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 14px;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      background: white;
+      color: var(--text);
+      transition: border-color 0.2s;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--green);
+    }
+
+    .form-group textarea { height: 100px; resize: vertical; }
+
+    .form-note {
+      font-size: 11px;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 16px;
+      font-size: 16px;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-weight: 900;
+      cursor: pointer;
+      margin-top: 8px;
+      box-shadow: 0 4px 14px rgba(58,125,68,0.35);
+      letter-spacing: 0.05em;
+    }
+
+    /* ===== ACCESS ===== */
+    .access-section {
+      background: var(--earth-light);
+      background: linear-gradient(160deg, #f5eadb 0%, #ffe8c8 100%);
+    }
+
+    .map-placeholder {
+      background: #d4edda;
+      border-radius: 14px;
+      height: 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      gap: 8px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .map-placeholder iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 14px;
+    }
+
+    .access-info {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .access-item {
+      background: white;
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .access-item .icon { font-size: 20px; }
+    .access-item h5 { font-size: 12px; font-weight: 700; color: var(--earth); margin-bottom: 2px; }
+    .access-item p { font-size: 13px; }
+
+    /* ===== LINE BANNER ===== */
+    .line-banner {
+      background: linear-gradient(135deg, #00B900, #06C755);
+      padding: 30px 20px;
+      text-align: center;
+      color: white;
+    }
+
+    .line-banner .line-icon { font-size: 48px; margin-bottom: 8px; }
+    .line-banner h3 { font-size: 20px; font-weight: 900; margin-bottom: 8px; }
+    .line-banner p { font-size: 13px; opacity: 0.9; margin-bottom: 20px; line-height: 1.6; }
+
+    .btn-line-large {
+      background: white;
+      color: #06C755;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 32px;
+      font-size: 16px;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-weight: 900;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+
+    /* ===== ADMIN NOTICE ===== */
+    .admin-section {
+      background: #fff9f0;
+      border-top: 3px solid var(--sun);
+      padding: 30px 20px;
+    }
+
+    .admin-card {
+      background: white;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .admin-card h4 { font-size: 15px; font-weight: 900; margin-bottom: 8px; color: var(--earth); }
+    .admin-card p { font-size: 12px; color: var(--text-light); line-height: 1.6; margin-bottom: 16px; }
+
+    .btn-admin {
+      background: var(--earth);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 10px 24px;
+      font-size: 13px;
+      font-family: 'Zen Maru Gothic', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--green);
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 16px 0;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: rgba(255,255,255,0.8);
+      text-decoration: none;
+      font-size: 12px;
+    }
+
+    .footer-sns {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .sns-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      text-decoration: none;
+    }
+
+    footer small {
+      font-size: 11px;
+      opacity: 0.6;
+    }
+
+    /* ===== BOTTOM NAV ===== */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: white;
+      border-top: 1.5px solid var(--green-pale);
+      display: flex;
+      z-index: 100;
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .bottom-nav a {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding: 8px 4px;
+      text-decoration: none;
+      color: var(--text-light);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .bottom-nav a.active {
+      color: var(--green);
+    }
+
+    .bottom-nav a .nav-icon {
+      font-size: 22px;
+    }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 300;
+      display: flex;
+      align-items: flex-end;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 24px 24px 0 0;
+      padding: 24px 20px 40px;
+      width: 100%;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .modal-overlay.open .modal {
+      transform: translateY(0);
+    }
+
+    .modal-handle {
+      width: 40px;
+      height: 4px;
+      background: #ddd;
+      border-radius: 2px;
+      margin: 0 auto 20px;
+    }
+
+    .modal h3 {
+      font-size: 18px;
+      font-weight: 900;
+      margin-bottom: 16px;
+      color: var(--green);
+    }
+
+    /* ===== FEATURES SECTION ===== */
+    .features-section {
+      background: white;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .feature-card {
+      background: var(--green-pale);
+      border-radius: 16px;
+      padding: 18px 14px;
+      text-align: center;
+    }
+
+    .feature-card .feat-icon {
+      font-size: 36px;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .feature-card h4 {
+      font-size: 13px;
+      font-weight: 900;
+      color: var(--green);
+      margin-bottom: 4px;
+    }
+
+    .feature-card p {
+      font-size: 11px;
+      color: var(--text-light);
+      line-height: 1.4;
+    }
+
+    /* Utilities */
+    .mb-0 { margin-bottom: 0; }
+    .text-center { text-align: center; }
+    .mt-16 { margin-top: 16px; }
+    .pb-nav { padding-bottom: 80px; }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s, transform 0.5s;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <a href="#" class="logo">
+      <div class="logo-icon">🌳</div>
+      <div class="logo-text">
+        <div class="main">プレーパーク八尾</div>
+        <div class="sub">PLAY PARK YACHYO</div>
+      </div>
+    </a>
+    <div class="header-actions">
+      <a href="#line" class="btn-line">
+        <span>💬</span> LINE
+      </a>
+      <button class="hamburger" id="menuBtn" aria-label="メニュー">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- DRAWER NAV -->
+  <div class="nav-overlay" id="navOverlay" onclick="closeMenu()"></div>
+  <div class="nav-drawer" id="navDrawer">
+    <nav>
+      <a href="#next-event"><span class="icon">📅</span>次回イベント</a>
+      <a href="#posts"><span class="icon">📸</span>投稿・インスタ</a>
+      <a href="#videos"><span class="icon">🎬</span>動画</a>
+      <a href="#events"><span class="icon">🎪</span>イベント一覧</a>
+      <a href="#apply"><span class="icon">✏️</span>参加申込</a>
+      <a href="#access"><span class="icon">📍</span>アクセス</a>
+      <a href="#line"><span class="icon">💬</span>LINE登録</a>
+      <a href="#admin" style="color: var(--earth)"><span class="icon">🔐</span>管理者ログイン</a>
+    </nav>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="pb-nav">
+
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="hero-shapes">
+        <div class="hero-sun"></div>
+        <div class="hero-cloud cloud1"></div>
+        <div class="hero-cloud cloud2"></div>
+      </div>
+      <div class="hero-tree">🌲</div>
+      <div class="hero-content">
+        <div class="hero-badge">🏕️ 八尾市の自然遊び場</div>
+        <h1>子どもたちが<br>のびのびと<br>遊べる場所</h1>
+        <p>自然の中で自由に遊ぶ。<br>プレーパーク八尾へようこそ！</p>
+        <div class="hero-cta">
+          <a href="#apply" class="btn-primary">📝 参加申込</a>
+          <a href="#events" class="btn-secondary">📅 イベント</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEXT EVENT BANNER -->
+    <section id="next-event" style="background: var(--bg); padding-bottom: 0;">
+      <div class="next-event reveal">
+        <div class="event-label">📣 次回予告</div>
+        <h3>春の自然探検あそび</h3>
+        <div class="event-meta">
+          <span>📅 2025年4月12日（土）10:00〜14:00</span>
+          <span>📍 八尾市○○公園</span>
+          <span>👶 対象：3歳〜小学生（保護者同伴）</span>
+          <span>💰 参加費：無料</span>
+        </div>
+        <a href="#apply" class="event-apply-btn">🌿 この回に申し込む</a>
+      </div>
+    </section>
+
+    <!-- SNS & POSTS SECTION -->
+    <section class="posts-section" id="posts">
+      <div class="section-header">
+        <div class="section-label">POSTS &amp; UPDATES</div>
+        <div class="section-title">最新<span>投稿</span></div>
+      </div>
+
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="switchTab('instagram', this)">📸 インスタ</button>
+        <button class="tab-btn" onclick="switchTab('news', this)">📢 お知らせ</button>
+        <button class="tab-btn" onclick="switchTab('videos', this)">🎬 動画</button>
+      </div>
+
+      <!-- INSTAGRAM TAB -->
+      <div id="tab-instagram">
+        <!-- ▼ Instagram埋め込みエリア（設定後に有効化） -->
+        <!--
+        <div id="instagram-embed">
+          ここにInstagram Basic Display APIまたはEmbeddedフィードが入ります
+        </div>
+        -->
+        <div class="instagram-grid">
+          <div class="instagram-placeholder">
+            <span>🌿</span>
+            <small>準備中</small>
+          </div>
+          <div class="instagram-placeholder">
+            <span>🍃</span>
+            <small>準備中</small>
+          </div>
+          <div class="instagram-placeholder">
+            <span>🌸</span>
+            <small>準備中</small>
+          </div>
+          <div class="instagram-placeholder">
+            <span>🌳</span>
+            <small>準備中</small>
+          </div>
+          <div class="instagram-placeholder">
+            <span>🏕️</span>
+            <small>準備中</small>
+          </div>
+          <div class="instagram-placeholder">
+            <span>🎵</span>
+            <small>準備中</small>
+          </div>
+        </div>
+
+        <!-- Instagram連携バナー -->
+        <div class="instagram-connect-banner mt-16">
+          <h4>📸 Instagramと連携中</h4>
+          <p>@playpark_yao の最新投稿が<br>自動的にここに反映されます</p>
+          <a href="https://www.instagram.com/" target="_blank" class="btn-instagram">Instagramで見る</a>
+        </div>
+      </div>
+
+      <!-- NEWS TAB -->
+      <div id="tab-news" style="display:none;">
+        <div class="post-card reveal">
+          <div class="post-tag tag-event">📅 イベント</div>
+          <div class="post-date">2025年3月28日</div>
+          <h4>春の自然探検あそびの参加者を募集します！</h4>
+          <p>4月12日開催の「春の自然探検あそび」の参加者を募集しています。定員20名、先着順です。お早めにお申し込みください。</p>
+        </div>
+        <div class="post-card reveal">
+          <div class="post-tag tag-news">📢 お知らせ</div>
+          <div class="post-date">2025年3月20日</div>
+          <h4>LINEで活動報告を配信スタートしました</h4>
+          <p>活動の様子や次回予告をLINEで配信しています。ぜひ友だち追加してください！</p>
+        </div>
+        <div class="post-card reveal">
+          <div class="post-tag tag-report">📷 活動報告</div>
+          <div class="post-date">2025年3月8日</div>
+          <h4>3月の活動レポートを公開しました</h4>
+          <p>先日の活動では子どもたちが泥遊びや焚き火体験を楽しみました。笑顔あふれる時間でした。</p>
+        </div>
+      </div>
+
+      <!-- VIDEOS TAB -->
+      <div id="tab-videos" style="display:none;" id="videos">
+        <div class="video-feed">
+          <div class="video-card reveal">
+            <div class="video-thumb">
+              <!-- YouTube埋め込み例（動画IDを変更して使用）-->
+              <!-- <iframe src="https://www.youtube.com/embed/動画ID" allowfullscreen loading="lazy"></iframe> -->
+              <div class="video-thumb-placeholder">
+                <div class="play-btn">▶</div>
+                <span style="font-size:13px;">活動の様子 #1</span>
+              </div>
+            </div>
+            <div class="video-info">
+              <h4>春の泥遊び大会！</h4>
+              <p>2025年3月 ・ 3分20秒</p>
+            </div>
+          </div>
+          <div class="video-card reveal">
+            <div class="video-thumb">
+              <div class="video-thumb-placeholder">
+                <div class="play-btn">▶</div>
+                <span style="font-size:13px;">活動の様子 #2</span>
+              </div>
+            </div>
+            <div class="video-info">
+              <h4>焚き火と自然探索の日</h4>
+              <p>2025年2月 ・ 2分45秒</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features-section" style="background: var(--green-pale); padding-top:30px;">
+      <div class="section-header">
+        <div class="section-label">ABOUT</div>
+        <div class="section-title">プレーパークって<span>なに？</span></div>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card reveal">
+          <span class="feat-icon">🌿</span>
+          <h4>自然の中で自由に</h4>
+          <p>どろんこ・焚き火・木登り。自分でやりたいことを見つける場所</p>
+        </div>
+        <div class="feature-card reveal">
+          <span class="feat-icon">👨‍👩‍👧</span>
+          <h4>親子で参加</h4>
+          <p>保護者も一緒に楽しめる。地域のみんなとつながれます</p>
+        </div>
+        <div class="feature-card reveal">
+          <span class="feat-icon">🏕️</span>
+          <h4>月2回開催</h4>
+          <p>定期的に開催。継続して通える地域の居場所です</p>
+        </div>
+        <div class="feature-card reveal">
+          <span class="feat-icon">💚</span>
+          <h4>無料・低料金</h4>
+          <p>誰でも参加しやすい料金設定。補助制度もあります</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- EVENTS LIST -->
+    <section class="events-section" id="events">
+      <div class="section-header">
+        <div class="section-label">SCHEDULE</div>
+        <div class="section-title">イベント<span>スケジュール</span></div>
+      </div>
+      <div class="event-list">
+        <div class="event-item reveal">
+          <div class="event-date-block">
+            <div class="month">APR</div>
+            <div class="day">12</div>
+            <div class="weekday">土</div>
+          </div>
+          <div class="event-details">
+            <h4>春の自然探検あそび</h4>
+            <p>📍 八尾市○○公園<br>⏰ 10:00〜14:00<br>👶 3歳〜小学生</p>
+            <a href="#apply" class="apply-link">✏️ 申し込む</a>
+          </div>
+        </div>
+        <div class="event-item reveal">
+          <div class="event-date-block" style="background: var(--sky-dark);">
+            <div class="month">APR</div>
+            <div class="day">26</div>
+            <div class="weekday">土</div>
+          </div>
+          <div class="event-details">
+            <h4>焚き火と野外料理の日</h4>
+            <p>📍 八尾市○○広場<br>⏰ 10:30〜14:30<br>👶 5歳〜中学生</p>
+            <a href="#apply" class="apply-link">✏️ 申し込む</a>
+          </div>
+        </div>
+        <div class="event-item reveal">
+          <div class="event-date-block" style="background: var(--earth);">
+            <div class="month">MAY</div>
+            <div class="day">10</div>
+            <div class="weekday">土</div>
+          </div>
+          <div class="event-details">
+            <h4>木工クラフト体験</h4>
+            <p>📍 八尾市○○センター<br>⏰ 10:00〜13:00<br>👶 小学生以上</p>
+            <a href="#apply" class="apply-link">✏️ 申し込む</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- APPLICATION FORM -->
+    <section class="apply-section" id="apply">
+      <div class="section-header">
+        <div class="section-label">ENTRY FORM</div>
+        <div class="section-title">参加<span>申込</span></div>
+      </div>
+      <div class="form-card">
+        <div class="form-group">
+          <label>参加するイベント <span class="required">必須</span></label>
+          <select>
+            <option value="">選んでください</option>
+            <option>4/12 春の自然探検あそび</option>
+            <option>4/26 焚き火と野外料理の日</option>
+            <option>5/10 木工クラフト体験</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>お名前（保護者） <span class="required">必須</span></label>
+          <input type="text" placeholder="山田 花子">
+        </div>
+        <div class="form-group">
+          <label>お子様のお名前 <span class="required">必須</span></label>
+          <input type="text" placeholder="山田 太郎">
+        </div>
+        <div class="form-group">
+          <label>お子様の年齢</label>
+          <select>
+            <option value="">選んでください</option>
+            <option>2歳以下</option>
+            <option>3〜4歳</option>
+            <option>5〜6歳（年長）</option>
+            <option>小学1〜2年</option>
+            <option>小学3〜4年</option>
+            <option>小学5〜6年</option>
+            <option>中学生</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>電話番号 <span class="required">必須</span></label>
+          <input type="tel" placeholder="090-0000-0000">
+        </div>
+        <div class="form-group">
+          <label>メールアドレス</label>
+          <input type="email" placeholder="example@email.com">
+          <div class="form-note">※確認メールを送信します</div>
+        </div>
+        <div class="form-group">
+          <label>アレルギー・配慮事項</label>
+          <textarea placeholder="食物アレルギー、持病、配慮が必要なことがあればご記入ください"></textarea>
+        </div>
+        <div class="form-group">
+          <label>どこで知りましたか？</label>
+          <select>
+            <option value="">選んでください</option>
+            <option>Instagram</option>
+            <option>LINE</option>
+            <option>知人の紹介</option>
+            <option>チラシ</option>
+            <option>市の広報</option>
+            <option>その他</option>
+          </select>
+        </div>
+        <button class="submit-btn" onclick="submitForm()">🌿 申込を送信する</button>
+      </div>
+    </section>
+
+    <!-- ACCESS -->
+    <section class="access-section" id="access">
+      <div class="section-header">
+        <div class="section-label">ACCESS</div>
+        <div class="section-title">アクセス<span>・場所</span></div>
+      </div>
+      <div class="map-placeholder">
+        <!-- Google Maps埋め込み（URLを変更して使用） -->
+        <!-- <iframe src="https://www.google.com/maps/embed?pb=..."></iframe> -->
+        <span>🗺️</span>
+        <span style="font-size:14px; color:var(--green); font-weight:700;">マップを設定してください</span>
+      </div>
+      <div class="access-info">
+        <div class="access-item reveal">
+          <span class="icon">📍</span>
+          <div>
+            <h5>開催場所</h5>
+            <p>八尾市○○公園（大阪府八尾市）</p>
+          </div>
+        </div>
+        <div class="access-item reveal">
+          <span class="icon">🚃</span>
+          <div>
+            <h5>電車・バス</h5>
+            <p>近鉄○○線「八尾駅」より徒歩15分<br>バス停「○○」すぐ</p>
+          </div>
+        </div>
+        <div class="access-item reveal">
+          <span class="icon">🚗</span>
+          <div>
+            <h5>車・駐車場</h5>
+            <p>○○駐車場をご利用ください（有料）<br>※台数に限りがあります</p>
+          </div>
+        </div>
+        <div class="access-item reveal">
+          <span class="icon">🌧️</span>
+          <div>
+            <h5>雨天・悪天候の場合</h5>
+            <p>前日18時までにLINE・HPにてお知らせします</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LINE BANNER -->
+    <section class="line-banner" id="line">
+      <div class="line-icon">💬</div>
+      <h3>公式LINEで最新情報をGET</h3>
+      <p>次回予告・キャンセル情報・活動レポートを<br>LINEでお届けします！<br>登録者限定の特典もあり🎁</p>
+      <a href="https://lin.ee/XXXXXXX" target="_blank" class="btn-line-large">
+        💬 友だち追加（無料）
+      </a>
+    </section>
+
+    <!-- ADMIN SECTION -->
+    <section class="admin-section" id="admin">
+      <div class="section-header">
+        <div class="section-label">MANAGEMENT</div>
+        <div class="section-title">運営<span>管理</span></div>
+      </div>
+      <div class="admin-card">
+        <h4>🔐 管理者ページ</h4>
+        <p>申込情報の管理・承認、投稿の作成・編集、参加者へのお知らせ配信は管理者ページから行えます。</p>
+        <a href="admin.html" class="btn-admin">管理者ページへ</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">🌳 プレーパーク八尾</div>
+    <p style="font-size:12px; opacity:0.7; margin-bottom:12px;">子どもたちの自由な遊びを守る場所</p>
+    <div class="footer-sns">
+      <a href="https://www.instagram.com/" target="_blank" class="sns-btn" title="Instagram">📸</a>
+      <a href="https://lin.ee/XXXXXXX" target="_blank" class="sns-btn" title="LINE">💬</a>
+      <a href="https://www.youtube.com/" target="_blank" class="sns-btn" title="YouTube">🎬</a>
+    </div>
+    <div class="footer-links">
+      <a href="#top">トップ</a>
+      <a href="#events">イベント</a>
+      <a href="#apply">申込</a>
+      <a href="#access">アクセス</a>
+      <a href="privacy.html">プライバシーポリシー</a>
+    </div>
+    <small>© 2025 プレーパーク八尾 All rights reserved.</small>
+  </footer>
+
+  <!-- BOTTOM NAV -->
+  <nav class="bottom-nav">
+    <a href="#top" class="active">
+      <span class="nav-icon">🏠</span>
+      <span>ホーム</span>
+    </a>
+    <a href="#events">
+      <span class="nav-icon">📅</span>
+      <span>イベント</span>
+    </a>
+    <a href="#apply">
+      <span class="nav-icon">✏️</span>
+      <span>申込</span>
+    </a>
+    <a href="#posts">
+      <span class="nav-icon">📸</span>
+      <span>投稿</span>
+    </a>
+    <a href="#line">
+      <span class="nav-icon">💬</span>
+      <span>LINE</span>
+    </a>
+  </nav>
+
+  <!-- SUCCESS MODAL -->
+  <div class="modal-overlay" id="successModal">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div style="text-align:center;">
+        <div style="font-size:60px; margin-bottom:12px;">🎉</div>
+        <h3>申込を受け付けました！</h3>
+        <p style="font-size:14px; color:var(--text-light); line-height:1.6; margin: 12px 0 20px;">
+          ご登録のメールアドレスに確認メールをお送りしました。
+          スタッフが内容を確認後、参加確定のご連絡をします。
+          <br><br>
+          📢 LINEでも最新情報をお届けしますので、ぜひ友だち追加してください！
+        </p>
+        <a href="https://lin.ee/XXXXXXX" target="_blank" class="btn-line-large" style="width:100%; justify-content:center; margin-bottom:12px;">
+          💬 LINE友だち追加
+        </a>
+        <button onclick="closeModal()" style="background:none; border:none; color:var(--text-light); font-size:14px; cursor:pointer; font-family:'Zen Maru Gothic',sans-serif;">閉じる</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // --- MENU ---
+    function openMenu() {
+      document.getElementById('navDrawer').classList.add('open');
+      document.getElementById('navOverlay').classList.add('open');
+    }
+    function closeMenu() {
+      document.getElementById('navDrawer').classList.remove('open');
+      document.getElementById('navOverlay').classList.remove('open');
+    }
+    document.getElementById('menuBtn').addEventListener('click', openMenu);
+
+    // --- TABS ---
+    function switchTab(tabName, btn) {
+      ['instagram', 'news', 'videos'].forEach(t => {
+        const el = document.getElementById('tab-' + t);
+        if (el) el.style.display = 'none';
+      });
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      const target = document.getElementById('tab-' + tabName);
+      if (target) target.style.display = 'block';
+      btn.classList.add('active');
+    }
+
+    // --- FORM SUBMIT ---
+    function submitForm() {
+      document.getElementById('successModal').classList.add('open');
+    }
+    function closeModal() {
+      document.getElementById('successModal').classList.remove('open');
+    }
+    document.getElementById('successModal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    // --- SCROLL REVEAL ---
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // --- BOTTOM NAV ACTIVE ---
+    const sections = ['top', 'events', 'apply', 'posts', 'line'];
+    const navLinks = document.querySelectorAll('.bottom-nav a');
+
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      navLinks.forEach(l => l.classList.remove('active'));
+      // Simple: highlight based on scroll position
+      if (scrollY < 200) navLinks[0].classList.add('active');
+    });
+
+    // --- SMOOTH SCROLL ---
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', function(e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+          closeMenu();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
