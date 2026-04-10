@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>イベント一覧 | プレーパーク八尾</title>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--green:#3a7d44;--green-pale:#e8f5e9;--earth:#8d6e47;--sky:#87ceeb;--sky-dark:#4a9ebe;--sun:#f5c842;--red:#e05a44;--bg:#fffef7;--text:#2c2c2c;--text-light:#666;--shadow:0 4px 20px rgba(0,0,0,0.08);--radius:20px;}
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Zen Maru Gothic',sans-serif;background:var(--bg);color:var(--text);}
+    header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,247,0.93);backdrop-filter:blur(12px);border-bottom:2px solid var(--green-pale);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;}
+    .logo{display:flex;align-items:center;gap:10px;text-decoration:none;}
+    .logo-icon{width:40px;height:40px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;}
+    .logo-text .main{font-size:14px;font-weight:900;color:var(--green);}
+    .logo-text .sub{font-size:9px;color:var(--earth);}
+    .back-btn{background:var(--green-pale);color:var(--green);border:none;border-radius:50px;padding:8px 16px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;cursor:pointer;text-decoration:none;}
+    .hero{margin-top:70px;background:linear-gradient(135deg,#2d5a27,var(--green));padding:40px 20px;text-align:center;color:white;position:relative;overflow:hidden;}
+    .hero::before{content:'🌳';position:absolute;right:-20px;bottom:-20px;font-size:120px;opacity:.1;}
+    .hero h1{font-size:26px;font-weight:900;margin-bottom:6px;}
+    .hero p{font-size:13px;opacity:.85;}
+    main{max-width:680px;margin:0 auto;padding:24px 16px 80px;}
+    .event-card{background:white;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden;}
+    .event-card-bg{height:140px;background:linear-gradient(135deg,var(--green),var(--sky-dark));position:relative;display:flex;align-items:flex-end;}
+    .event-card-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+    .event-card-bg .overlay{position:absolute;inset:0;background:rgba(0,0,0,0.35);}
+    .event-date-badge{position:absolute;top:12px;left:12px;z-index:2;background:white;border-radius:12px;padding:8px 12px;text-align:center;min-width:54px;}
+    .event-date-badge .month{font-size:9px;font-weight:700;color:var(--text-light);}
+    .event-date-badge .day{font-size:24px;font-weight:900;color:var(--green);line-height:1;}
+    .event-date-badge .wd{font-size:10px;color:var(--text-light);}
+    .event-body{padding:18px;}
+    .event-body h3{font-size:17px;font-weight:900;margin-bottom:8px;}
+    .event-meta{font-size:12px;color:var(--text-light);line-height:1.9;margin-bottom:10px;}
+    .event-detail{background:var(--green-pale);border-radius:12px;padding:12px 14px;font-size:12px;color:var(--text-light);line-height:1.8;margin-bottom:12px;display:none;}
+    .event-detail.open{display:block;}
+    .detail-toggle{background:none;border:1.5px solid var(--green-pale);color:var(--text-light);border-radius:50px;padding:6px 14px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;cursor:pointer;margin-right:8px;}
+    .apply-btn{background:var(--green);color:white;border:none;border-radius:50px;padding:10px 20px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;}
+    .empty{text-align:center;padding:60px 20px;color:var(--text-light);}
+    .loading{text-align:center;padding:60px;color:var(--text-light);font-size:14px;}
+    .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1.5px solid var(--green-pale);display:flex;z-index:100;}
+    .bottom-nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;text-decoration:none;color:var(--text-light);font-size:10px;font-weight:700;}
+    .bottom-nav a.active{color:var(--green);}
+    .bottom-nav a span:first-child{font-size:22px;}
+  </style>
+</head>
+<body>
+<header>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">🌳</div>
+    <div class="logo-text"><div class="main">プレーパーク八尾</div><div class="sub">PLAY PARK YAO</div></div>
+  </a>
+  <a href="index.html" class="back-btn">← トップへ</a>
+</header>
+
+<div class="hero">
+  <h1>📅 イベント一覧</h1>
+  <p>プレーパーク八尾の全イベントをまとめています</p>
+</div>
+
+<main>
+  <div id="eventsList"><div class="loading">⏳ 読み込み中...</div></div>
+</main>
+
+<nav class="bottom-nav">
+  <a href="index.html"><span>🏠</span><span>ホーム</span></a>
+  <a href="events-list.html" class="active"><span>📅</span><span>イベント</span></a>
+  <a href="news.html"><span>📢</span><span>お知らせ</span></a>
+  <a href="index.html#line"><span>💬</span><span>LINE</span></a>
+</nav>
+
+<script>
+const SB_URL='https://ipzdgsodhcxhnpajfvrt.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlwemRnc29kaGN4aG5wYWpmdnJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNTgzNTcsImV4cCI6MjA4ODYzNDM1N30.b6ce95bLev-_6t2LidinKiRdn7VMV79iy9yBrz0db6k';
+const HDR={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY};
+
+function nl2br(s){return (s||'').replace(/\n/g,'<br>');}
+
+async function init(){
+  const r = await fetch(`${SB_URL}/rest/v1/site_settings?key=eq.events_list&select=value`,{headers:HDR});
+  const rows = await r.json();
+  const raw = rows?.[0]?.value||null;
+  const defaults=[
+    {month:'APR',day:12,weekday:'土',color:'var(--green)',name:'春の自然探検あそび',place:'信貴山・大竹緑地',time:'10:00〜14:00',target:'3歳〜小学生（保護者同伴）',fee:'無料'}
+  ];
+  const events = raw ? JSON.parse(raw) : defaults;
+  const list = document.getElementById('eventsList');
+  if(!events.length){
+    list.innerHTML='<div class="empty"><div style="font-size:48px;margin-bottom:12px;">📭</div><p>現在予定されているイベントはありません</p></div>';
+    return;
+  }
+  list.innerHTML = events.map((ev,i)=>{
+    const hasDetail = ev.items||ev.notes||ev.extra;
+    return `<div class="event-card">
+      <div class="event-card-bg" style="background:${ev.bgImage?'':ev.color||'var(--green)'};">
+        ${ev.bgImage?`<img src="${ev.bgImage}" alt="${ev.name}"><div class="overlay"></div>`:''}
+        <div class="event-date-badge">
+          <div class="month">${ev.month||''}</div>
+          <div class="day">${ev.day||''}</div>
+          <div class="wd">${ev.weekday||''}</div>
+        </div>
+      </div>
+      <div class="event-body">
+        <h3>${ev.name||''}</h3>
+        <div class="event-meta">
+          ${ev.place?'📍 '+ev.place+'<br>':''}
+          ${ev.time?'⏰ '+ev.time+'<br>':''}
+          ${ev.target?'👶 '+ev.target+'<br>':''}
+          ${ev.fee?'💰 参加費：'+ev.fee:''}
+        </div>
+        ${hasDetail?`
+        <div class="event-detail" id="det-${i}">
+          ${ev.items?'🎒 <strong>準備物</strong><br>'+nl2br(ev.items)+'<br><br>':''}
+          ${ev.notes?'⚠️ <strong>注意事項</strong><br>'+nl2br(ev.notes)+'<br><br>':''}
+          ${ev.extra?'📝 <strong>補足</strong><br>'+nl2br(ev.extra):''}
+        </div>
+        <button class="detail-toggle" onclick="toggleDetail(${i},this)">▶ 詳細を見る</button>`:''}
+        <a href="index.html#apply-section" class="apply-btn">✏️ 申し込む</a>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleDetail(i,btn){
+  const el=document.getElementById('det-'+i);
+  const open=el.classList.toggle('open');
+  btn.textContent=open?'▲ 閉じる':'▶ 詳細を見る';
+}
+
+init();
+</script>
+</body>
+</html>
