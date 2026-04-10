@@ -768,9 +768,9 @@ async function loadNews(){
         <div class="post-date">${p.date||''}</div>
         <h4>${p.title||''}</h4>
         ${p.body?`<p>${nl2br(p.body)}</p>`:''}
-        ${photos.length?`<div style="display:flex;gap:8px;margin-top:10px;">
-          ${photos.map(img=>`<img src="${img}" onclick="openLightbox('${img}')" style="width:${photos.length===1?'100%':'33.33%'};flex:0 0 ${photos.length===1?'100%':'33.33%'};aspect-ratio:1;object-fit:cover;border-radius:10px;cursor:pointer;">`).join('')}
-        </div>`:''}
+${photos.length?`<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+  ${photos.map(img=>`<img src="${img}" onclick="openLightbox('${img}')" style="width:33.33%;flex:0 0 33.33%;aspect-ratio:1;object-fit:cover;border-radius:8px;cursor:pointer;" />`).join('')}
+</div>`:''}
       </div>`;
     }).join('')
     + (more ? `<div style="text-align:center;margin-top:8px;"><a href="news.html" style="display:inline-flex;align-items:center;gap:6px;background:var(--green);color:white;border-radius:50px;padding:10px 24px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">📢 お知らせをもっと見る →</a></div>` : '');
