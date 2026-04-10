@@ -12,6 +12,23 @@
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://playpark-yao.github.io/playpark-yao/">
   <meta name="google-site-verification" content="7I2E9uEtJataH92MsaybuZXDl-FtQo-0jNE9qTtdki0" />
+  <link rel="canonical" href="https://playpark-yao.github.io/playpark-yao/">
+  <meta name="google-site-verification" content="7I2E9uEtJataH92MsaybuZXDl-FtQo-0jNE9qTtdki0" />
+
+  <link rel="manifest" href="manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('sw.js').then(function(reg) {
+          console.log('PWA: ServiceWorker登録成功');
+          // 通知の許可設定（必要に応じてコメントアウトを外す）
+        }).catch(function(err) {
+          console.log('PWA: ServiceWorker登録失敗', err);
+        });
+      });
+    }
+  </script>
+  <meta property="og:type" content="website">
 
   <!-- OGP（SNS・LINEシェア用） -->
   <meta property="og:type" content="website">
