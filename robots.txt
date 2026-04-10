@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://playpark-yao.github.io/playpark-yao/sitemap.xml
