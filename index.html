@@ -769,7 +769,7 @@ async function loadNews(){
         <h4>${p.title||''}</h4>
         ${p.body?`<p>${nl2br(p.body)}</p>`:''}
         ${photos.length?`<div style="display:flex;gap:8px;margin-top:10px;">
-          ${photos.map(img=>`<img src="${img}" onclick="openLightbox('${img}')" style="width:${photos.length===1?'33.33%':'33.33%'};flex:0 0 ${photos.length===1?'33.33%':'33.33%'};aspect-ratio:1;object-fit:cover;border-radius:10px;cursor:pointer;">`).join('')}
+          ${photos.map(img=>`<img src="${img}" onclick="openLightbox('${img}')" style="width:${photos.length===1?'33.33%':'33.33%'};flex:0 0 ${photos.length===1?'100%':'33.33%'};aspect-ratio:1;object-fit:cover;border-radius:10px;cursor:pointer;">`).join('')}
         </div>`:''}
       </div>`;
     }).join('')
