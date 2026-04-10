@@ -1,0 +1,25 @@
+{
+  "name": "プレーパーク八尾",
+  "short_name": "プレーパーク",
+  "description": "大阪府八尾市の子どもの自然遊び場",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fffef7",
+  "theme_color": "#3a7d44",
+  "orientation": "portrait",
+  "lang": "ja",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
