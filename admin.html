@@ -1706,6 +1706,22 @@ async function sendPushNotification(title, body, url) {
     showToast('⚠️ 通知の送信に失敗しました。コンソールを確認してください。');
   }
 }  
+
+// 【緊急用】新しいVAPID鍵を生成してコンソールに表示する関数
+async function generateNewKeys() {
+  const keys = await crypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify']);
+  const pub = await crypto.subtle.exportKey('raw', keys.publicKey);
+  const priv = await crypto.subtle.exportKey('pkcs8', keys.privateKey);
+  
+  const toBase64 = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  
+  console.log("=== 新しい鍵が生成されました ===");
+  console.log("新しい Public Key (index.htmlとSecretsへ):", toBase64(pub));
+  console.log("新しい Private Key (Secretsへ):", toBase64(priv));
+  alert("ブラウザのコンソール（F12）に新しい鍵を出力しました！");
+}
+// 実行（一度だけ動かせばOK）
+// generateNewKeys();
 </script>
 </body>
 </html>
