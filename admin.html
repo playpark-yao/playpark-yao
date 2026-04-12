@@ -1671,6 +1671,41 @@ async function deleteEvent(i){
   }
 }
 
+// ===== PWA PUSH NOTIFICATION SENDER =====
+async function sendPushNotification(title, body, url) {
+  // あなたのSupabase環境に合わせて設定
+  const EDGE_FUNCTION_URL = 'https://ipzdgsodhcxhnpajfvrt.supabase.co/functions/v1/clever-task';
+  const SB_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlwemRnc29kaGN4aG5wYWpmdnJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNTgzNTcsImV4cCI6MjA4ODYzNDM1N30.b6ce95bLev-_6t2LidinKiRdn7VMV79iy9yBrz0db6k';
+
+  console.log('通知送信を開始:', { title, body, url });
+
+  try {
+    const response = await fetch(EDGE_FUNCTION_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SB_ANON_KEY}`
+      },
+      body: JSON.stringify({ title, body, url })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`送信失敗: ${response.status} ${errorText}`);
+    }
+
+    const result = await response.json();
+    console.log('送信成功:', result);
+    showToast(`🔔 通知を送信しました（成功:${result.sent} / 失敗:${result.failed}）`);
+    
+    // ログにも記録
+    await addLog('プッシュ通知送信', `タイトル: ${title}`, '🔔');
+
+  } catch (error) {
+    console.error('通知送信エラー:', error);
+    showToast('⚠️ 通知の送信に失敗しました。コンソールを確認してください。');
+  }
+}  
 </script>
 </body>
 </html>
