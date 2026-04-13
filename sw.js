@@ -1,64 +1,76 @@
-const CACHE_NAME = 'playpark-yao-v3';
-const URLS = ['./index.html','./news.html','./events-list.html'];
+const CACHE_NAME = 'playpark-yao-v5'; // バージョンを v5 に上げる
+const URLS = [
+  './index.html',
+  './manifest.json',
+  './icon-192.png'
+];
 
+// インストール
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(URLS)).then(() => self.skipWaiting()));
+  e.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(c => c.addAll(URLS))
+      .then(() => self.skipWaiting())
+  );
 });
+
+// アクティベート（古いキャッシュを完全に消す）
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+      Promise.all(keys.map(k => caches.delete(k))) // 全ての古いキャッシュを削除
     ).then(() => self.clients.claim())
   );
 });
-self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request).catch(() => caches.match('./index.html')))
-  );
-});
 
-// ===== プッシュ通知 =====
-self.addEventListener('push', e => {
-  let data = { title:'プレーパーク八尾', body:'新しいお知らせがあります', url:'/' };
-  try { data = e.data ? e.data.json() : data; } catch(err) {}
-  // バッジを設定
-  if('setAppBadge' in self.navigator){
-    self.navigator.setAppBadge(1).catch(()=>{});
+// フェッチ（画像やAPIはキャッシュせず、常に最新を取りに行く）
+self.addEventListener('fetch', e => {
+  // Supabaseの画像やデータは常にネットワークから取得
+  if (e.request.url.includes('supabase.co')) {
+    return e.respondWith(fetch(e.request));
   }
-  e.waitUntil(
-    self.registration.showNotification(data.title, {
-      body: data.body,
-      icon: './icon-192.png',
-      badge: './icon-192.png',
-      data: { url: data.url || '/' },
-      vibrate: [200, 100, 200],
-      requireInteraction: false
+  
+  e.respondWith(
+    caches.match(e.request).then(cached => {
+      return cached || fetch(e.request);
     })
   );
 });
 
-// 通知タップ時
+// ===== プッシュ通知の受信（バッジ対応） =====
+self.addEventListener('push', e => {
+  let data = { title: 'プレーパーク八尾', body: '新しいお知らせがあります', url: './index.html', badge: 1 };
+  if (e.data) {
+    try { data = e.data.json(); } catch (err) { data.body = e.data.text(); }
+  }
+
+  if (data.badge && 'setAppBadge' in navigator) {
+    navigator.setAppBadge(data.badge).catch(() => {});
+  }
+
+  const options = {
+    body: data.body,
+    icon: './icon-192.png',
+    badge: './icon-192.png',
+    data: { url: data.url || './index.html' },
+    tag: 'playpark-notification',
+    renotify: true,
+    requireInteraction: true 
+  };
+
+  e.waitUntil(self.registration.showNotification(data.title, options));
+});
+
+// 通知クリック
 self.addEventListener('notificationclick', e => {
   e.notification.close();
-  const url = e.notification.data?.url || '/';
+  const urlToOpen = new URL(e.notification.data?.url || './index.html', self.location.origin).href;
   e.waitUntil(
-    // バッジを消去
-    (('clearAppBadge' in self.navigator) ? self.navigator.clearAppBadge().catch(()=>{}) : Promise.resolve())
-    .then(() => clients.matchAll({ type:'window', includeUncontrolled:true }))
-    .then(cs => {
-      const c = cs.find(w => 'focus' in w);
-      return c ? c.focus().then(w => w.navigate(url)) : clients.openWindow(url);
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(windowClients => {
+      for (let client of windowClients) {
+        if (client.url === urlToOpen && 'focus' in client) return client.focus();
+      }
+      if (clients.openWindow) return clients.openWindow(urlToOpen);
     })
   );
-});
-
-// ページが開かれたらバッジ消去
-self.addEventListener('message', e => {
-  if(e.data === 'clearBadge'){
-    if('clearAppBadge' in self.navigator){
-      self.navigator.clearAppBadge().catch(()=>{});
-    }
-    // 全通知も消去
-    self.registration.getNotifications().then(ns => ns.forEach(n => n.close()));
-  }
 });
