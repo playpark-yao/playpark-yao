@@ -48,7 +48,7 @@
   <meta name="apple-mobile-web-app-title" content="プレーパーク八尾">
   <link rel="apple-touch-icon" href="icon-192.png" id="appleIcon">
   <meta name="theme-color" content="#3a7d44">
-  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
     .lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;}
     .lightbox.open{display:flex;}
@@ -151,7 +151,7 @@
     .footer-logo{font-size:20px;font-weight:900;margin-bottom:8px;}
     .footer-links{display:flex;justify-content:center;gap:20px;margin:16px 0;flex-wrap:wrap;}
     .footer-links a{color:rgba(255,255,255,.8);text-decoration:none;font-size:12px;}
-    .footer-sns{display:flex;justify-content:center;gap:16px;margin:16px 0;}
+    .footer-sns{display:flex;justify(content:center;gap:16px;margin:16px 0;}
     .sns-btn{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:20px;text-decoration:none;}
     .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1.5px solid var(--green-pale);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);}
     .bottom-nav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;text-decoration:none;color:var(--text-light);font-size:10px;font-weight:700;}
@@ -354,6 +354,34 @@ async function clearBadge() {
 window.addEventListener('load', clearBadge);
 window.addEventListener('focus', clearBadge);
 
+// ===== コンテンツ統合読み込み（iPhone競合回避版） =====
+async function initAllContent() {
+  try {
+    await Promise.all([
+      loadSlides(),
+      loadAbout(),
+      loadApply(),
+      loadDynamicSeo(),
+      loadDynamicPhotos(),
+      loadLocalBizSchema(),
+      loadServices(),
+      loadInstaPosts(),
+      loadEvents(),
+      loadNextEvent(),
+      loadAccessInfo(),
+      loadPwaIcon()
+    ]);
+    initReveal();
+    loadNews();
+    loadVideos();
+  } catch (e) {
+    console.error('読み込みエラー:', e);
+  }
+}
+
+// ページ読み込み完了時にコンテンツ初期化
+document.addEventListener('DOMContentLoaded', initAllContent);
+
 // ===== 次回予告 =====
 async function loadNextEvent(){
   const wrap = document.getElementById('nextEventContent');
@@ -413,7 +441,6 @@ async function loadAccessInfo(){
       html += `<div class="access-item reveal"><span class="ai">🌧️</span><div><h5>雨天の場合</h5><p>${nl2br(d.rain)}</p></div></div>`;
     }
     if(html) wrap.innerHTML = html;
-    initReveal();
   }catch(e){}
 }
 
@@ -446,7 +473,6 @@ async function loadVideos(){
         </div>
       </div>`;
     }).join('');
-    initReveal();
   }catch(e){
     wrap.innerHTML='<div style="text-align:center;padding:30px;color:var(--text-light);font-size:13px;">読み込みに失敗しました</div>';
   }
@@ -486,12 +512,6 @@ async function sbGetSetting(key){
   const rows=await sbGet('site_settings',`?key=eq.${key}&select=value`);
   return rows?.[0]?.value||null;
 }
-
-// ===== INIT =====
-document.addEventListener('DOMContentLoaded',async()=>{
-  await Promise.all([loadSlides(),loadAbout(),loadApply(),loadDynamicSeo(),loadDynamicPhotos(),loadLocalBizSchema(),loadServices(),loadInstaPosts(),loadEvents(),loadNextEvent(),loadAccessInfo(),loadPwaIcon()]);
-  loadNews();loadVideos();initReveal();
-});
 
 // ===== SERVICES =====
 async function loadServices(){
@@ -606,7 +626,6 @@ async function loadEvents(){
       </div>`;
     }).join('')
     + (moreEvents ? `<div style="text-align:center;margin-top:8px;"><a href="events-list.html" style="display:inline-flex;align-items:center;gap:6px;background:var(--green);color:white;border-radius:50px;padding:10px 24px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">📅 イベントをもっと見る →</a></div>` : '');
-    initReveal();
   }catch(e){
     wrap.innerHTML='<p style="text-align:center;color:var(--text-light);padding:20px;font-size:13px;">読み込みに失敗しました</p>';
   }
@@ -666,6 +685,7 @@ function initSlideshow(slides){
 }
 function goSlide(n){
   const sl=document.querySelectorAll('.slide'),dt=document.querySelectorAll('.slide-dot');
+  if(!sl.length)return;
   sl[cur].classList.remove('active');dt[cur]?.classList.remove('active');
   cur=(n+sl.length)%sl.length;
   sl[cur].classList.add('active');dt[cur]?.classList.add('active');
@@ -678,7 +698,6 @@ async function loadAbout(){
   const raw=await sbGetSetting('about_features');
   const feats=raw?JSON.parse(raw):[];
   if(feats.length) document.getElementById('featuresGrid').innerHTML=feats.map(f=>`<div class="feature-card reveal"><span class="feat-icon">${f.icon}</span><h4>${f.title}</h4><p>${f.body}</p></div>`).join('');
-  initReveal();
 }
 async function loadApply(){
   const [isOpenRaw,formUrl,closedMsg]=await Promise.all([sbGetSetting('apply_open'),sbGetSetting('google_form_url'),sbGetSetting('apply_closed_message')]);
@@ -693,7 +712,6 @@ async function loadNews(){
     const raw = await sbGetSetting('news_posts');
     const posts = raw ? JSON.parse(raw) : [];
     if(posts.length) wrap.innerHTML = posts.slice(0,3).map(p=>`<div class="post-card reveal"><h4>${p.title}</h4><p>${nl2br(p.body)}</p></div>`).join('');
-    initReveal();
   }catch(e){}
 }
 function switchTab(name,btn){
@@ -708,29 +726,13 @@ function initReveal(){
   document.querySelectorAll('.reveal:not(.visible)').forEach(el=>obs.observe(el));
 }
 
-// ===== PWA =====
+// ===== PWA / Service Worker =====
 const VAPID_PUBLIC_KEY = 'BJqskRVBumHLgijxJxFziNkGMFJXDSQr2ssCpA7rz-0zxt95238Isfs4MYALze2oav4EeuN6emYpLYuTsAt-Fhw';
-const EDGE_FUNCTION_URL = 'https://ipzdgsodhcxhnpajfvrt.supabase.co/functions/v1/clever-task';
 const SB_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlwemRnc29kaGN4aG5wYWpmdnJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNTgzNTcsImV4cCI6MjA4ODYzNDM1N30.b6ce95bLev-_6t2LidinKiRdn7VMV79iy9yBrz0db6k';
 const SB_REST_URL = 'https://ipzdgsodhcxhnpajfvrt.supabase.co/rest/v1';
 
 let deferredPrompt = null;
 let swRegistration = null;
-
-// ★ バッジ（通知の数字）を消去する関数
-async function clearBadge() {
-  if ('clearAppBadge' in navigator) {
-    try {
-      await navigator.clearAppBadge();
-    } catch (e) {
-      console.error('Badge clear error:', e);
-    }
-  }
-}
-
-// ★ アプリ起動時と、画面にフォーカスが戻った時に実行
-window.addEventListener('load', clearBadge);
-window.addEventListener('focus', clearBadge);
 
 async function loadPwaIcon(){
   try{
@@ -798,15 +800,20 @@ function installPWA(){
   }
 }
 
+// Service Worker登録の遅延（iPhoneの写真競合回避）
 if('serviceWorker' in navigator){
   window.addEventListener('load', async () => {
     try{
-      swRegistration = await navigator.serviceWorker.register('./sw.js');
-      if(localStorage.getItem('pushSubscribed')==='1'){
-        const btn = document.getElementById('notifyBtn');
-        if(btn){ btn.textContent='🔔 通知ON ✅'; btn.style.background='var(--green)'; }
-      }
-    }catch(e){}
+      // コンテンツ読み込み後に2秒遅らせて登録
+      setTimeout(async () => {
+        swRegistration = await navigator.serviceWorker.register('./sw.js');
+        console.log('Service Worker registered after delay');
+        if(localStorage.getItem('pushSubscribed')==='1'){
+          const btn = document.getElementById('notifyBtn');
+          if(btn){ btn.textContent='🔔 通知ON ✅'; btn.style.background='var(--green)'; }
+        }
+      }, 2000);
+    }catch(e){ console.error('SW Error:', e); }
   });
 }
 
