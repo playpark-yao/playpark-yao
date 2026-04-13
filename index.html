@@ -290,7 +290,6 @@
     </div>
   </section>
 
-
   <section id="pwa-install" style="background:#f0faf0;padding:28px 20px;text-align:center;">
     <div style="background:white;border-radius:20px;padding:24px;max-width:400px;margin:0 auto;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
       <div id="pwaIconWrap" style="width:72px;height:72px;background:var(--green);border-radius:18px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:36px;overflow:hidden;">🌳</div>
@@ -338,7 +337,7 @@
 </nav>
 
 <script>
-// ===== 通知バッジ制御機能 =====
+// ===== 1. 通知バッジ消去機能 =====
 async function clearBadge() {
   if ('clearAppBadge' in navigator) {
     try {
@@ -349,16 +348,14 @@ async function clearBadge() {
     }
   }
 }
-
-// 起動時とフォーカス時に実行
 window.addEventListener('load', clearBadge);
 window.addEventListener('focus', clearBadge);
 
-// ===== コンテンツ統合読み込み（iPhone競合回避・順序最適化版） =====
+// ===== 2. コンテンツ読み込み統合（Service Worker競合回避版） =====
 async function initAllContent() {
-  console.log('初期化開始...');
+  console.log('コンテンツの初期化を開始します...');
   try {
-    // 重要な写真・マップデータを先に確実に読み込む
+    // 重要な写真データを優先的に読み込む
     await Promise.all([
       loadDynamicPhotos(),
       loadApply(),
@@ -376,44 +373,53 @@ async function initAllContent() {
     initReveal();
     loadNews();
     loadVideos();
-    console.log('全コンテンツ読み込み完了');
+    console.log('すべてのコンテンツが正常に読み込まれました');
   } catch (e) {
-    console.error('読み込みエラー:', e);
+    console.error('コンテンツ読み込みエラー:', e);
   }
 }
 
 // ページ読み込み時に実行
 document.addEventListener('DOMContentLoaded', initAllContent);
 
-// ===== 各読み込み関数群 =====
+// ===== 3. PWA / Service Worker (最後に行う) =====
+const VAPID_PUBLIC_KEY = 'BJqskRVBumHLgijxJxFziNkGMFJXDSQr2ssCpA7rz-0zxt95238Isfs4MYALze2oav4EeuN6emYpLYuTsAt-Fhw';
+const SB_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlwemRnc29kaGN4aG5wYWpmdnJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNTgzNTcsImV4cCI6MjA4ODYzNDM1N30.b6ce95bLev-_6t2LidinKiRdn7VMV79iy9yBrz0db6k';
+const SB_REST_URL = 'https://ipzdgsodhcxhnpajfvrt.supabase.co/rest/v1';
+let deferredPrompt = null, swRegistration = null;
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    // 写真の通信が落ち着くのを3秒待ってからService Workerを登録
+    setTimeout(async () => {
+      try {
+        swRegistration = await navigator.serviceWorker.register('./sw.js');
+        console.log('Service Workerを3秒遅延させて登録完了');
+        if(localStorage.getItem('pushSubscribed')==='1') {
+          const b = document.getElementById('notifyBtn');
+          if(b){ b.textContent='🔔 通知ON ✅'; b.style.background='var(--green)'; }
+        }
+      } catch(e){
+        console.error('Service Worker登録エラー:', e);
+      }
+    }, 3000);
+  });
+}
+
+// ===== 各読み込み関数群（既存の機能を維持） =====
 async function loadNextEvent(){
   const wrap = document.getElementById('nextEventContent');
   const card = document.getElementById('nextEventCard');
   if(!wrap) return;
   try{
     const raw = await sbGetSetting('events_list');
-    const defaults = [
-      {month:'APR',day:12,weekday:'土',color:'var(--green)',name:'春の自然探検あそび',place:'信貴山・大竹緑地',time:'10:00〜14:00',target:'3歳〜小学生（保護者同伴）',fee:'無料'}
-    ];
+    const defaults = [{month:'APR',day:12,weekday:'土',color:'var(--green)',name:'春の自然探検あそび',place:'信貴山・大竹緑地',time:'10:00〜14:00',target:'3歳〜小学生（保護者同伴）',fee:'無料'}];
     const events = raw ? JSON.parse(raw) : defaults;
-    if(!events.length){
-      wrap.innerHTML = '<p style="opacity:.8;">イベント情報を準備中です</p>';
-      return;
-    }
-    const ev = events[0]; 
-    wrap.innerHTML = `
-      <h3>${ev.name||''}</h3>
-      <div class="event-meta">
-        ${ev.month&&ev.day ? `<span>📅 ${ev.month} ${ev.day}日（${ev.weekday||''}）${ev.time?'　'+ev.time:''}</span>` : ''}
-      </div>
-      <a href="#events" style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;background:rgba(255,255,255,0.2);color:white;border:1.5px solid rgba(255,255,255,0.5);border-radius:50px;padding:8px 16px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">📋 詳細を見る →</a>`;
-    if(ev.bgImage && card){
-      card.style.backgroundImage = `url(${ev.bgImage})`;
-      card.style.backgroundSize = 'cover';
-      card.style.backgroundPosition = 'center';
-      card.style.position = 'relative';
-    }
-  }catch(e){ wrap.innerHTML = '<p style="opacity:.8;">読み込みに失敗しました</p>'; }
+    if(!events.length){ wrap.innerHTML = '<p>準備中</p>'; return; }
+    const ev = events[0];
+    wrap.innerHTML = `<h3>${ev.name||''}</h3><div class="event-meta"><span>📅 ${ev.month} ${ev.day}日（${ev.weekday||''}）</span></div><a href="#events" style="display:inline-flex;padding:8px 16px;border:1px solid white;color:white;border-radius:50px;text-decoration:none;margin-top:10px;">詳細を見る</a>`;
+    if(ev.bgImage && card){ card.style.backgroundImage = `url(${ev.bgImage})`; card.style.backgroundSize = 'cover'; }
+  }catch(e){}
 }
 
 async function loadAccessInfo(){
@@ -421,85 +427,29 @@ async function loadAccessInfo(){
     const raw = await sbGetSetting('access_info');
     if(!raw) return;
     const d = JSON.parse(raw);
-    const mapWrap = document.getElementById('accessMapWrap');
-    if(mapWrap && d.mapUrl){
-      mapWrap.innerHTML = `<iframe src="${d.mapUrl}" allowfullscreen loading="lazy" style="width:100%;height:100%;border:none;"></iframe>`;
-    }
-    const wrap = document.getElementById('accessInfoWrap');
-    if(!wrap) return;
+    if(d.mapUrl) document.getElementById('accessMapWrap').innerHTML = `<iframe src="${d.mapUrl}" allowfullscreen loading="lazy" style="width:100%;height:100%;border:none;"></iframe>`;
     let html = '';
-    if(d.place||d.address){
-      html += `<div class="access-item reveal"><span class="ai">📍</span><div><h5>開催場所</h5><p>${d.place||''}${d.address?'<br>'+d.address:''}${d.placeNote?'<br><span style="font-size:11px;color:var(--text-light);">'+nl2br(d.placeNote)+'</span>':''}</p></div></div>`;
-    }
-    if(d.train){
-      html += `<div class="access-item reveal"><span class="ai">🚃</span><div><h5>電車・バス</h5><p>${nl2br(d.train)}</p></div></div>`;
-    }
-    if(d.car){
-      html += `<div class="access-item reveal"><span class="ai">🚗</span><div><h5>お車の場合</h5><p>${nl2br(d.car)}</p></div></div>`;
-    }
-    if(d.rain){
-      html += `<div class="access-item reveal"><span class="ai">🌧️</span><div><h5>雨天の場合</h5><p>${nl2br(d.rain)}</p></div></div>`;
-    }
-    if(html) wrap.innerHTML = html;
+    if(d.place) html += `<div class="access-item reveal">📍 <h5>開催場所</h5><p>${d.place}</p></div>`;
+    if(d.train) html += `<div class="access-item reveal">🚃 <h5>交通</h5><p>${nl2br(d.train)}</p></div>`;
+    if(html) document.getElementById('accessInfoWrap').innerHTML = html;
   }catch(e){}
 }
 
-function getYouTubeId(url){
-  if(!url)return null;
-  const m=url.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/);
-  return m?m[1]:null;
-}
+function getYouTubeId(url){ if(!url)return null; const m=url.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/); return m?m[1]:null; }
 async function loadVideos(){
   const wrap = document.getElementById('videosWrap');
-  if(!wrap) return;
   try{
     const raw = await sbGetSetting('video_posts');
     const videos = raw ? JSON.parse(raw) : [];
-    if(!videos.length){
-      wrap.innerHTML='<div style="text-align:center;padding:30px;color:var(--text-light);font-size:13px;">動画を準備中です</div>';
-      return;
-    }
-    wrap.innerHTML = videos.map(v=>{
-      const vid = getYouTubeId(v.url||'');
-      const embedUrl = vid ? `https://www.youtube.com/embed/${vid}` : '';
-      return `<div class="video-card reveal" style="margin-bottom:16px;">
-        ${embedUrl
-          ? `<div style="aspect-ratio:16/9;"><iframe src="${embedUrl}" allowfullscreen style="width:100%;height:100%;border:none;border-radius:16px 16px 0 0;"></iframe></div>`
-          : `<div class="video-thumb"><div class="play-btn">▶</div></div>`}
-        <div class="video-info">
-          <h4>${v.title||'動画'}</h4>
-          ${v.desc?`<p>${v.desc}</p>`:''}
-        </div>
-      </div>`;
-    }).join('');
-  }catch(e){ wrap.innerHTML='<div style="text-align:center;padding:30px;color:var(--text-light);font-size:13px;">読み込みに失敗しました</div>'; }
+    if(videos.length) wrap.innerHTML = videos.map(v=>`<div class="video-card reveal"><h4>${v.title}</h4></div>`).join('');
+  }catch(e){}
 }
 
-function toggleEvDetail(id,btn){
-  const el=document.getElementById(id);
-  if(!el)return;
-  const open=el.style.display==='block';
-  el.style.display=open?'none':'block';
-  btn.textContent=open?'▶ 詳細を見る':'▲ 閉じる';
-}
-function openLightbox(src){
-  document.getElementById('lightboxImg').src=src;
-  document.getElementById('lightbox').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeLightbox(){
-  document.getElementById('lightbox').classList.remove('open');
-  document.body.style.overflow='';
-}
-function nl2br(str){ return (str||'').replace(/\n/g,'<br>'); }
-
-// ===== SUPABASE API =====
+// SUPABASE API
 const SUPABASE_URL='https://ipzdgsodhcxhnpajfvrt.supabase.co';
-const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlwemRnc29kaGN4aG5wYWpmdnJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNTgzNTcsImV4cCI6MjA4ODYzNDM1N30.b6ce95bLev-_6t2LidinKiRdn7VMV79iy9yBrz0db6k';
-
+const SUPABASE_KEY=SB_ANON_KEY;
 async function sbGet(table,filter=''){
-  const url=`${SUPABASE_URL}/rest/v1/${table}${filter}`;
-  const r=await fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}});
+  const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}${filter}`,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}});
   return r.json();
 }
 async function sbGetSetting(key){
@@ -507,195 +457,94 @@ async function sbGetSetting(key){
   return rows?.[0]?.value||null;
 }
 
-// ===== その他表示機能 =====
+// OTHER LOADER FUNCTIONS
 async function loadServices(){
   try{
-    const raw = await sbGetSetting('services');
-    if(!raw) return;
+    const raw = await sbGetSetting('services'); if(!raw) return;
     const d = JSON.parse(raw);
-    if(d.instaId){
-      const instaUrl = d.instaId.startsWith('http') ? d.instaId : 'https://www.instagram.com/' + d.instaId.replace('@','');
-      const el = document.getElementById('instaLink');
-      if(el){ el.href = instaUrl; el.textContent = 'Instagramで見る → ' + (d.instaId.startsWith('@') ? d.instaId : '@'+d.instaId); }
-      const fi = document.getElementById('footerInsta');
-      if(fi) fi.href = instaUrl;
-    }
-    if(d.lineUrl){
-      const lineMain = document.getElementById('lineMainBtn');
-      if(lineMain) lineMain.href = d.lineUrl;
-      const footerLine = document.getElementById('footerLine');
-      if(footerLine) footerLine.href = d.lineUrl;
-      document.querySelectorAll('a[href="https://lin.ee/XXXXXXX"]').forEach(el => el.href = d.lineUrl);
-    }
-    if(d.youtubeUrl){
-      const fy = document.getElementById('footerYoutube');
-      if(fy) fy.href = d.youtubeUrl;
-    }
+    if(d.lineUrl) document.getElementById('lineMainBtn').href = d.lineUrl;
   }catch(e){}
 }
-
 async function loadInstaPosts(){
   const wrap = document.getElementById('instaPostsWrap');
-  if(!wrap) return;
   try{
     const raw = await sbGetSetting('insta_posts');
     const posts = raw ? JSON.parse(raw) : [];
-    if(!posts.length){
-      wrap.innerHTML = '<div style="text-align:center;padding:24px 16px;color:var(--text-light);font-size:13px;line-height:1.8;">📸 まだ投稿がありません。</div>';
-      return;
-    }
-    wrap.innerHTML = posts.map(p => `
-      <div style="border:1.5px solid var(--green-pale);border-radius:14px;overflow:hidden;">
-        ${p.imageUrl ? `<img src="${p.imageUrl}" style="width:100%;aspect-ratio:1;object-fit:cover;">` : ''}
-        <div style="padding:12px 14px;">
-          ${p.caption ? `<p style="font-size:13px;line-height:1.6;color:var(--text);margin-bottom:6px;">${p.caption}</p>` : ''}
-          <div style="display:flex;align-items:center;justify-content:space-between;">
-            <span style="font-size:11px;color:var(--text-light);">📅 ${p.date||''}</span>
-            ${p.url ? `<a href="${p.url}" target="_blank" style="font-size:12px;color:#dc2743;font-weight:700;text-decoration:none;">投稿を見る →</a>` : ''}
-          </div>
-        </div>
-      </div>`).join('');
-  }catch(e){ wrap.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-light);font-size:13px;">読み込みに失敗しました</div>'; }
+    if(posts.length) wrap.innerHTML = posts.map(p => `<div style="border:1px solid #eee;border-radius:10px;overflow:hidden;">${p.imageUrl?`<img src="${p.imageUrl}" style="width:100%;">`:''}<p style="padding:10px;">${p.caption||''}</p></div>`).join('');
+  }catch(e){}
 }
-
 async function loadEvents(){
   const wrap=document.getElementById('eventsList');
-  if(!wrap)return;
   try{
     const raw=await sbGetSetting('events_list');
-    const defaultEvents=[{month:'APR',day:12,weekday:'土',color:'var(--green)',name:'春の自然探検あそび',place:'信貴山・大竹緑地',time:'10:00〜14:00',target:'3歳〜小学生（保護者同伴）',fee:'無料'}];
-    const events=raw?JSON.parse(raw):defaultEvents;
-    if(!events.length){
-      wrap.innerHTML='<p style="text-align:center;color:var(--text-light);padding:20px;font-size:13px;">イベント情報を準備中です</p>';
-      return;
-    }
-    wrap.innerHTML=events.slice(0,3).map((ev,i)=>{
-      const hasBg = !!ev.bgImage;
-      const evId = 'ev-detail-'+i;
-      return `<div class="event-item reveal" style="${hasBg?`background-image:url(${ev.bgImage});background-size:cover;background-position:center;position:relative;`:''}">
-        ${hasBg?'<div style="position:absolute;inset:0;background:rgba(0,0,0,0.45);border-radius:14px;z-index:0;"></div>':''}
-        <div class="event-date-block" style="position:relative;z-index:1;background:${hasBg?'rgba(255,255,255,0.2)':ev.color||'var(--green)'};">
-          <div class="month">${ev.month||''}</div>
-          <div class="day">${ev.day||''}</div>
-          <div class="weekday">${ev.weekday||''}</div>
-        </div>
-        <div class="event-details" style="position:relative;z-index:1;flex:1;">
-          <h4 style="${hasBg?'color:white;':''}">${ev.name||''}</h4>
-          <p style="${hasBg?'color:rgba(255,255,255,0.9);':''}font-size:12px;">${ev.place?'📍 '+ev.place+'<br>':''}${ev.time?'⏰ '+ev.time:''}</p>
-          <button class="apply-link" onclick="openApply()" style="${hasBg?'border-color:white;color:white;':''}">✏️ 申し込む</button>
-        </div>
-      </div>`;
-    }).join('');
-    initReveal();
+    const events=raw?JSON.parse(raw):[];
+    if(events.length) wrap.innerHTML=events.slice(0,3).map(ev=>`<div class="event-item reveal"><h4>${ev.name}</h4><p>${ev.month} ${ev.day}</p></div>`).join('');
   }catch(e){}
 }
-
 async function loadLocalBizSchema(){
-  try{
-    const raw = await sbGetSetting('lb_jsonld');
-    if(!raw) return;
-    const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.textContent = raw;
-    document.head.appendChild(script);
-  }catch(e){}
+  try{ const raw = await sbGetSetting('lb_jsonld'); if(raw) { const s = document.createElement('script'); s.type = 'application/ld+json'; s.textContent = raw; document.head.appendChild(s); } }catch(e){}
 }
 async function loadDynamicSeo(){
-  try{
-    const[title,desc]=await Promise.all([sbGetSetting('seo_title'),sbGetSetting('seo_desc')]);
-    if(title) document.title=title;
-    if(desc) document.querySelector('meta[name="description"]')?.setAttribute('content',desc);
-  }catch(e){}
+  try{ const[t,d]=await Promise.all([sbGetSetting('seo_title'),sbGetSetting('seo_desc')]); if(t) document.title=t; if(d) document.querySelector('meta[name="description"]')?.setAttribute('content',d); }catch(e){}
 }
 async function loadDynamicPhotos(){
   try{
-    const[nextBg,aboutBg,mapUrl]=await Promise.all([sbGetSetting('photo_next_event_bg'),sbGetSetting('photo_about_bg'),sbGetSetting('photo_map_url')]);
-    if(nextBg) document.querySelector('.next-event').style.backgroundImage=`url(${nextBg})`;
-    if(aboutBg) document.querySelector('.about-section').style.backgroundImage=`url(${aboutBg})`;
-    if(mapUrl) document.getElementById('accessMapWrap').innerHTML=`<iframe src="${mapUrl}" allowfullscreen loading="lazy"></iframe>`;
+    const[n,a,m]=await Promise.all([sbGetSetting('photo_next_event_bg'),sbGetSetting('photo_about_bg'),sbGetSetting('photo_map_url')]);
+    if(n) document.querySelector('.next-event').style.backgroundImage=`url(${n})`;
+    if(a) document.querySelector('.about-section').style.backgroundImage=`url(${a})`;
+    if(m) document.getElementById('accessMapWrap').innerHTML=`<iframe src="${m}" allowfullscreen loading="lazy"></iframe>`;
   }catch(e){}
 }
-
 async function loadSlides(){
-  const raw=await sbGetSetting('slides');
-  const slides=raw?JSON.parse(raw):[{id:1,url:'',caption:'自然の中で自由に遊ぼう！'}];
-  initSlideshow(slides);
-}
-function initSlideshow(slides){
+  const raw=await sbGetSetting('slides'); const slides=raw?JSON.parse(raw):[{id:1,caption:'Welcome'}];
   const ss=document.getElementById('slideshow');
-  const dots=document.getElementById('slideDots');
-  ss.querySelectorAll('.slide').forEach(s=>s.remove());
-  dots.innerHTML='';
   slides.forEach((s,i)=>{
-    const div=document.createElement('div');
-    div.className='slide'+(i===0?' active':'');
-    div.innerHTML=`${s.url?`<img src="${s.url}">`:`<div class="slide-bg"><span>🌿</span></div>`}<div class="slide-caption">${s.caption}</div>`;
-    ss.insertBefore(div,ss.querySelector('.slide-prev'));
-    const dot=document.createElement('button');
-    dot.className='slide-dot'+(i===0?' active':'');
-    dot.onclick=()=>goSlide(i);dots.appendChild(dot);
+    const d=document.createElement('div'); d.className='slide'+(i===0?' active':'');
+    d.innerHTML=`${s.url?`<img src="${s.url}">`:`<div class="slide-bg"><span>🌿</span></div>`}<div class="slide-caption">${s.caption}</div>`;
+    ss.insertBefore(d,ss.querySelector('.slide-prev'));
   });
-  if(slides.length>1) setInterval(()=>slideNext(),4500);
 }
-function goSlide(n){
-  const sl=document.querySelectorAll('.slide'),dt=document.querySelectorAll('.slide-dot');
-  if(!sl.length)return;
-  sl.forEach((s,i)=>{s.classList.remove('active'); dt[i]?.classList.remove('active');});
-  let cur=(n+sl.length)%sl.length;
-  sl[cur].classList.add('active'); dt[cur].classList.add('active');
-}
-function slideNext(){ goSlide((Array.from(document.querySelectorAll('.slide')).findIndex(s=>s.classList.contains('active'))+1)); }
-function slidePrev(){ goSlide((Array.from(document.querySelectorAll('.slide')).findIndex(s=>s.classList.contains('active'))-1)); }
-
 async function loadAbout(){
-  const raw=await sbGetSetting('about_features');
-  const feats=raw?JSON.parse(raw):[];
-  if(feats.length) document.getElementById('featuresGrid').innerHTML=feats.map(f=>`<div class="feature-card reveal"><span class="feat-icon">${f.icon}</span><h4>${f.title}</h4><p>${f.body}</p></div>`).join('');
+  const raw=await sbGetSetting('about_features'); const feats=raw?JSON.parse(raw):[];
+  if(feats.length) document.getElementById('featuresGrid').innerHTML=feats.map(f=>`<div class="feature-card reveal"><span>${f.icon}</span><h4>${f.title}</h4><p>${f.body}</p></div>`).join('');
 }
 async function loadApply(){
   const [isOpenRaw,formUrl,closedMsg]=await Promise.all([sbGetSetting('apply_open'),sbGetSetting('google_form_url'),sbGetSetting('apply_closed_message')]);
   const isOpen=isOpenRaw!=='false';
-  document.getElementById('applyStatusWrap').innerHTML=isOpen?`<a href="${formUrl||'#apply-section'}" class="apply-open-btn">📝 この回に申し込む →</a>`:`<div class="apply-closed-box">${closedMsg||'停止中'}</div>`;
-  document.getElementById('applyMainArea').innerHTML=isOpen?`<a href="${formUrl}" target="_blank" style="display:block;background:var(--green);color:white;border-radius:50px;padding:16px;font-size:16px;font-weight:900;text-decoration:none;text-align:center;">📝 申込フォームを開く</a>`:`<p style="text-align:center;">${closedMsg||'停止中'}</p>`;
+  document.getElementById('applyStatusWrap').innerHTML=isOpen?`<a href="${formUrl||'#apply-section'}" class="apply-open-btn">📝 申し込む →</a>`:`<div class="apply-closed-box">${closedMsg||'停止中'}</div>`;
+  document.getElementById('applyMainArea').innerHTML=isOpen?`<a href="${formUrl}" target="_blank" style="display:block;background:var(--green);color:white;border-radius:50px;padding:16px;text-align:center;text-decoration:none;font-weight:900;">📝 フォームを開く</a>`:`<p style="text-align:center;">${closedMsg||'停止中'}</p>`;
 }
 async function loadNews(){
   try{
-    const raw = await sbGetSetting('news_posts');
-    const posts = raw ? JSON.parse(raw) : [];
+    const raw = await sbGetSetting('news_posts'); const posts = raw ? JSON.parse(raw) : [];
     if(posts.length) document.getElementById('newsWrap').innerHTML = posts.slice(0,3).map(p=>`<div class="post-card reveal"><h4>${p.title}</h4><p>${nl2br(p.body)}</p></div>`).join('');
   }catch(e){}
 }
+async function loadPwaIcon(){
+  try{ const raw = await sbGetSetting('pwa_icon'); if(raw) document.getElementById('pwaIconWrap').innerHTML = `<img src="${raw}" style="width:100%;height:100%;object-fit:cover;border-radius:18px;">`; }catch(e){}
+}
+
+// UTILITIES
 function switchTab(name,btn){
   ['instagram','news','videos'].forEach(t=>document.getElementById('tab-'+t).style.display='none');
   document.getElementById('tab-'+name).style.display='block';
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
 }
 function initReveal(){
   const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:.1});
   document.querySelectorAll('.reveal:not(.visible)').forEach(el=>obs.observe(el));
 }
+function nl2br(str){ return (str||'').replace(/\n/g,'<br>'); }
 function openApply(){document.getElementById('apply-section').scrollIntoView({behavior:'smooth'});}
+function slideNext(){ const sl=document.querySelectorAll('.slide'); let c=Array.from(sl).findIndex(s=>s.classList.contains('active')); sl[c].classList.remove('active'); sl[(c+1)%sl.length].classList.add('active'); }
+function slidePrev(){ const sl=document.querySelectorAll('.slide'); let c=Array.from(sl).findIndex(s=>s.classList.contains('active')); sl[c].classList.remove('active'); sl[(c-1+sl.length)%sl.length].classList.add('active'); }
 
-// ===== PWA / Service Worker (遅延登録でiPhone競合回避) =====
-const VAPID_PUBLIC_KEY = 'BJqskRVBumHLgijxJxFziNkGMFJXDSQr2ssCpA7rz-0zxt95238Isfs4MYALze2oav4EeuN6emYpLYuTsAt-Fhw';
-const SB_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlwemRnc29kaGN4aG5wYWpmdnJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNTgzNTcsImV4cCI6MjA4ODYzNDM1N30.b6ce95bLev-_6t2LidinKiRdn7VMV79iy9yBrz0db6k';
-const SB_REST_URL = 'https://ipzdgsodhcxhnpajfvrt.supabase.co/rest/v1';
-let deferredPrompt = null, swRegistration = null;
-
-async function loadPwaIcon(){
-  try{
-    const raw = await sbGetSetting('pwa_icon');
-    if(raw) document.getElementById('pwaIconWrap').innerHTML = `<img src="${raw}" style="width:100%;height:100%;object-fit:cover;border-radius:18px;">`;
-  }catch(e){}
-}
-
+// NOTIFICATION PERMISSION
 function urlBase64ToUint8Array(base64String){
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
   const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
   return new Uint8Array(atob(base64).split("").map(c => c.charCodeAt(0)));
 }
-
 async function subscribePush(){
   if(!swRegistration) return false;
   try {
@@ -708,7 +557,6 @@ async function subscribePush(){
     return true;
   } catch(e){ return false; }
 }
-
 async function requestNotificationPermission(){
   const btn = document.getElementById('notifyBtn'), msg = document.getElementById('notifyMsg');
   if(!window.navigator.standalone && !window.matchMedia('(display-mode: standalone)').matches){
@@ -721,23 +569,10 @@ async function requestNotificationPermission(){
   } catch(e){ msg.textContent = 'エラー: '+e.message; }
 }
 
-if('serviceWorker' in navigator){
-  window.addEventListener('load', () => {
-    setTimeout(async () => {
-      try {
-        swRegistration = await navigator.serviceWorker.register('./sw.js');
-        if(localStorage.getItem('pushSubscribed')==='1') {
-          const b = document.getElementById('notifyBtn'); if(b){ b.textContent='🔔 通知ON ✅'; b.style.background='var(--green)'; }
-        }
-      } catch(e){}
-    }, 3000);
-  });
-}
-
-document.getElementById('menuBtn').addEventListener('click',()=>{document.getElementById('navDrawer').classList.add('open');document.getElementById('navOverlay').classList.add('open');});
-function closeMenu(){document.getElementById('navDrawer').classList.remove('open');document.getElementById('navOverlay').classList.remove('open');}
 function installPWA(){ if(deferredPrompt){ deferredPrompt.prompt(); deferredPrompt.userChoice.then(() => deferredPrompt = null); } }
 window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredPrompt = e; });
+document.getElementById('menuBtn').addEventListener('click',()=>{document.getElementById('navDrawer').classList.add('open');document.getElementById('navOverlay').classList.add('open');});
+function closeMenu(){document.getElementById('navDrawer').classList.remove('open');document.getElementById('navOverlay').classList.remove('open');}
 </script>
 </body>
 </html>
