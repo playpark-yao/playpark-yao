@@ -717,6 +717,21 @@ const SB_REST_URL = 'https://ipzdgsodhcxhnpajfvrt.supabase.co/rest/v1';
 let deferredPrompt = null;
 let swRegistration = null;
 
+// ★ バッジ（通知の数字）を消去する関数
+async function clearBadge() {
+  if ('clearAppBadge' in navigator) {
+    try {
+      await navigator.clearAppBadge();
+    } catch (e) {
+      console.error('Badge clear error:', e);
+    }
+  }
+}
+
+// ★ アプリ起動時と、画面にフォーカスが戻った時に実行
+window.addEventListener('load', clearBadge);
+window.addEventListener('focus', clearBadge);
+
 async function loadPwaIcon(){
   try{
     const raw = await sbGetSetting('pwa_icon');
