@@ -1,4 +1,4 @@
-const CACHE_NAME = 'playpark-yao-v3'; // バージョンを上げて更新を促す
+const CACHE_NAME = 'playpark-yao-v4'; // バージョンを上げて更新を促す
 const URLS = [
   './index.html',
   './news.html',
@@ -25,12 +25,11 @@ self.addEventListener('activate', e => {
   );
 });
 
-// フェッチ: キャッシュがあれば返し、なければネットワークから取得
+// フェッチ
 self.addEventListener('fetch', e => {
   e.respondWith(
     caches.match(e.request).then(cached => {
       return cached || fetch(e.request).then(response => {
-        // 動的なリクエスト（Supabase APIなど）はキャッシュしない
         if (e.request.url.includes('supabase.co')) return response;
         return response;
       }).catch(() => caches.match('./index.html'));
@@ -38,10 +37,10 @@ self.addEventListener('fetch', e => {
   );
 });
 
-// ===== プッシュ通知の受信 =====
+// ===== プッシュ通知の受信（バッジ対応版） =====
 self.addEventListener('push', e => {
   console.log('Push received');
-  let data = { title: 'プレーパーク八尾', body: '新しいお知らせがあります', url: './index.html' };
+  let data = { title: 'プレーパーク八尾', body: '新しいお知らせがあります', url: './index.html', badge: 1 };
 
   if (e.data) {
     try {
@@ -51,15 +50,20 @@ self.addEventListener('push', e => {
     }
   }
 
+  // ★ iPhone/Androidのアイコンにバッジ（数字）を表示
+  if (data.badge && 'setAppBadge' in navigator) {
+    navigator.setAppBadge(data.badge).catch(err => console.log('Badge error:', err));
+  }
+
   const options = {
     body: data.body,
     icon: './icon-192.png',
-    badge: './icon-192.png',
+    badge: './icon-192.png', // 通知センター用のアイコン
     data: { url: data.url || './index.html' },
     vibrate: [200, 100, 200],
-    tag: 'playpark-notification', // 同じタグの通知はまとめる
-    renotify: true, // 再通知を許可
-    requireInteraction: true // iPhoneでは特に重要：ユーザーが確認するまで消さない
+    tag: 'playpark-notification',
+    renotify: true,
+    requireInteraction: true 
   };
 
   e.waitUntil(
@@ -74,7 +78,6 @@ self.addEventListener('notificationclick', e => {
 
   e.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then(windowClients => {
-      // 既に開いているページがあればフォーカス、なければ新規で開く
       for (let client of windowClients) {
         if (client.url === urlToOpen && 'focus' in client) {
           return client.focus();
