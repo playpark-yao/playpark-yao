@@ -1717,67 +1717,44 @@ async function generateNewKeys() {
   alert("ブラウザのコンソール（F12）に新しい鍵を出力しました！");
 }
 // 実行（一度だけ動かせばOK）
-// generateNewKeys();
-// アイコンアップロードと反映の処理
+// ===== PWA ICON (Base64保存方式) =====
 async function handlePwaIconUpload(files) {
   if (!files || files.length === 0) return;
-  const file = files[0];
-
-  showSaving(true); // 保存中インジケーター表示
-
   try {
-    // 1. 画像をストレージにアップロード（ファイル名はタイムスタンプで重複回避）
-    const fileName = `logo_${Date.now()}.${file.name.split('.').pop()}`;
-    const filePath = `settings/${fileName}`;
-    
-    // Supabaseのストレージにアップロード（既存のバケット名に合わせて調整してください）
-    const { data: uploadData, error: uploadError } = await _supabase.storage
-      .from('media') // あなたのバケット名
-      .upload(filePath, file);
-
-    if (uploadError) throw uploadError;
-
-    // 2. アップロードした画像の公開URLを取得
-    const { data: { publicUrl } } = _supabase.storage
-      .from('media')
-      .getPublicUrl(filePath);
-
-    // 3. データベースの「設定(settings)」テーブルにURLを保存
-    // キー名を 'pwa_icon' として保存する例
-    await sbSaveSetting('pwa_icon', publicUrl);
-
-    // 4. 管理画面上のプレビューを即座に更新
+    showToast('📸 アイコンを処理中...');
+    const compressed = await compressImage(files[0], 512, 0.92);
+    await setSetting('pwa_icon', compressed);
     const preview = document.getElementById('pwaIconPreview');
-    preview.innerHTML = `<img src="${publicUrl}" style="width:100%;height:100%;object-fit:cover;">`;
-
-    // 5. ログに記録
-    addLog("⚙️ 設定", "ロゴ・PWAアイコンを更新しました");
-    
-    showToast("アイコンを更新しました！サイトに反映されます。");
-  } catch (error) {
-    console.error(error);
-    showToast("エラー: アップロードに失敗しました");
-  } finally {
-    showSaving(false);
+    if(preview) preview.innerHTML = `<img src="${compressed}" style="width:100%;height:100%;object-fit:cover;border-radius:18px;">`;
+    await addLog('PWAアイコン更新', 'ホーム画面アイコンを変更しました', '📲');
+    showToast('アイコンを保存しました ✅');
+    showSaving();
+    document.getElementById('pwaIconFile').value = '';
+  } catch(e) {
+    showToast('⚠️ 保存に失敗しました: ' + e.message);
+    console.error(e);
   }
 }
 
-// ページ読み込み時に現在のアイコンを表示する処理（既存のinit等に追加）
-async function loadCurrentPwaIcon() {
-  const iconUrl = await sbGetSetting('pwa_icon');
-  if (iconUrl) {
+async function loadPwaIconAdmin() {
+  try {
+    const raw = await getSetting('pwa_icon');
+    if (!raw) return;
     const preview = document.getElementById('pwaIconPreview');
-    if (preview) {
-      preview.innerHTML = `<img src="${iconUrl}" style="width:100%;height:100%;object-fit:cover;">`;
-    }
-  }
+    if (preview) preview.innerHTML = `<img src="${raw}" style="width:100%;height:100%;object-fit:cover;border-radius:18px;">`;
+  } catch(e) {}
 }
 
-// 初期化時に実行
-document.addEventListener('DOMContentLoaded', () => {
-  loadCurrentPwaIcon();
-});
+async function clearPwaIcon() {
+  if (!confirm('アイコンをデフォルトに戻しますか？')) return;
+  await setSetting('pwa_icon', '');
+  const preview = document.getElementById('pwaIconPreview');
+  if (preview) preview.innerHTML = '🌳';
+  await addLog('PWAアイコン削除', 'デフォルトアイコンに戻しました', '🗑️');
+  showToast('デフォルトに戻しました');
+  showSaving();
+}
 
 </script>
 </body>
-</html> 
+</html>
