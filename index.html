@@ -628,6 +628,17 @@ if('serviceWorker' in navigator){
 }
 document.getElementById('menuBtn').addEventListener('click',()=>{document.getElementById('navDrawer').classList.add('open');document.getElementById('navOverlay').classList.add('open');});
 function closeMenu(){document.getElementById('navDrawer').classList.remove('open');document.getElementById('navOverlay').classList.remove('open');}
+
+// ページ読み込み時にロゴを反映
+window.addEventListener('DOMContentLoaded', () => {
+  const savedLogo = localStorage.getItem('site_logo');
+  const headerLogoArea = document.querySelector('.header-logo'); // ヘッダーのロゴ部分のクラス名に合わせてください
+
+  if (savedLogo && headerLogoArea) {
+    // ロゴが保存されていれば、テキストの代わりに画像を表示
+    headerLogoArea.innerHTML = `<img src="${savedLogo}" alt="森のプレーパーク八尾" style="height: 50px; width: auto; object-fit: contain;">`;
+  }
+});
 </script>
 </body>
 </html>
