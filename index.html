@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>プレーパーク八尾 | 子どもの自然遊び・プレーパーク（大阪府八尾市）</title>
 
+  <!-- SEO -->
   <meta name="description" content="大阪府八尾市で開催する子どもの自然遊び・プレーパーク。どろんこ・焚き火・木登りなど、自由な遊びを通じて子どもたちの育ちを支える地域の居場所です。月2回開催・参加無料。">
   <meta name="keywords" content="プレーパーク,八尾,八尾市,子ども,自然遊び,焚き火,木登り,どろんこ,子育て,遊び場,大阪,居場所">
   <meta name="author" content="プレーパーク八尾">
@@ -12,6 +13,7 @@
   <link rel="canonical" href="https://playpark-yao.github.io/playpark-yao/">
   <meta name="google-site-verification" content="7I2E9uEtJataH92MsaybuZXDl-FtQo-0jNE9qTtdki0" />
 
+  <!-- OGP（SNS・LINEシェア用） -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="プレーパーク八尾 | 子どもの自然遊び（大阪府八尾市）">
   <meta property="og:description" content="大阪府八尾市で開催する子どもの自然遊び・プレーパーク。どろんこ・焚き火・木登りなど、自由な遊びを通じて子どもたちの育ちを支える地域の居場所です。">
@@ -19,10 +21,12 @@
   <meta property="og:site_name" content="プレーパーク八尾">
   <meta property="og:locale" content="ja_JP">
 
+  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="プレーパーク八尾 | 子どもの自然遊び（大阪府八尾市）">
   <meta name="twitter:description" content="大阪府八尾市で開催する子どもの自然遊び・プレーパーク。月2回開催・参加無料。">
 
+  <!-- 構造化データ -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -36,9 +40,7 @@
       "addressRegion": "大阪府",
       "addressCountry": "JP"
     },
-    "sameAs": [
-      "https://www.instagram.com/playpark_yao"
-    ]
+    "sameAs": ["https://www.instagram.com/playpark_yao"]
   }
   </script>
 
@@ -50,31 +52,10 @@
   <meta name="theme-color" content="#3a7d44">
   <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
-    /* --- ライトボックス（拡大表示） --- */
-    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(5px);}
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;}
     .lightbox.open{display:flex;}
-    .lightbox img{max-width:100%;max-height:90vh;object-fit:contain;border-radius:8px;box-shadow:0 0 30px rgba(0,0,0,0.5);}
-    .lightbox-close{position:absolute;top:20px;right:20px;width:44px;height:44px;background:rgba(255,255,255,0.2);border:none;border-radius:50%;color:white;font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-
-    /* --- インスタグラム3列グリッド --- */
-    #instaPostsWrap {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 3px;
-      padding: 10px;
-    }
-    .insta-post-item {
-      aspect-ratio: 1/1;
-      overflow: hidden;
-      background: #eee;
-      cursor: pointer;
-    }
-    .insta-post-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
+    .lightbox img{max-width:100%;max-height:90vh;object-fit:contain;border-radius:8px;}
+    .lightbox-close{position:absolute;top:16px;right:16px;width:44px;height:44px;background:rgba(255,255,255,0.2);border:none;border-radius:50%;color:white;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
     :root{--green:#3a7d44;--green-light:#6abf69;--green-pale:#e8f5e9;--earth:#8d6e47;--sky:#87ceeb;--sky-dark:#4a9ebe;--sun:#f5c842;--red:#e05a44;--bg:#fffef7;--text:#2c2c2c;--text-light:#666;--shadow:0 4px 20px rgba(0,0,0,0.08);--radius:20px;}
     *{margin:0;padding:0;box-sizing:border-box;}
     body{font-family:'Zen Maru Gothic',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;}
@@ -85,8 +66,6 @@
     .logo-text .sub{font-size:10px;color:var(--earth);letter-spacing:.1em;}
     .header-actions{display:flex;gap:8px;align-items:center;}
     .btn-line{background:#06C755;color:white;border:none;border-radius:50px;padding:8px 14px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:5px;}
-    .btn-admin-icon{background:none;border:none;cursor:pointer;font-size:20px;opacity:0.28;padding:4px;text-decoration:none;transition:opacity .2s;line-height:1;}
-    .btn-admin-icon:hover{opacity:0.6;}
     .hamburger{background:none;border:none;cursor:pointer;padding:4px;display:flex;flex-direction:column;gap:5px;}
     .hamburger span{display:block;width:24px;height:2.5px;background:var(--green);border-radius:2px;}
     .nav-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s;}
@@ -95,7 +74,7 @@
     .nav-drawer.open{right:0;}
     .nav-drawer nav a{display:flex;padding:14px 0;border-bottom:1px solid var(--green-pale);text-decoration:none;color:var(--text);font-size:16px;font-weight:700;align-items:center;gap:10px;}
     .slideshow{margin-top:70px;position:relative;width:100%;height:min(65vw,400px);overflow:hidden;background:linear-gradient(160deg,#c8f0a0,#87d4a8 40%,#87ceeb);}
-    .slide{position:absolute;inset:0;opacity:0;transition:opacity .8s ease;cursor:pointer;}
+    .slide{position:absolute;inset:0;opacity:0;transition:opacity .8s ease;}
     .slide.active{opacity:1;}
     .slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
     .slide-bg{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:70px;gap:8px;}
@@ -122,10 +101,6 @@
     .tab-bar{display:flex;margin-bottom:24px;background:var(--green-pale);border-radius:50px;padding:4px;}
     .tab-btn{flex:1;background:none;border:none;border-radius:50px;padding:10px 6px;font-family:'Zen Maru Gothic',sans-serif;font-size:13px;font-weight:700;color:var(--text-light);cursor:pointer;transition:all .25s;}
     .tab-btn.active{background:white;color:var(--green);box-shadow:0 2px 8px rgba(0,0,0,.1);}
-    .insta-ph{aspect-ratio:1;background:linear-gradient(135deg,var(--green-pale),#d4edda);display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:28px;gap:4px;}
-    .insta-ph small{font-size:9px;color:var(--text-light);}
-    .insta-banner{margin-top:16px;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);border-radius:14px;padding:16px;text-align:center;color:white;}
-    .btn-insta{background:white;color:#dc2743;border:none;border-radius:50px;padding:9px 20px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;display:inline-block;}
     .post-card{border:1.5px solid var(--green-pale);border-radius:16px;padding:16px;margin-bottom:12px;}
     .post-tag{font-size:10px;font-weight:900;padding:2px 10px;border-radius:20px;display:inline-block;margin-bottom:8px;}
     .tag-event{background:var(--sun);color:var(--earth);}
@@ -167,7 +142,7 @@
     .line-section h3{font-size:20px;font-weight:900;margin-bottom:8px;}
     .line-section p{font-size:13px;opacity:.9;margin-bottom:20px;line-height:1.6;}
     .btn-line-lg{background:white;color:#06C755;border:none;border-radius:50px;padding:14px 32px;font-size:16px;font-family:'Zen Maru Gothic',sans-serif;font-weight:900;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:8px;}
-    footer{background:var(--green);color:white;padding:30px 20px;text-align:center;padding-bottom:100px;}
+    footer{background:var(--green);color:white;padding:30px 20px;text-align:center;}
     .footer-logo{font-size:20px;font-weight:900;margin-bottom:8px;}
     .footer-links{display:flex;justify-content:center;gap:20px;margin:16px 0;flex-wrap:wrap;}
     .footer-links a{color:rgba(255,255,255,.8);text-decoration:none;font-size:12px;}
@@ -246,12 +221,10 @@
             <div style="color:rgba(255,255,255,.8);font-size:11px;">プレーパーク八尾 Instagram</div>
           </div>
           <a href="https://www.instagram.com/playpark_yao" target="_blank" id="instaLink"
-             style="margin-left:auto;background:white;color:#dc2743;border-radius:50px;padding:6px 14px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">
-            フォロー
-          </a>
+             style="margin-left:auto;background:white;color:#dc2743;border-radius:50px;padding:6px 14px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">フォロー</a>
         </div>
-        <div id="instaPostsWrap">
-          <div style="text-align:center;padding:30px;color:var(--text-light);font-size:13px;grid-column:1/-1;">⏳ 読み込み中...</div>
+        <div id="instaPostsWrap" style="padding:14px;display:flex;flex-direction:column;gap:10px;min-height:100px;">
+          <div style="text-align:center;padding:30px;color:var(--text-light);font-size:13px;">⏳ 読み込み中...</div>
         </div>
         <div style="padding:14px 16px;border-top:1.5px solid var(--green-pale);text-align:center;">
           <a href="https://www.instagram.com/playpark_yao" target="_blank"
@@ -310,7 +283,7 @@
     </div>
   </section>
 
-
+  <!-- PWAインストール -->
   <section id="pwa-install" style="background:#f0faf0;padding:28px 20px;text-align:center;">
     <div style="background:white;border-radius:20px;padding:24px;max-width:400px;margin:0 auto;box-shadow:0 4px 20px rgba(0,0,0,0.08);">
       <div id="pwaIconWrap" style="width:72px;height:72px;background:var(--green);border-radius:18px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:36px;overflow:hidden;">🌳</div>
@@ -357,539 +330,302 @@
   <a href="#line"><span class="ni">💬</span><span>LINE</span></a>
 </nav>
 
-<div id="lightbox" class="lightbox" onclick="closeLightbox()">
-  <button class="lightbox-close">×</button>
-  <img id="lightboxImg" src="" onclick="event.stopPropagation()">
+<!-- ライトボックス -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <button class="lightbox-close" onclick="closeLightbox(event)">✕</button>
+  <img id="lightboxImg" src="" alt="">
 </div>
 
 <script>
-// ===== 1. 通知バッジ制御（確実に消す） =====
-async function clearBadge() {
-  if ('clearAppBadge' in navigator) {
-    try {
-      await navigator.clearAppBadge();
-      await navigator.setAppBadge(0); // 強制的に0を上書き
-      console.log('通知バッジを完全にクリアしました');
-    } catch (e) {
-      console.error('バッジ消去エラー:', e);
-    }
-  }
+// ===== ライトボックス =====
+function openLightbox(src){
+  document.getElementById('lightboxImg').src=src;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow='hidden';
 }
-window.addEventListener('load', clearBadge);
-window.addEventListener('focus', clearBadge);
+function closeLightbox(e){
+  if(e && e.target && e.target.tagName==='IMG') return;
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow='';
+}
 
-// ===== 2. コンテンツ統合読み込み（iPhone競合回避版） =====
-async function initAllContent() {
-  console.log('データの読み込みを開始します...');
-  try {
-    await Promise.all([
-      loadSlides(),
-      loadAbout(),
-      loadApply(),
-      loadDynamicSeo(),
-      loadDynamicPhotos(),
-      loadLocalBizSchema(),
-      loadServices(),
-      loadInstaPosts(),
-      loadEvents(),
-      loadNextEvent(),
-      loadAccessInfo(),
-      loadPwaIcon()
-    ]);
-    initReveal();
-    loadNews();
-    loadVideos();
-    console.log('すべてのコンテンツが正常に読み込まれました');
-  } catch (e) {
-    console.error('読み込みエラー:', e);
+// ===== バッジ消去 =====
+async function clearBadge(){
+  if('serviceWorker' in navigator){
+    try{
+      const reg = await navigator.serviceWorker.getRegistration();
+      if(reg){
+        const ns = await reg.getNotifications();
+        ns.forEach(n => n.close());
+        if(reg.active) reg.active.postMessage('clearBadge');
+      }
+    }catch(e){}
+  }
+  if('clearAppBadge' in navigator){
+    try{ await navigator.clearAppBadge(); }catch(e){}
   }
 }
-document.addEventListener('DOMContentLoaded', initAllContent);
+window.addEventListener('load', () => setTimeout(clearBadge, 1500));
+window.addEventListener('focus', clearBadge);
+document.addEventListener('visibilitychange', () => {
+  if(document.visibilityState==='visible') clearBadge();
+});
 
 // ===== 次回予告 =====
 async function loadNextEvent(){
-  const wrap = document.getElementById('nextEventContent');
-  const card = document.getElementById('nextEventCard');
-  if(!wrap) return;
+  const wrap=document.getElementById('nextEventContent');
+  const card=document.getElementById('nextEventCard');
+  if(!wrap)return;
   try{
-    const raw = await sbGetSetting('events_list');
-    const defaults = [
-      {month:'APR',day:12,weekday:'土',color:'var(--green)',name:'春の自然探検あそび',place:'信貴山・大竹緑地',time:'10:00〜14:00',target:'3歳〜小学生（保護者同伴）',fee:'無料'}
-    ];
-    const events = raw ? JSON.parse(raw) : defaults;
-    if(!events.length){ wrap.innerHTML = '<p style="opacity:.8;">イベント情報を準備中です</p>'; return; }
-    const ev = events[0]; 
-    wrap.innerHTML = `
-      <h3>${ev.name||''}</h3>
-      <div class="event-meta">
-        ${ev.month&&ev.day ? `<span>📅 ${ev.month} ${ev.day}日（${ev.weekday||''}）${ev.time?'　'+ev.time:''}</span>` : ''}
-      </div>
-      <a href="#events" style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;background:rgba(255,255,255,0.2);color:white;border:1.5px solid rgba(255,255,255,0.5);border-radius:50px;padding:8px 16px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">📋 詳細を見る →</a>`;
-    if(ev.bgImage && card){
-      card.style.backgroundImage = `url(${ev.bgImage})`;
-      card.style.backgroundSize = 'cover';
-      card.style.backgroundPosition = 'center';
-      card.style.position = 'relative';
-    }
-  }catch(e){ wrap.innerHTML = '<p style="opacity:.8;">読み込みに失敗しました</p>'; }
+    const raw=await sbGetSetting('events_list');
+    const defaults=[{month:'APR',day:12,weekday:'土',color:'var(--green)',name:'春の自然探検あそび',place:'信貴山・大竹緑地',time:'10:00〜14:00',target:'3歳〜小学生（保護者同伴）',fee:'無料'}];
+    const events=raw?JSON.parse(raw):defaults;
+    if(!events.length){wrap.innerHTML='<p style="opacity:.8;">イベント情報を準備中です</p>';return;}
+    const ev=events[0];
+    wrap.innerHTML=`<h3>${ev.name||''}</h3><div class="event-meta">${ev.month&&ev.day?`<span>📅 ${ev.month} ${ev.day}日（${ev.weekday||''}）${ev.time?'　'+ev.time:''}</span>`:''}</div><a href="#events" style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;background:rgba(255,255,255,0.2);color:white;border:1.5px solid rgba(255,255,255,0.5);border-radius:50px;padding:8px 16px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">📋 詳細を見る →</a>`;
+    if(ev.bgImage&&card){card.style.backgroundImage=`url(${ev.bgImage})`;card.style.backgroundSize='cover';card.style.backgroundPosition='center';}
+  }catch(e){wrap.innerHTML='<p style="opacity:.8;">読み込みに失敗しました</p>';}
 }
 
 // ===== ACCESS INFO =====
 async function loadAccessInfo(){
   try{
-    const raw = await sbGetSetting('access_info');
-    if(!raw) return;
-    const d = JSON.parse(raw);
-    const mapWrap = document.getElementById('accessMapWrap');
-    if(mapWrap && d.mapUrl){
-      mapWrap.innerHTML = `<iframe src="${d.mapUrl}" allowfullscreen loading="lazy" style="width:100%;height:100%;border:none;"></iframe>`;
+    const raw=await sbGetSetting('access_info');
+    if(!raw)return;
+    const d=JSON.parse(raw);
+    const mapWrap=document.getElementById('accessMapWrap');
+    if(mapWrap&&d.mapUrl){
+      mapWrap.innerHTML=`<iframe src="${d.mapUrl}" allowfullscreen loading="lazy" style="width:100%;height:100%;border:none;"></iframe>`;
+    } else if(mapWrap&&d.mapPhoto){
+      mapWrap.innerHTML=`<img src="${d.mapPhoto}" onclick="openLightbox('${d.mapPhoto}')" style="width:100%;height:100%;object-fit:cover;cursor:pointer;" title="タップで拡大">`;
     }
-    const wrap = document.getElementById('accessInfoWrap');
-    if(!wrap) return;
-    let html = '';
-    if(d.place||d.address){ html += `<div class="access-item reveal"><span class="ai">📍</span><div><h5>開催場所</h5><p>${d.place||''}${d.address?'<br>'+d.address:''}${d.placeNote?'<br><span style="font-size:11px;color:var(--text-light);">'+nl2br(d.placeNote)+'</span>':''}</p></div></div>`; }
-    if(d.train){ html += `<div class="access-item reveal"><span class="ai">🚃</span><div><h5>電車・バス</h5><p>${nl2br(d.train)}</p></div></div>`; }
-    if(d.car){ html += `<div class="access-item reveal"><span class="ai">🚗</span><div><h5>お車の場合</h5><p>${nl2br(d.car)}</p></div></div>`; }
-    if(d.rain){ html += `<div class="access-item reveal"><span class="ai">🌧️</span><div><h5>雨天の場合</h5><p>${nl2br(d.rain)}</p></div></div>`; }
-    if(html) wrap.innerHTML = html;
+    const wrap=document.getElementById('accessInfoWrap');
+    if(!wrap)return;
+    let html='';
+    if(d.place||d.address){html+=`<div class="access-item reveal"><span class="ai">📍</span><div><h5>開催場所</h5><p>${d.place||''}${d.address?'<br>'+d.address:''}${d.placeNote?'<br><span style="font-size:11px;color:var(--text-light);">'+nl2br(d.placeNote)+'</span>':''}</p></div></div>`;}
+    if(d.train){html+=`<div class="access-item reveal"><span class="ai">🚃</span><div><h5>電車・バス</h5><p>${nl2br(d.train)}</p></div></div>`;}
+    if(d.car){html+=`<div class="access-item reveal"><span class="ai">🚗</span><div><h5>お車の場合</h5><p>${nl2br(d.car)}</p></div></div>`;}
+    if(d.rain){html+=`<div class="access-item reveal"><span class="ai">🌧️</span><div><h5>雨天の場合</h5><p>${nl2br(d.rain)}</p></div></div>`;}
+    if(html)wrap.innerHTML=html;
+    initReveal();
   }catch(e){}
 }
 
 // ===== VIDEOS =====
-function getYouTubeId(url){
-  if(!url)return null;
-  const m=url.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/);
-  return m?m[1]:null;
-}
+function getYouTubeId(url){if(!url)return null;const m=url.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/);return m?m[1]:null;}
 async function loadVideos(){
-  const wrap = document.getElementById('videosWrap');
-  if(!wrap) return;
+  const wrap=document.getElementById('videosWrap');if(!wrap)return;
   try{
-    const raw = await sbGetSetting('video_posts');
-    const videos = raw ? JSON.parse(raw) : [];
-    if(!videos.length){ wrap.innerHTML='<div style="text-align:center;padding:30px;color:var(--text-light);font-size:13px;">動画を準備中です</div>'; return; }
-    wrap.innerHTML = videos.map(v=>{
-      const vid = getYouTubeId(v.url||'');
-      const embedUrl = vid ? `https://www.youtube.com/embed/${vid}` : '';
-      return `<div class="video-card reveal" style="margin-bottom:16px;">
-        ${embedUrl ? `<div style="aspect-ratio:16/9;"><iframe src="${embedUrl}" allowfullscreen style="width:100%;height:100%;border:none;border-radius:16px 16px 0 0;"></iframe></div>` : `<div class="video-thumb"><div class="play-btn">▶</div></div>`}
-        <div class="video-info"><h4>${v.title||'動画'}</h4>${v.desc?`<p>${v.desc}</p>`:''}</div>
-      </div>`;
-    }).join('');
-  }catch(e){}
+    const raw=await sbGetSetting('video_posts');const videos=raw?JSON.parse(raw):[];
+    if(!videos.length){wrap.innerHTML='<div style="text-align:center;padding:30px;color:var(--text-light);font-size:13px;">動画を準備中です</div>';return;}
+    wrap.innerHTML=videos.map(v=>{
+      const vid=getYouTubeId(v.url||'');const embedUrl=vid?`https://www.youtube.com/embed/${vid}`:'';
+      return `<div class="video-card reveal" style="margin-bottom:16px;">${embedUrl?`<div style="aspect-ratio:16/9;"><iframe src="${embedUrl}" allowfullscreen style="width:100%;height:100%;border:none;border-radius:16px 16px 0 0;"></iframe></div>`:`<div class="video-thumb"><div class="play-btn">▶</div></div>`}<div class="video-info"><h4>${v.title||'動画'}</h4>${v.desc?`<p>${v.desc}</p>`:''}</div></div>`;
+    }).join('');initReveal();
+  }catch(e){wrap.innerHTML='<div style="text-align:center;padding:30px;color:var(--text-light);font-size:13px;">読み込みに失敗しました</div>';}
 }
 
-// ===== ユーティリティ & ライトボックス =====
-function toggleEvDetail(id,btn){
-  const el=document.getElementById(id);
-  if(!el)return;
-  const open=el.style.display==='block';
-  el.style.display=open?'none':'block';
-  btn.textContent=open?'▶ 詳細を見る':'▲ 閉じる';
-}
-function openLightbox(src){
-  const img = document.getElementById('lightboxImg');
-  const box = document.getElementById('lightbox');
-  if(src && img && box) {
-    img.src = src;
-    box.classList.add('open');
-  }
-}
-function closeLightbox(){
-  document.getElementById('lightbox').classList.remove('open');
-}
-function nl2br(str){ return (str||'').replace(/\n/g,'<br>'); }
+// ===== ユーティリティ =====
+function toggleEvDetail(id,btn){const el=document.getElementById(id);if(!el)return;const open=el.style.display==='block';el.style.display=open?'none':'block';btn.textContent=open?'▶ 詳細を見る':'▲ 閉じる';}
+function nl2br(str){return(str||'').replace(/\n/g,'<br>');}
+function openApply(){document.getElementById('apply-section').scrollIntoView({behavior:'smooth'});}
 
 // ===== SUPABASE =====
 const SUPABASE_URL='https://ipzdgsodhcxhnpajfvrt.supabase.co';
 const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlwemRnc29kaGN4aG5wYWpmdnJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNTgzNTcsImV4cCI6MjA4ODYzNDM1N30.b6ce95bLev-_6t2LidinKiRdn7VMV79iy9yBrz0db6k';
+async function sbGet(table,filter=''){const r=await fetch(`${SUPABASE_URL}/rest/v1/${table}${filter}`,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}});return r.json();}
+async function sbGetSetting(key){const rows=await sbGet('site_settings',`?key=eq.${key}&select=value`);return rows?.[0]?.value||null;}
 
-async function sbGet(table,filter=''){
-  const url=`${SUPABASE_URL}/rest/v1/${table}${filter}`;
-  const r=await fetch(url,{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}});
-  return r.json();
-}
-async function sbGetSetting(key){
-  const rows=await sbGet('site_settings',`?key=eq.${key}&select=value`);
-  return rows?.[0]?.value||null;
-}
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded',async()=>{
+  await Promise.all([loadSlides(),loadAbout(),loadApply(),loadDynamicSeo(),loadDynamicPhotos(),loadLocalBizSchema(),loadServices(),loadInstaPosts(),loadEvents(),loadNextEvent(),loadAccessInfo(),loadPwaIcon()]);
+  loadNews();loadVideos();initReveal();
+});
 
 // ===== SERVICES =====
 async function loadServices(){
   try{
-    const raw = await sbGetSetting('services');
-    if(!raw) return;
-    const d = JSON.parse(raw);
-    if(d.instaId){
-      const instaUrl = d.instaId.startsWith('http') ? d.instaId : 'https://www.instagram.com/' + d.instaId.replace('@','');
-      const el = document.getElementById('instaLink');
-      if(el){ el.href = instaUrl; el.textContent = 'Instagramで見る → ' + (d.instaId.startsWith('@') ? d.instaId : '@'+d.instaId); }
-      const fi = document.getElementById('footerInsta');
-      if(fi) fi.href = instaUrl;
-    }
-    if(d.lineUrl){
-      const lineMain = document.getElementById('lineMainBtn');
-      if(lineMain) lineMain.href = d.lineUrl;
-      const footerLine = document.getElementById('footerLine');
-      if(footerLine) footerLine.href = d.lineUrl;
-      document.querySelectorAll('a[href="https://lin.ee/XXXXXXX"]').forEach(el => el.href = d.lineUrl);
-    }
-    if(d.youtubeUrl){
-      const fy = document.getElementById('footerYoutube');
-      if(fy) fy.href = d.youtubeUrl;
-    }
+    const raw=await sbGetSetting('services');if(!raw)return;const d=JSON.parse(raw);
+    if(d.instaId){const u=d.instaId.startsWith('http')?d.instaId:'https://www.instagram.com/'+d.instaId.replace('@','');const el=document.getElementById('instaLink');if(el){el.href=u;el.textContent='フォロー';}const fi=document.getElementById('footerInsta');if(fi)fi.href=u;}
+    if(d.lineUrl){const lm=document.getElementById('lineMainBtn');if(lm)lm.href=d.lineUrl;const fl=document.getElementById('footerLine');if(fl)fl.href=d.lineUrl;document.querySelectorAll('a[href="https://lin.ee/XXXXXXX"]').forEach(el=>el.href=d.lineUrl);}
+    if(d.youtubeUrl){const fy=document.getElementById('footerYoutube');if(fy)fy.href=d.youtubeUrl;}
   }catch(e){}
 }
 
-// ===== INSTAGRAM POSTS (3列グリッド化) =====
+// ===== INSTAGRAM POSTS =====
 async function loadInstaPosts(){
-  const wrap = document.getElementById('instaPostsWrap');
-  if(!wrap) return;
+  const wrap=document.getElementById('instaPostsWrap');if(!wrap)return;
   try{
-    const raw = await sbGetSetting('insta_posts');
-    const posts = raw ? JSON.parse(raw) : [];
-    if(!posts.length){
-      wrap.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:24px 16px; color:var(--text-light); font-size:13px; line-height:1.8;">📸 まだ投稿がありません。<br>管理者ページの「📸 インスタ投稿」から追加できます。</div>';
-      return;
-    }
-    wrap.innerHTML = posts.map(p => `
-      <div class="insta-post-item" onclick="openLightbox('${p.imageUrl}')">
-        ${p.imageUrl ? `<img src="${p.imageUrl}" loading="lazy">` : `<div style="background:#eee; width:100%; height:100%;"></div>`}
-      </div>
-    `).join('');
-  }catch(e){
-    wrap.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:24px; color:var(--text-light); font-size:13px;">読み込みに失敗しました</div>';
-  }
+    const raw=await sbGetSetting('insta_posts');const posts=raw?JSON.parse(raw):[];
+    if(!posts.length){wrap.innerHTML='<div style="text-align:center;padding:24px 16px;color:var(--text-light);font-size:13px;line-height:1.8;">📸 まだ投稿がありません。<br>管理者ページの「📸 インスタ投稿」から追加できます。</div>';return;}
+    wrap.innerHTML=posts.map(p=>`<div style="border:1.5px solid var(--green-pale);border-radius:14px;overflow:hidden;">${p.imageUrl?`<img src="${p.imageUrl}" onclick="openLightbox('${p.imageUrl}')" style="width:100%;aspect-ratio:1;object-fit:cover;cursor:pointer;">`:''}<div style="padding:12px 14px;">${p.caption?`<p style="font-size:13px;line-height:1.6;color:var(--text);margin-bottom:6px;">${p.caption}</p>`:''}<div style="display:flex;align-items:center;justify-content:space-between;"><span style="font-size:11px;color:var(--text-light);">📅 ${p.date||''}</span>${p.url?`<a href="${p.url}" target="_blank" style="font-size:12px;color:#dc2743;font-weight:700;text-decoration:none;">投稿を見る →</a>`:''}</div></div></div>`).join('');
+  }catch(e){wrap.innerHTML='<div style="text-align:center;padding:24px;color:var(--text-light);font-size:13px;">読み込みに失敗しました</div>';}
 }
 
 // ===== EVENTS =====
 async function loadEvents(){
-  const wrap=document.getElementById('eventsList');
-  if(!wrap)return;
+  const wrap=document.getElementById('eventsList');if(!wrap)return;
   try{
     const raw=await sbGetSetting('events_list');
-    const defaultEvents=[
-      {month:'APR',day:12,weekday:'土',color:'var(--green)',name:'春の自然探検あそび',place:'信貴山・大竹緑地',time:'10:00〜14:00',target:'3歳〜小学生（保護者同伴）',fee:'無料'},
-      {month:'APR',day:26,weekday:'土',color:'var(--sky-dark)',name:'焚き火と野外料理の日',place:'信貴山・大竹緑地',time:'10:30〜14:30',target:'5歳〜中学生',fee:'無料'}
-    ];
+    const defaultEvents=[{month:'APR',day:12,weekday:'土',color:'var(--green)',name:'春の自然探検あそび',place:'信貴山・大竹緑地',time:'10:00〜14:00',target:'3歳〜小学生（保護者同伴）',fee:'無料'},{month:'APR',day:26,weekday:'土',color:'var(--sky-dark)',name:'焚き火と野外料理の日',place:'信貴山・大竹緑地',time:'10:30〜14:30',target:'5歳〜中学生',fee:'無料'}];
     const events=raw?JSON.parse(raw):defaultEvents;
-    if(!events.length){ wrap.innerHTML='<p style="text-align:center;color:var(--text-light);padding:20px;font-size:13px;">イベント情報を準備中です</p>'; return; }
-    const showEvents = events.slice(0,3);
-    const moreEvents = events.length > 3;
+    if(!events.length){wrap.innerHTML='<p style="text-align:center;color:var(--text-light);padding:20px;font-size:13px;">イベント情報を準備中です</p>';return;}
+    const showEvents=events.slice(0,3);const moreEvents=events.length>3;
     wrap.innerHTML=showEvents.map((ev,i)=>{
-      const hasBg = !!ev.bgImage;
-      const evId = 'ev-detail-'+i;
-      const textColor = hasBg ? 'color:white;' : '';
-      const subColor  = hasBg ? 'color:rgba(255,255,255,0.85);' : 'color:var(--text-light);';
-      const detailBg  = hasBg ? 'background:rgba(255,255,255,0.15);border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.8;color:rgba(255,255,255,0.9);margin-top:8px;' : 'background:#f8fbf8;border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.8;color:var(--text-light);margin-top:8px;';
-      const cardWrap = hasBg ? `position:relative;overflow:hidden;background-image:url(${ev.bgImage});background-size:cover;background-position:center;` : '';
-      return `<div class="event-item reveal" style="${cardWrap}">
-        ${hasBg?'<div style="position:absolute;inset:0;background:rgba(0,0,0,0.45);border-radius:14px;z-index:0;"></div>':''}
-        <div class="event-date-block" style="position:relative;z-index:1;background:${hasBg?'rgba(255,255,255,0.2)':ev.color||'var(--green)'};${hasBg?'border:1.5px solid rgba(255,255,255,0.5);':''}">
-          <div class="month" style="${subColor}">${ev.month||''}</div>
-          <div class="day" style="${textColor}">${ev.day||''}</div>
-          <div class="weekday" style="${subColor}">${ev.weekday||''}</div>
-        </div>
-        <div class="event-details" style="position:relative;z-index:1;flex:1;">
-          <h4 style="${textColor}">${ev.name||''}</h4>
-          <p style="${subColor}font-size:12px;line-height:1.7;margin-bottom:6px;">${[ ev.place?'📍 '+ev.place:'', ev.time?'⏰ '+ev.time:'', ev.target?'👶 '+ev.target:'', ev.fee?'💰 '+ev.fee:'' ].filter(Boolean).join('<br>')}</p>
-          ${(ev.items||ev.notes||ev.extra)?`<div id="${evId}" style="display:none;"><div style="${detailBg}">${ev.items?'🎒 <strong>準備物：</strong><br>'+nl2br(ev.items)+'<br>':''}${ev.notes?'⚠️ <strong>注意事項：</strong><br>'+nl2br(ev.notes)+'<br>':''}${ev.extra?'📝 <strong>補足：</strong><br>'+nl2br(ev.extra):''}</div></div><button onclick="toggleEvDetail('${evId}',this)" style="font-size:11px;font-weight:700;color:${hasBg?'rgba(255,255,255,0.8)':'var(--text-light)'};background:none;border:none;cursor:pointer;padding:0;margin-bottom:6px;font-family:'Zen Maru Gothic',sans-serif;">▶ 詳細を見る</button>`:''}
-          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;"><button class="apply-link" onclick="openApply()" style="${hasBg?'border-color:white;color:white;background:rgba(255,255,255,0.15);':''}">✏️ 申し込む</button></div>
-        </div>
-      </div>`;
-    }).join('') + (moreEvents ? `<div style="text-align:center;margin-top:8px;"><a href="events-list.html" style="display:inline-flex;align-items:center;gap:6px;background:var(--green);color:white;border-radius:50px;padding:10px 24px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">📅 イベントをもっと見る →</a></div>` : '');
-  }catch(e){}
+      const hasBg=!!ev.bgImage;const evId='ev-detail-'+i;
+      const textColor=hasBg?'color:white;':'';const subColor=hasBg?'color:rgba(255,255,255,0.85);':'color:var(--text-light);';
+      const detailBg=hasBg?'background:rgba(255,255,255,0.15);border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.8;color:rgba(255,255,255,0.9);margin-top:8px;':'background:#f8fbf8;border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.8;color:var(--text-light);margin-top:8px;';
+      const cardWrap=hasBg?`position:relative;overflow:hidden;background-image:url(${ev.bgImage});background-size:cover;background-position:center;`:'';
+      return `<div class="event-item reveal" style="${cardWrap}">${hasBg?'<div style="position:absolute;inset:0;background:rgba(0,0,0,0.45);border-radius:14px;z-index:0;"></div>':''}<div class="event-date-block" style="position:relative;z-index:1;background:${hasBg?'rgba(255,255,255,0.2)':ev.color||'var(--green)'};${hasBg?'border:1.5px solid rgba(255,255,255,0.5);':''}"><div class="month" style="${subColor}">${ev.month||''}</div><div class="day" style="${textColor}">${ev.day||''}</div><div class="weekday" style="${subColor}">${ev.weekday||''}</div></div><div class="event-details" style="position:relative;z-index:1;flex:1;"><h4 style="${textColor}">${ev.name||''}</h4><p style="${subColor}font-size:12px;line-height:1.7;margin-bottom:6px;">${[ev.place?'📍 '+ev.place:'',ev.time?'⏰ '+ev.time:'',ev.target?'👶 '+ev.target:'',ev.fee?'💰 '+ev.fee:''].filter(Boolean).join('<br>')}</p>${(ev.items||ev.notes||ev.extra)?`<div id="${evId}" style="display:none;"><div style="${detailBg}">${ev.items?'🎒 <strong>準備物：</strong><br>'+nl2br(ev.items)+'<br>':''}${ev.notes?'⚠️ <strong>注意事項：</strong><br>'+nl2br(ev.notes)+'<br>':''}${ev.extra?'📝 <strong>補足：</strong><br>'+nl2br(ev.extra):''}</div></div><button onclick="toggleEvDetail('${evId}',this)" style="font-size:11px;font-weight:700;color:${hasBg?'rgba(255,255,255,0.8)':'var(--text-light)'};background:none;border:none;cursor:pointer;padding:0;margin-bottom:6px;font-family:'Zen Maru Gothic',sans-serif;">▶ 詳細を見る</button>`:''}<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;"><button class="apply-link" onclick="openApply()" style="${hasBg?'border-color:white;color:white;background:rgba(255,255,255,0.15);':''}">✏️ 申し込む</button></div></div></div>`;
+    }).join('')+(moreEvents?`<div style="text-align:center;margin-top:8px;"><a href="events-list.html" style="display:inline-flex;align-items:center;gap:6px;background:var(--green);color:white;border-radius:50px;padding:10px 24px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">📅 イベントをもっと見る →</a></div>`:'');
+    initReveal();
+  }catch(e){wrap.innerHTML='<p style="text-align:center;color:var(--text-light);padding:20px;font-size:13px;">読み込みに失敗しました</p>';}
 }
 
 // ===== DYNAMIC SEO =====
-async function loadLocalBizSchema(){
-  try{
-    const raw = await sbGetSetting('lb_jsonld');
-    if(!raw) return;
-    const old = document.getElementById('ld-localbiz');
-    if(old) old.remove();
-    const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.id   = 'ld-localbiz';
-    script.textContent = raw;
-    document.head.appendChild(script);
-  }catch(e){}
-}
-
+async function loadLocalBizSchema(){try{const raw=await sbGetSetting('lb_jsonld');if(!raw)return;const old=document.getElementById('ld-localbiz');if(old)old.remove();const s=document.createElement('script');s.type='application/ld+json';s.id='ld-localbiz';s.textContent=raw;document.head.appendChild(s);}catch(e){}}
 async function loadDynamicSeo(){
   try{
     const[title,desc,kw,ogTitle,ogDesc]=await Promise.all([sbGetSetting('seo_title'),sbGetSetting('seo_desc'),sbGetSetting('seo_keywords'),sbGetSetting('og_title'),sbGetSetting('og_desc')]);
-    if(title){document.title=title;}
-    if(desc){document.querySelector('meta[name="description"]')?.setAttribute('content',desc);}
+    if(title){document.title=title;document.querySelector('meta[property="og:title"]')?.setAttribute('content',title);document.querySelector('meta[name="twitter:title"]')?.setAttribute('content',title);}
+    if(desc){document.querySelector('meta[name="description"]')?.setAttribute('content',desc);document.querySelector('meta[property="og:description"]')?.setAttribute('content',desc);document.querySelector('meta[name="twitter:description"]')?.setAttribute('content',desc);}
     if(kw)document.querySelector('meta[name="keywords"]')?.setAttribute('content',kw);
+    if(ogTitle)document.querySelector('meta[property="og:title"]')?.setAttribute('content',ogTitle);
+    if(ogDesc)document.querySelector('meta[property="og:description"]')?.setAttribute('content',ogDesc);
   }catch(e){}
 }
 
-// ===== DYNAMIC PHOTOS (クリックで拡大) =====
+// ===== DYNAMIC PHOTOS =====
 async function loadDynamicPhotos(){
   try{
     const[nextBg,aboutBg,mapPhoto,mapUrl]=await Promise.all([sbGetSetting('photo_next_event_bg'),sbGetSetting('photo_about_bg'),sbGetSetting('photo_map_photo'),sbGetSetting('photo_map_url')]);
-    if(nextBg){ const ne=document.querySelector('.next-event'); if(ne){ ne.style.backgroundImage=`url(${nextBg})`; ne.style.backgroundSize='cover'; ne.style.backgroundPosition='center'; } }
-    if(aboutBg){ const ab=document.querySelector('.about-section'); if(ab){ ab.style.backgroundImage=`url(${aboutBg})`; ab.style.backgroundSize='cover'; ab.style.backgroundPosition='center'; } }
+    if(nextBg){const ne=document.querySelector('.next-event');if(ne){ne.style.backgroundImage=`url(${nextBg})`;ne.style.backgroundSize='cover';ne.style.backgroundPosition='center';}}
+    if(aboutBg){const ab=document.querySelector('.about-section');if(ab){ab.style.backgroundImage=`url(${aboutBg})`;ab.style.backgroundSize='cover';ab.style.backgroundPosition='center';}}
     const mapWrap=document.querySelector('.map-wrap');
     if(mapWrap){
-      if(mapUrl){ mapWrap.innerHTML=`<iframe src="${mapUrl}" allowfullscreen loading="lazy"></iframe>`; } 
-      else if(mapPhoto){ mapWrap.innerHTML=`<img src="${mapPhoto}" onclick="openLightbox('${mapPhoto}')" style="width:100%;height:100%;object-fit:cover;cursor:pointer;" title="タップで拡大">`; }
+      if(mapUrl){mapWrap.innerHTML=`<iframe src="${mapUrl}" allowfullscreen loading="lazy"></iframe>`;}
+      else if(mapPhoto){mapWrap.innerHTML=`<img src="${mapPhoto}" onclick="openLightbox('${mapPhoto}')" style="width:100%;height:100%;object-fit:cover;cursor:pointer;" title="タップで拡大">`;}
     }
   }catch(e){}
 }
 
-// SLIDESHOW
+// ===== SLIDESHOW =====
 let cur=0,timer=null;
-async function loadSlides(){
-  const raw=await sbGetSetting('slides');
-  const slides=raw?JSON.parse(raw):[{id:1,url:'',caption:'自然の中で自由に遊ぼう！'}];
-  initSlideshow(slides);
-}
+async function loadSlides(){const raw=await sbGetSetting('slides');const slides=raw?JSON.parse(raw):[{id:1,url:'',caption:'自然の中で自由に遊ぼう！'}];initSlideshow(slides);}
 function initSlideshow(slides){
-  const ss=document.getElementById('slideshow');
-  const dots=document.getElementById('slideDots');
-  ss.querySelectorAll('.slide').forEach(s=>s.remove());
-  dots.innerHTML='';
+  const ss=document.getElementById('slideshow');const dots=document.getElementById('slideDots');
+  ss.querySelectorAll('.slide').forEach(s=>s.remove());dots.innerHTML='';
   const bgs=['linear-gradient(160deg,#c8f0a0,#87d4a8 40%,#87ceeb)','linear-gradient(160deg,#ffe082,#ffb74d 50%,#ff8f00)','linear-gradient(160deg,#b2dfdb,#4db6ac 50%,#00796b)'];
   slides.forEach((s,i)=>{
-    const div=document.createElement('div');
-    div.className='slide'+(i===0?' active':'');
-    // クリックで拡大する処理を追加
-    if(s.url){div.innerHTML=`<img src="${s.url}" alt="${s.caption}" onclick="openLightbox('${s.url}')"><div class="slide-caption">${s.caption}</div>`;}
+    const div=document.createElement('div');div.className='slide'+(i===0?' active':'');
+    if(s.url){div.innerHTML=`<img src="${s.url}" onclick="openLightbox('${s.url}')" alt="${s.caption}" style="cursor:pointer;"><div class="slide-caption">${s.caption}</div>`;}
     else{div.innerHTML=`<div class="slide-bg" style="background:${bgs[i%bgs.length]}"><span>🌿</span></div><div class="slide-caption">${s.caption}</div>`;}
     ss.insertBefore(div,ss.querySelector('.slide-prev'));
-    const dot=document.createElement('button');
-    dot.className='slide-dot'+(i===0?' active':'');
-    dot.onclick=()=>goSlide(i);dots.appendChild(dot);
+    const dot=document.createElement('button');dot.className='slide-dot'+(i===0?' active':'');dot.onclick=()=>goSlide(i);dots.appendChild(dot);
   });
-  cur=0;clearInterval(timer);
-  if(slides.length>1)timer=setInterval(()=>slideNext(),4500);
+  cur=0;clearInterval(timer);if(slides.length>1)timer=setInterval(()=>slideNext(),4500);
 }
-function goSlide(n){
-  const sl=document.querySelectorAll('.slide'),dt=document.querySelectorAll('.slide-dot');
-  if(!sl.length)return;
-  sl[cur].classList.remove('active');dt[cur]?.classList.remove('active');
-  cur=(n+sl.length)%sl.length;
-  sl[cur].classList.add('active');dt[cur]?.classList.add('active');
-}
-function slideNext(){goSlide(cur+1);}
-function slidePrev(){goSlide(cur-1);}
+function goSlide(n){const sl=document.querySelectorAll('.slide'),dt=document.querySelectorAll('.slide-dot');if(!sl.length)return;sl[cur].classList.remove('active');dt[cur]?.classList.remove('active');cur=(n+sl.length)%sl.length;sl[cur].classList.add('active');dt[cur]?.classList.add('active');}
+function slideNext(){goSlide(cur+1);}function slidePrev(){goSlide(cur-1);}
 
-// ABOUT
+// ===== ABOUT =====
 async function loadAbout(){
   const raw=await sbGetSetting('about_features');
   const feats=raw?JSON.parse(raw):[{icon:'🌿',title:'自然の中で自由に',body:'どろんこ・焚き火・木登り。自分でやりたいことを見つける場所'},{icon:'👨‍👩‍👧',title:'親子で参加',body:'保護者も一緒に楽しめる。地域のみんなとつながれます'},{icon:'🏕️',title:'月2回開催',body:'定期的に開催。継続して通える地域の居場所です'},{icon:'💚',title:'無料・低料金',body:'誰でも参加しやすい料金設定。補助制度もあります'}];
-  document.getElementById('featuresGrid').innerHTML=feats.map(f=>
-    `<div class="feature-card reveal"><span class="feat-icon">${f.icon}</span><h4>${f.title}</h4><p>${f.body}</p></div>`
-  ).join('');
+  document.getElementById('featuresGrid').innerHTML=feats.map(f=>`<div class="feature-card reveal"><span class="feat-icon">${f.icon}</span><h4>${f.title}</h4><p>${f.body}</p></div>`).join('');
+  initReveal();
 }
 
-// APPLY
+// ===== APPLY =====
 async function loadApply(){
-  const [isOpenRaw,formUrl,closedMsg]=await Promise.all([sbGetSetting('apply_open'),sbGetSetting('google_form_url'),sbGetSetting('apply_closed_message')]);
+  const[isOpenRaw,formUrl,closedMsg]=await Promise.all([sbGetSetting('apply_open'),sbGetSetting('google_form_url'),sbGetSetting('apply_closed_message')]);
   const isOpen=isOpenRaw!=='false';
-  renderApplyStatus(isOpen,formUrl,closedMsg);
-  renderApplyMain(isOpen,formUrl,closedMsg);
+  renderApplyStatus(isOpen,formUrl,closedMsg);renderApplyMain(isOpen,formUrl,closedMsg);
 }
 function renderApplyStatus(isOpen,formUrl,closedMsg){
   const w=document.getElementById('applyStatusWrap');
-  if(isOpen){
-    const url=formUrl||'#apply-section';const target=formUrl?'target="_blank"':'';
-    w.innerHTML=`<a href="${url}" ${target} class="apply-open-btn">📝 この回に申し込む →</a>`;
-  }else{
-    w.innerHTML=`<div class="apply-closed-box"><div style="font-size:24px;margin-bottom:4px;">🚫</div>${closedMsg||'現在申込を停止しています。'}</div>`;
-  }
+  if(isOpen){const url=formUrl||'#apply-section';const target=formUrl?'target="_blank"':'';w.innerHTML=`<a href="${url}" ${target} class="apply-open-btn">📝 この回に申し込む →</a>`;}
+  else{w.innerHTML=`<div class="apply-closed-box"><div style="font-size:24px;margin-bottom:4px;">🚫</div>${closedMsg||'現在申込を停止しています。'}</div>`;}
 }
 function renderApplyMain(isOpen,formUrl,closedMsg){
   const a=document.getElementById('applyMainArea');
-  if(isOpen){
-    if(formUrl){
-      a.innerHTML=`<div style="background:white;border-radius:16px;padding:28px;text-align:center;box-shadow:var(--shadow);">
-        <div style="font-size:48px;margin-bottom:12px;">📝</div>
-        <h3 style="font-size:18px;font-weight:900;color:var(--green);margin-bottom:8px;">参加申込フォーム</h3>
-        <p style="font-size:13px;color:var(--text-light);margin-bottom:20px;line-height:1.6;">Googleフォームから簡単にお申し込みいただけます。</p>
-        <a href="${formUrl}" target="_blank" style="display:block;background:var(--green);color:white;border-radius:50px;padding:16px;font-size:16px;font-family:'Zen Maru Gothic',sans-serif;font-weight:900;text-decoration:none;">📝 申込フォームを開く</a>
-      </div>`;
-    }else{
-      a.innerHTML=`<div style="background:white;border-radius:16px;padding:28px;text-align:center;"><p style="color:var(--text-light);font-size:13px;line-height:1.8;">申込フォームを準備中です。<br>しばらくお待ちください。</p></div>`;
-    }
-  }else{
-    a.innerHTML=`<div style="background:white;border-radius:16px;padding:32px 24px;text-align:center;box-shadow:var(--shadow);">
-      <div style="font-size:52px;margin-bottom:12px;">🚫</div>
-      <h3 style="font-size:18px;font-weight:900;color:var(--red);margin-bottom:8px;">現在申込を停止しています</h3>
-      <p style="font-size:13px;color:var(--text-light);line-height:1.6;">${closedMsg||'次回開催情報をお待ちください。'}</p>
-      <a href="#line" style="display:inline-block;margin-top:16px;background:#06C755;color:white;border-radius:50px;padding:12px 24px;font-size:14px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">💬 LINEで通知を受け取る</a>
-    </div>`;
-  }
+  if(isOpen){if(formUrl){a.innerHTML=`<div style="background:white;border-radius:16px;padding:28px;text-align:center;box-shadow:var(--shadow);"><div style="font-size:48px;margin-bottom:12px;">📝</div><h3 style="font-size:18px;font-weight:900;color:var(--green);margin-bottom:8px;">参加申込フォーム</h3><p style="font-size:13px;color:var(--text-light);margin-bottom:20px;line-height:1.6;">Googleフォームから簡単にお申し込みいただけます。</p><a href="${formUrl}" target="_blank" style="display:block;background:var(--green);color:white;border-radius:50px;padding:16px;font-size:16px;font-family:'Zen Maru Gothic',sans-serif;font-weight:900;text-decoration:none;">📝 申込フォームを開く</a></div>`;}else{a.innerHTML=`<div style="background:white;border-radius:16px;padding:28px;text-align:center;"><p style="color:var(--text-light);font-size:13px;line-height:1.8;">申込フォームを準備中です。<br>しばらくお待ちください。</p></div>`;}}
+  else{a.innerHTML=`<div style="background:white;border-radius:16px;padding:32px 24px;text-align:center;box-shadow:var(--shadow);"><div style="font-size:52px;margin-bottom:12px;">🚫</div><h3 style="font-size:18px;font-weight:900;color:var(--red);margin-bottom:8px;">現在申込を停止しています</h3><p style="font-size:13px;color:var(--text-light);line-height:1.6;">${closedMsg||'次回開催情報をお待ちください。'}</p><a href="#line" style="display:inline-block;margin-top:16px;background:#06C755;color:white;border-radius:50px;padding:12px 24px;font-size:14px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">💬 LINEで通知を受け取る</a></div>`;}
 }
-function openApply(){document.getElementById('apply-section').scrollIntoView({behavior:'smooth'});}
 
-// NEWS
+// ===== NEWS =====
 async function loadNews(){
-  const wrap = document.getElementById('newsWrap') || document.getElementById('tab-news');
-  if(!wrap) return;
+  const wrap=document.getElementById('newsWrap')||document.getElementById('tab-news');if(!wrap)return;
   try{
-    const raw = await sbGetSetting('news_posts');
+    const raw=await sbGetSetting('news_posts');
     const TAG_LABEL={event:'📅 イベント',news:'📢 お知らせ',report:'📷 活動報告'};
-    const TAG_CLS  ={event:'tag-event',  news:'tag-news',    report:'tag-report'};
-    const posts = raw ? JSON.parse(raw) : [];
-    if(!posts.length){
-      wrap.innerHTML='<p style="text-align:center;color:var(--text-light);padding:20px;font-size:13px;">お知らせはありません</p>';
-      return;
-    }
-    const show = posts.slice(0,3);
-    const more = posts.length > 3;
-    wrap.innerHTML = show.map(p=>{
-      const photos = p.images||[];
-      return `<div class="post-card reveal">
-        <div class="post-tag ${TAG_CLS[p.tag]||'tag-news'}">${TAG_LABEL[p.tag]||'📢 お知らせ'}</div>
-        <div class="post-date">${p.date||''}</div>
-        <h4>${p.title||''}</h4>
-        ${p.body?`<p>${nl2br(p.body)}</p>`:''}
-        ${photos.length?`<div style="display:flex;gap:8px;margin-top:10px;">
-          ${photos.map(img=>`<img src="${img}" onclick="openLightbox('${img}')" style="width:${photos.length===1?'100%':'33.33%'};flex:0 0 ${photos.length===1?'100%':'33.33%'};aspect-ratio:1;object-fit:cover;border-radius:10px;cursor:pointer;">`).join('')}
-        </div>`:''}
-      </div>`;
-    }).join('') + (more ? `<div style="text-align:center;margin-top:8px;"><a href="news.html" style="display:inline-flex;align-items:center;gap:6px;background:var(--green);color:white;border-radius:50px;padding:10px 24px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">📢 お知らせをもっと見る →</a></div>` : '');
-  }catch(e){}
+    const TAG_CLS={event:'tag-event',news:'tag-news',report:'tag-report'};
+    const posts=raw?JSON.parse(raw):[];
+    if(!posts.length){wrap.innerHTML='<p style="text-align:center;color:var(--text-light);padding:20px;font-size:13px;">お知らせはありません</p>';return;}
+    const show=posts.slice(0,3);const more=posts.length>3;
+    wrap.innerHTML=show.map(p=>{
+      const photos=p.images||[];
+      return `<div class="post-card reveal"><div class="post-tag ${TAG_CLS[p.tag]||'tag-news'}">${TAG_LABEL[p.tag]||'📢 お知らせ'}</div><div class="post-date">${p.date||''}</div><h4>${p.title||''}</h4>${p.body?`<p>${nl2br(p.body)}</p>`:''}${photos.length?`<div style="display:flex;gap:8px;margin-top:10px;">${photos.map(img=>`<img src="${img}" onclick="openLightbox('${img}')" style="width:${photos.length===1?'100%':photos.length===2?'calc(50% - 4px)':'calc(33.33% - 6px)'};aspect-ratio:1;object-fit:cover;border-radius:8px;cursor:pointer;">`).join('')}</div>`:''}</div>`;
+    }).join('')+(more?`<div style="text-align:center;margin-top:8px;"><a href="news.html" style="display:inline-flex;align-items:center;gap:6px;background:var(--green);color:white;border-radius:50px;padding:10px 24px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">📢 お知らせをもっと見る →</a></div>`:'');
+    initReveal();
+  }catch(e){wrap.innerHTML='<p style="text-align:center;color:var(--text-light);padding:20px;font-size:13px;">読み込みに失敗しました</p>';}
 }
 
 function switchTab(name,btn){
-  if(name==='videos'){loadVideos();}
-  if(name==='news'){loadNews();}
+  if(name==='videos')loadVideos();if(name==='news')loadNews();
   ['instagram','news','videos'].forEach(t=>{const e=document.getElementById('tab-'+t);if(e)e.style.display='none';});
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  const t=document.getElementById('tab-'+name);if(t)t.style.display='block';
-  btn.classList.add('active');
+  const t=document.getElementById('tab-'+name);if(t)t.style.display='block';btn.classList.add('active');
 }
 function initReveal(){
   const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:.1});
   document.querySelectorAll('.reveal:not(.visible)').forEach(el=>obs.observe(el));
 }
 
-// ===== PWA / Service Worker (遅延登録でiPhone競合回避) =====
-const VAPID_PUBLIC_KEY = 'BNS4-yrccZ9Ov5ZM609te_42n9p1Rd9QabVIXRpgoUk1QL-XwSiDiPayvrKawUbcvIyo3YglIqmeZgDo-M24NU4';
-const SB_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlwemRnc29kaGN4aG5wYWpmdnJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNTgzNTcsImV4cCI6MjA4ODYzNDM1N30.b6ce95bLev-_6t2LidinKiRdn7VMV79iy9yBrz0db6k';
-const SB_REST_URL = 'https://ipzdgsodhcxhnpajfvrt.supabase.co/rest/v1';
-
-let deferredPrompt = null;
-let swRegistration = null;
+// ===== PWA =====
+const VAPID_PUBLIC_KEY='BNS4-yrccZ9Ov5ZM609te_42n9p1Rd9QabVIXRpgoUk1QL-XwSiDiPayvrKawUbcvIyo3YglIqmeZgDo-M24NU4';
+const EDGE_FUNCTION_URL='https://ipzdgsodhcxhnpajfvrt.supabase.co/functions/v1/clever-task';
+const SB_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlwemRnc29kaGN4aG5wYWpmdnJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNTgzNTcsImV4cCI6MjA4ODYzNDM1N30.b6ce95bLev-_6t2LidinKiRdn7VMV79iy9yBrz0db6k';
+const SB_REST_URL='https://ipzdgsodhcxhnpajfvrt.supabase.co/rest/v1';
+let deferredPrompt=null,swRegistration=null;
 
 async function loadPwaIcon(){
-  try{
-    const raw = await sbGetSetting('pwa_icon');
-    if(!raw) return;
-    const wrap = document.getElementById('pwaIconWrap');
-    if(wrap) wrap.innerHTML = `<img src="${raw}" style="width:100%;height:100%;object-fit:cover;border-radius:18px;">`;
-    const link = document.getElementById('appleIcon');
-    if(link) link.href = raw;
-  }catch(e){}
+  try{const raw=await sbGetSetting('pwa_icon');if(!raw)return;const wrap=document.getElementById('pwaIconWrap');if(wrap)wrap.innerHTML=`<img src="${raw}" style="width:100%;height:100%;object-fit:cover;border-radius:18px;">`;const link=document.getElementById('appleIcon');if(link)link.href=raw;}catch(e){}
 }
-
-function urlBase64ToUint8Array(base64String){
-  const padding = '='.repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
-  const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
-  for(let i = 0; i < rawData.length; ++i) outputArray[i] = rawData.charCodeAt(i);
-  return outputArray;
-}
-
+function urlBase64ToUint8Array(b){const p='='.repeat((4-b.length%4)%4);const base64=(b+p).replace(/-/g,'+').replace(/_/g,'/');const raw=window.atob(base64);const out=new Uint8Array(raw.length);for(let i=0;i<raw.length;++i)out[i]=raw.charCodeAt(i);return out;}
 async function subscribePush(){
-  if(!swRegistration) return false;
+  if(!swRegistration)return false;
   try{
-    const sub = await swRegistration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
-    });
-    const key = sub.getKey('p256dh');
-    const auth = sub.getKey('auth');
-    const p256dh = btoa(String.fromCharCode(...new Uint8Array(key)));
-    const authStr = btoa(String.fromCharCode(...new Uint8Array(auth)));
-    await fetch(SB_REST_URL+'/push_subscriptions', {
-      method:'POST',
-      headers:{'apikey':SB_ANON_KEY,'Authorization':'Bearer '+SB_ANON_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},
-      body: JSON.stringify({endpoint:sub.endpoint, p256dh, auth:authStr})
-    });
+    const sub=await swRegistration.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC_KEY)});
+    const key=sub.getKey('p256dh');const auth=sub.getKey('auth');
+    const p256dh=btoa(String.fromCharCode(...new Uint8Array(key)));const authStr=btoa(String.fromCharCode(...new Uint8Array(auth)));
+    await fetch(SB_REST_URL+'/push_subscriptions',{method:'POST',headers:{'apikey':SB_ANON_KEY,'Authorization':'Bearer '+SB_ANON_KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},body:JSON.stringify({endpoint:sub.endpoint,p256dh,auth:authStr})});
     return true;
-  }catch(e){ return false; }
+  }catch(e){console.log('push subscribe error:',e);return false;}
 }
-
 async function requestNotificationPermission(){
-  const btn = document.getElementById('notifyBtn');
-  const msg = document.getElementById('notifyMsg');
-  if(btn) btn.disabled = true;
-  if(msg) msg.textContent = '処理中...';
-
-  const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-  if(!isPWA){
-    if(msg) msg.innerHTML = '⚠️ まずSafariの「共有」→「ホーム画面に追加」でアプリをインストールしてから、アイコンからアプリを開いて通知ボタンを押してください。';
-    if(btn){ btn.disabled=false; btn.textContent='🔔 通知を受け取る'; }
-    return;
-  }
-
-  if(!('Notification' in window)){
-    if(msg) msg.textContent = '⚠️ このブラウザは通知に対応していません（iOS16.4以上のSafariが必要です）';
-    if(btn) btn.disabled=false;
-    return;
-  }
-
+  const btn=document.getElementById('notifyBtn');const msg=document.getElementById('notifyMsg');
+  if(btn)btn.disabled=true;if(msg)msg.textContent='処理中...';
+  const isPWA=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone;
+  if(!isPWA){if(msg)msg.innerHTML='⚠️ まずSafariの「共有」→「ホーム画面に追加」でアプリをインストールしてから、アイコンからアプリを開いて通知ボタンを押してください。';if(btn){btn.disabled=false;btn.textContent='🔔 通知を受け取る';}return;}
+  if(!('Notification' in window)){if(msg)msg.textContent='⚠️ このブラウザは通知に対応していません（iOS16.4以上のSafariが必要です）';if(btn)btn.disabled=false;return;}
   try{
-    const permission = await Notification.requestPermission();
-    if(permission === 'granted'){
-      const ok = await subscribePush();
-      if(ok){
-        if(btn){ btn.textContent = '🔔 通知ON ✅'; btn.style.background='var(--green)'; }
-        if(msg) msg.textContent = '通知の設定が完了しました！';
-        localStorage.setItem('pushSubscribed','1');
-      }else{
-        if(btn){ btn.textContent = '再試行する'; btn.disabled=false; }
-        if(msg) msg.textContent = '⚠️ 購読の登録に失敗しました。もう一度試してください。';
-      }
-    }else{
-      if(btn){ btn.textContent = '🔔 通知を受け取る'; btn.disabled=false; }
-      if(msg) msg.textContent = '通知が許可されませんでした。設定→Safari→通知から許可してください。';
-    }
-  }catch(e){
-    if(btn){ btn.textContent = '再試行する'; btn.disabled=false; }
-    if(msg) msg.textContent = '⚠️ エラー: '+e.message;
-  }
+    const permission=await Notification.requestPermission();
+    if(permission==='granted'){
+      const ok=await subscribePush();
+      if(ok){if(btn){btn.textContent='🔔 通知ON ✅';btn.style.background='var(--green)';}if(msg)msg.textContent='通知の設定が完了しました！';localStorage.setItem('pushSubscribed','1');}
+      else{if(btn){btn.textContent='再試行する';btn.disabled=false;}if(msg)msg.textContent='⚠️ 購読の登録に失敗しました。もう一度試してください。';}
+    }else{if(btn){btn.textContent='🔔 通知を受け取る';btn.disabled=false;}if(msg)msg.textContent='通知が許可されませんでした。設定→Safari→通知から許可してください。';}
+  }catch(e){if(btn){btn.textContent='再試行する';btn.disabled=false;}if(msg)msg.textContent='⚠️ エラー: '+e.message;}
 }
-
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredPrompt = e;
-  const section = document.getElementById('pwa-install');
-  if(section) section.style.display = 'block';
-});
-
-function installPWA(){
-  if(deferredPrompt){
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(result => {
-      if(result.outcome === 'accepted') document.getElementById('pwa-install').style.display = 'none';
-      deferredPrompt = null;
-    });
-  }
-}
-window.addEventListener('appinstalled', () => { document.getElementById('pwa-install').style.display = 'none'; });
-
-// Service Workerを少し遅らせて登録し、表示バグを防ぐ
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;});
+function installPWA(){if(deferredPrompt){deferredPrompt.prompt();deferredPrompt.userChoice.then(()=>deferredPrompt=null);}}
+window.addEventListener('appinstalled',()=>{document.getElementById('pwa-install').style.display='none';});
 if('serviceWorker' in navigator){
-  window.addEventListener('load', () => {
-    setTimeout(async () => {
-      try{
-        swRegistration = await navigator.serviceWorker.register('./sw.js');
-        if(localStorage.getItem('pushSubscribed')==='1'){
-          const btn = document.getElementById('notifyBtn');
-          if(btn){ btn.textContent='🔔 通知ON ✅'; btn.style.background='var(--green)'; }
-        }
-      }catch(e){}
-    }, 3000);
+  window.addEventListener('load',async()=>{
+    try{swRegistration=await navigator.serviceWorker.register('./sw.js');if(localStorage.getItem('pushSubscribed')==='1'){const b=document.getElementById('notifyBtn');if(b){b.textContent='🔔 通知ON ✅';b.style.background='var(--green)';}}}catch(e){console.log('SW error:',e);}
   });
 }
-
 document.getElementById('menuBtn').addEventListener('click',()=>{document.getElementById('navDrawer').classList.add('open');document.getElementById('navOverlay').classList.add('open');});
 function closeMenu(){document.getElementById('navDrawer').classList.remove('open');document.getElementById('navOverlay').classList.remove('open');}
 </script>
