@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>管理パネル | プレーパーク八尾</title>
-  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Zen Maru Gothic:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
     :root{--green:#3a7d44;--green-pale:#e8f5e9;--earth:#8d6e47;--sun:#f5c842;--red:#e05a44;--bg:#f4f7f4;--text:#2c2c2c;--text-light:#777;--border:#ddeedd;--shadow:0 2px 16px rgba(0,0,0,.07);--radius:16px;}
     *{margin:0;padding:0;box-sizing:border-box;}
@@ -39,15 +39,79 @@
     .form-input:focus{border-color:var(--green);}
     textarea.form-input{resize:vertical;min-height:80px;}
     .save-btn{background:var(--green);color:white;border:none;border-radius:50px;padding:10px 24px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;cursor:pointer;}
+    .save-btn:disabled{background:#aaa;cursor:not-allowed;}
+    .apply-status-card{border-radius:14px;padding:20px;text-align:center;margin-bottom:16px;}
+    .apply-status-card.open{background:var(--green-pale);border:2px solid #a5d6a7;}
+    .apply-status-card.closed{background:#fdecea;border:2px solid #ef9a9a;}
+    .toggle-apply-btn{margin-top:14px;border:none;border-radius:50px;padding:12px 28px;font-size:14px;font-family:'Zen Maru Gothic',sans-serif;font-weight:900;cursor:pointer;width:100%;}
+    .toggle-apply-btn.open{background:var(--red);color:white;}
+    .toggle-apply-btn.closed{background:var(--green);color:white;}
+    .slides-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:16px;}
+    .slide-thumb{background:var(--green-pale);border-radius:12px;aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;font-size:24px;}
+    .slide-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+    .slide-thumb .del-btn{position:absolute;top:4px;right:4px;background:rgba(224,90,68,.9);color:white;border:none;border-radius:50%;width:24px;height:24px;font-size:12px;cursor:pointer;}
+    .slide-thumb .cap-ov{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.5);color:white;font-size:10px;padding:3px 6px;font-weight:700;}
     .upload-area{border:2px dashed #6abf69;border-radius:12px;padding:20px;text-align:center;cursor:pointer;color:var(--green);font-weight:700;font-size:13px;}
     .upload-area:hover{background:var(--green-pale);}
+    .feature-editor{background:#f8fbf8;border-radius:12px;padding:14px;margin-bottom:10px;border:1.5px solid var(--border);}
+    .feat-row{display:flex;gap:8px;align-items:center;margin-bottom:6px;}
+    .feat-row input{flex:1;border:1.5px solid var(--border);border-radius:8px;padding:7px 10px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;outline:none;}
+    .feat-row input:focus{border-color:var(--green);}
+    .filter-bar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+    .filter-select{border:2px solid var(--border);border-radius:10px;padding:8px 12px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;outline:none;background:white;}
+
+    .ai-panel{background:white;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;display:flex;flex-direction:column;height:calc(100vh - 160px);min-height:450px;}
+    .ai-head{background:linear-gradient(135deg,var(--green),#2d5a27);color:white;padding:14px 18px;display:flex;align-items:center;gap:10px;}
+    .ai-avatar{width:34px;height:34px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;}
+    .ai-head-text h3{font-size:14px;font-weight:900;}
+    .ai-head-text p{font-size:11px;opacity:.8;}
+    .ai-status{margin-left:auto;display:flex;align-items:center;gap:5px;font-size:11px;}
+    .ai-dot{width:7px;height:7px;background:#69f0ae;border-radius:50%;animation:pulse 2s infinite;}
+    @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+    .chat-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:14px;background:#fafcfa;}
+    .msg{display:flex;gap:8px;max-width:88%;}
+    .msg.user{align-self:flex-end;flex-direction:row-reverse;}
+    .msg.ai{align-self:flex-start;}
+    .msg-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+    .msg.ai .msg-av{background:var(--green-pale);}
+    .msg.user .msg-av{background:var(--sun);}
+    .msg-bub{padding:11px 14px;border-radius:14px;font-size:13px;line-height:1.6;}
+    .msg.ai .msg-bub{background:white;border:1.5px solid var(--border);border-bottom-left-radius:4px;}
+    .msg.user .msg-bub{background:var(--green);color:white;border-bottom-right-radius:4px;}
+    .msg-bub pre{background:#1e1e1e;color:#d4d4d4;padding:10px;border-radius:8px;font-size:11px;overflow-x:auto;margin-top:8px;white-space:pre-wrap;}
+    .typing{display:none;align-self:flex-start;align-items:center;gap:8px;}
+    .typing.show{display:flex;}
+    .typing-dots{background:white;border:1.5px solid var(--border);border-radius:14px;padding:10px 14px;display:flex;gap:4px;}
+    .typing-dots span{width:7px;height:7px;background:#6abf69;border-radius:50%;animation:bounce 1.2s infinite;}
+    .typing-dots span:nth-child(2){animation-delay:.2s;}
+    .typing-dots span:nth-child(3){animation-delay:.4s;}
+    @keyframes bounce{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-6px);}}
+    .quick-btns{padding:10px 14px;border-top:1.5px solid var(--border);display:flex;gap:6px;overflow-x:auto;background:white;}
+    .q-btn{flex-shrink:0;background:var(--green-pale);color:var(--green);border:none;border-radius:50px;padding:6px 12px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;cursor:pointer;white-space:nowrap;}
+    .q-btn:hover{background:var(--green);color:white;}
+    .chat-in{padding:10px 14px;border-top:1.5px solid var(--border);background:white;display:flex;gap:8px;align-items:flex-end;}
+    .chat-textarea{flex:1;border:2px solid var(--border);border-radius:12px;padding:9px 12px;font-size:14px;font-family:'Zen Maru Gothic',sans-serif;resize:none;outline:none;max-height:90px;min-height:40px;line-height:1.4;}
+    .chat-textarea:focus{border-color:var(--green);}
+    .send-btn{width:40px;height:40px;background:var(--green);color:white;border:none;border-radius:50%;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .send-btn:disabled{background:#ccc;}
+    .log-item{background:white;border-radius:10px;padding:12px 16px;box-shadow:var(--shadow);margin-bottom:8px;border-left:4px solid var(--green);display:flex;gap:12px;align-items:flex-start;}
+    .log-icon{font-size:20px;flex-shrink:0;}
+    .log-action{font-size:13px;font-weight:700;margin-bottom:2px;}
+    .log-detail{font-size:12px;color:var(--text-light);}
+    .log-time{font-size:10px;color:#aaa;margin-top:2px;}
+    .log-filter-btn{border:1.5px solid var(--border);background:white;border-radius:50px;padding:6px 14px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;cursor:pointer;color:var(--text-light);}
+    .log-filter-btn.active{background:var(--green);color:white;border-color:var(--green);}
+    .clear-log-btn{background:none;border:1.5px solid var(--red);color:var(--red);border-radius:50px;padding:6px 14px;font-size:11px;font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;}
     .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--green);color:white;padding:12px 24px;border-radius:50px;font-size:13px;font-weight:700;z-index:999;transition:transform .3s;white-space:nowrap;}
     .toast.show{transform:translateX(-50%) translateY(0);}
-    @media(max-width:700px){.sidebar{display:none;}.main-content{padding:14px;}}
+    .saving-indicator{display:none;position:fixed;top:70px;right:16px;background:var(--green);color:white;padding:8px 16px;border-radius:50px;font-size:12px;font-weight:700;z-index:200;}
+    .saving-indicator.show{display:block;}
+    @media(max-width:700px){.sidebar{display:none;}.main-content{padding:14px;}.ai-panel{height:calc(100vh - 180px);}}
   </style>
 </head>
 <body>
 
+<!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-card">
     <div class="login-icon">🔐</div>
@@ -55,187 +119,1609 @@
     <p>プレーパーク八尾 管理パネル</p>
     <input class="login-input" type="text" id="loginUser" placeholder="ユーザー名">
     <input class="login-input" type="password" id="loginPass" placeholder="パスワード">
-    <button class="login-btn" onclick="doLogin()">ログイン</button>
+    <button class="login-btn" id="loginBtn">ログイン</button>
     <div class="login-error" id="loginError">ユーザー名またはパスワードが違います</div>
   </div>
 </div>
 
+<!-- APP -->
 <div id="app">
   <div class="top-bar">
     <h1>🌳 プレーパーク八尾 管理パネル</h1>
     <button class="logout-btn" onclick="doLogout()">ログアウト</button>
   </div>
+  <div class="saving-indicator" id="savingIndicator">💾 保存中...</div>
   <div class="layout">
     <div class="sidebar">
       <div class="sidebar-label">メイン</div>
       <button class="nav-item active" onclick="showPage('slides',this)"><span>🖼️</span> スライドショー</button>
+      <button class="nav-item" onclick="showPage('photos',this)"><span>📷</span> 写真配置</button>
+      <button class="nav-item" onclick="showPage('insta',this)"><span>📸</span> インスタ投稿</button>
+      <button class="nav-item" onclick="showPage('news',this)"><span>📢</span> お知らせ</button>
+      <button class="nav-item" onclick="showPage('videos',this)"><span>🎬</span> 動画</button>
+      <button class="nav-item" onclick="showPage('about',this)"><span>🌿</span> プレーパークって？</button>
       <button class="nav-item" onclick="showPage('apply',this)"><span>✏️</span> 申込管理</button>
+      <button class="nav-item" onclick="showPage('access',this)"><span>📍</span> アクセス情報</button>
+      <button class="nav-item" onclick="showPage('events',this)"><span>📅</span> イベント管理</button>
       <button class="nav-item" onclick="showPage('ai',this)"><span>🤖</span> AIアシスタント</button>
       <div class="sidebar-label" style="margin-top:8px;">記録・設定</div>
+      <button class="nav-item" onclick="showPage('seo',this)"><span>🔍</span> SEO設定</button>
+      <button class="nav-item" onclick="showPage('logs',this)"><span>📋</span> 変更ログ</button>
       <button class="nav-item" onclick="showPage('settings',this)"><span>⚙️</span> 設定</button>
       <button class="nav-item" onclick="window.open('index.html','_blank')"><span>🌐</span> サイトを見る</button>
     </div>
-
     <div class="main-content">
+
+      <!-- SLIDES -->
       <div class="page active" id="page-slides">
         <div class="page-title">🖼️ スライドショー管理</div>
-        <div class="card"><h3>スライド設定などはここに実装</h3></div>
+        <div class="card">
+          <h3>📸 写真を追加する</h3>
+          <p style="font-size:12px;color:var(--text-light);margin-bottom:14px;">写真をタップして選択するだけで追加できます。最大6枚。</p>
+          <div class="slides-grid" id="slidesGrid"></div>
+          <div class="upload-area" onclick="document.getElementById('slideFile').click()">＋ 写真を追加する（タップで選択）</div>
+          <input type="file" id="slideFile" accept="image/*" multiple style="display:none" onchange="addSlides(this.files)">
+        </div>
+        <div class="card">
+          <h3>✏️ キャプションを編集</h3>
+          <div id="captionEditor"></div>
+          <button class="save-btn" id="saveCaptionsBtn" onclick="saveCaptions()">💾 保存してサイトに反映</button>
+        </div>
       </div>
 
+      <!-- ABOUT -->
+      <div class="page" id="page-about">
+        <div class="page-title">🌿 「プレーパークって何？」編集</div>
+        <div class="card">
+          <h3>📝 4つの特徴を編集する</h3>
+          <p style="font-size:12px;color:var(--text-light);margin-bottom:16px;">変更すると即座にサイトに反映されます。</p>
+          <div id="aboutEditor"></div>
+          <button class="save-btn" id="saveAboutBtn" onclick="saveAbout()">💾 保存してサイトに反映</button>
+        </div>
+      </div>
+
+
+
+
+      <!-- APPLY -->
       <div class="page" id="page-apply">
         <div class="page-title">✏️ 申込管理</div>
-        <div class="card"><h3>申込管理の設定はここに実装</h3></div>
+        <div id="applyStatusCard"></div>
+        <div class="card">
+          <h3>🔗 Googleフォームの設定</h3>
+          <p style="font-size:12px;color:var(--text-light);margin-bottom:12px;">GoogleフォームのURLを貼り付けると申込ボタンと連携します。</p>
+          <div class="form-row">
+            <label>GoogleフォームのURL</label>
+            <input class="form-input" type="url" id="googleFormUrl" placeholder="https://docs.google.com/forms/d/...">
+          </div>
+          <button class="save-btn" id="saveFormBtn" onclick="saveFormUrl()">💾 URLを保存・反映</button>
+          <div style="margin-top:12px;background:var(--green-pale);border-radius:10px;padding:12px;font-size:12px;color:var(--text-light);line-height:1.7;">
+            💡 <strong>Googleフォームの作り方</strong><br>
+            forms.google.com でフォームを作成 → 右上「送信」→「リンク」タブ → URLをコピーして上に貼り付け
+          </div>
+        </div>
+        <div class="card">
+          <h3>💬 申込停止中のメッセージ</h3>
+          <div class="form-row">
+            <label>停止中に表示するメッセージ</label>
+            <textarea class="form-input" id="closedMessage" rows="3"></textarea>
+          </div>
+          <button class="save-btn" id="saveMsgBtn" onclick="saveClosedMsg()">💾 保存する</button>
+        </div>
       </div>
 
+      <!-- NEWS PAGE -->
+      <div class="page" id="page-news">
+        <div class="page-title">📢 お知らせ管理</div>
+        <div class="card">
+          <div id="newsEditingBanner" style="display:none;background:#fff9c4;border:2px solid var(--sun);border-radius:12px;padding:12px 16px;margin-bottom:14px;display:none;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;color:var(--earth);">
+            <span id="newsEditingLabel">✏️ 編集中</span>
+            <button onclick="cancelNewsEdit()" style="background:none;border:1.5px solid var(--earth);border-radius:50px;padding:4px 12px;font-size:11px;font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;color:var(--earth);">キャンセル</button>
+          </div>
+          <h3>➕ 新しいお知らせを追加</h3>
+          <div class="form-row">
+            <label>カテゴリ</label>
+            <select class="form-input" id="newsTag">
+              <option value="event">📅 イベント</option>
+              <option value="news">📢 お知らせ</option>
+              <option value="report">📷 活動報告</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>タイトル</label>
+            <input class="form-input" type="text" id="newsTitle" placeholder="例：春のイベント参加者を募集します！">
+          </div>
+          <div class="form-row">
+            <label>本文</label>
+            <textarea class="form-input" id="newsBody" rows="4" placeholder="例：4月12日開催。定員20名、先着順。詳細はこちら..."></textarea>
+          </div>
+          <div class="form-row">
+            <label>日付</label>
+            <input class="form-input" type="date" id="newsDate">
+          </div>
+          <div class="form-row">
+            <label>📸 写真（最大3枚）</label>
+            <div id="newsImgPreviews" style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;"></div>
+            <div class="upload-area" onclick="document.getElementById('newsImgFiles').click()" style="padding:12px;">
+              📁 写真を選ぶ（複数選択可）
+            </div>
+            <input type="file" id="newsImgFiles" accept="image/*" multiple style="display:none" onchange="previewNewsImgs(this.files)">
+            <div style="font-size:11px;color:var(--text-light);margin-top:4px;">最大3枚まで添付できます</div>
+          </div>
+          <button class="save-btn" id="newsAddBtn" onclick="addNews()">➕ お知らせを追加する</button>
+        </div>
+        <div class="card">
+          <h3>📋 登録済みお知らせ</h3>
+          <div id="newsList"><div style="text-align:center;padding:30px;color:var(--text-light);">⏳ 読み込み中...</div></div>
+        </div>
+      </div>
+
+      <!-- VIDEOS PAGE -->
+      <div class="page" id="page-videos">
+        <div class="page-title">🎬 動画管理</div>
+        <div class="card">
+          <h3>➕ 新しい動画を追加</h3>
+          <div class="form-row">
+            <label>YouTube動画のURL</label>
+            <input class="form-input" type="url" id="videoUrl" placeholder="https://www.youtube.com/watch?v=XXXXXXX">
+            <div style="font-size:11px;color:var(--text-light);margin-top:4px;">💡 YouTubeで動画を開いて、URLをそのままコピーしてください</div>
+          </div>
+          <div class="form-row">
+            <label>動画タイトル</label>
+            <input class="form-input" type="text" id="videoTitle" placeholder="例：プレーパーク八尾 活動の様子">
+          </div>
+          <div class="form-row">
+            <label>説明文（任意）</label>
+            <textarea class="form-input" id="videoDesc" rows="2" placeholder="例：2024年秋の活動の様子をまとめました"></textarea>
+          </div>
+          <button class="save-btn" onclick="addVideo()">➕ 動画を追加する</button>
+        </div>
+        <div class="card">
+          <h3>📋 登録済み動画</h3>
+          <div id="videoList"><div style="text-align:center;padding:30px;color:var(--text-light);">⏳ 読み込み中...</div></div>
+        </div>
+      </div>
+
+      <!-- EVENTS PAGE -->
+      <div class="page" id="page-events">
+        <div class="page-title">📅 イベント管理</div>
+        <div class="card" style="border-left:5px solid var(--sun);">
+          <h3>📣 次回予告の設定</h3>
+          <p style="font-size:12px;color:var(--text-light);margin-bottom:14px;">下の「登録済みイベント」の一番上のイベントが次回予告に自動表示されます。<br>順番を変えたい場合は削除して再追加してください。</p>
+          <div id="nextEventPreview" style="background:linear-gradient(135deg,var(--green),var(--sky-dark));border-radius:14px;padding:18px;color:white;">
+            <div style="font-size:11px;font-weight:900;background:var(--sun);color:var(--earth);padding:2px 10px;border-radius:20px;display:inline-block;margin-bottom:8px;">📣 次回予告</div>
+            <div id="nextEventPreviewText" style="font-size:14px;font-weight:700;">⏳ 読み込み中...</div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>➕ 新しいイベントを追加</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div class="form-row">
+              <label>月（英語）</label>
+              <input class="form-input" type="text" id="evMonth" placeholder="APR">
+            </div>
+            <div class="form-row">
+              <label>日</label>
+              <input class="form-input" type="number" id="evDay" placeholder="12" min="1" max="31">
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div class="form-row">
+              <label>曜日</label>
+              <select class="form-input" id="evWeekday">
+                <option>日</option><option>月</option><option>火</option>
+                <option>水</option><option>木</option><option>金</option><option>土</option>
+              </select>
+            </div>
+            <div class="form-row">
+              <label>カラー</label>
+              <select class="form-input" id="evColor">
+                <option value="var(--green)">緑</option>
+                <option value="var(--sky-dark)">青</option>
+                <option value="var(--earth)">茶</option>
+                <option value="#e05a44">赤</option>
+                <option value="#9c27b0">紫</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <label>イベント名</label>
+            <input class="form-input" type="text" id="evName" placeholder="春の自然探検あそび">
+          </div>
+          <div class="form-row">
+            <label>場所</label>
+            <input class="form-input" type="text" id="evPlace" placeholder="信貴山・大竹緑地">
+          </div>
+          <div class="form-row">
+            <label>時間</label>
+            <input class="form-input" type="text" id="evTime" placeholder="10:00〜14:00">
+          </div>
+          <div class="form-row">
+            <label>対象</label>
+            <input class="form-input" type="text" id="evTarget" placeholder="3歳〜小学生（保護者同伴）">
+          </div>
+          <div class="form-row">
+            <label>参加費</label>
+            <input class="form-input" type="text" id="evFee" placeholder="無料">
+          </div>
+          <div class="form-row">
+            <label>🎒 準備物</label>
+            <textarea class="form-input" id="evItems" rows="2" placeholder="例：動きやすい服装・タオル・水筒・着替え"></textarea>
+          </div>
+          <div class="form-row">
+            <label>⚠️ 注意事項</label>
+            <textarea class="form-input" id="evNotes" rows="2" placeholder="例：雨天中止・前日18時にLINEでお知らせします"></textarea>
+          </div>
+          <div class="form-row">
+            <label>📝 補足</label>
+            <textarea class="form-input" id="evExtra" rows="2" placeholder="例：お弁当持参OK・駐車場あり"></textarea>
+          </div>
+          <div class="form-row">
+            <label>🖼️ イベントカード背景画像（任意）</label>
+            <div id="evImgPreview" style="width:100%;height:80px;background:linear-gradient(135deg,var(--green),var(--sky-dark));border-radius:10px;margin-bottom:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;cursor:pointer;" onclick="document.getElementById('evImgFile').click()">📸 タップして写真を選ぶ</div>
+            <input type="file" id="evImgFile" accept="image/*" style="display:none" onchange="previewEvImg(this.files)">
+            <div style="font-size:11px;color:var(--text-light);">設定しない場合はカラーが使われます</div>
+          </div>
+          <button class="save-btn" onclick="addEvent()">➕ イベントを追加する</button>
+        </div>
+        <div class="card">
+          <h3>📋 登録済みイベント</h3>
+          <div id="eventList"><div style="text-align:center;padding:30px;color:var(--text-light);">⏳ 読み込み中...</div></div>
+        </div>
+      </div>
+
+
+      <!-- ACCESS PAGE -->
+      <div class="page" id="page-access">
+        <div class="page-title">📍 アクセス情報管理</div>
+        <div class="card">
+          <h3>📍 開催場所</h3>
+          <div class="form-row">
+            <label>場所名</label>
+            <input class="form-input" type="text" id="accessPlace" placeholder="例：信貴山・大竹緑地">
+          </div>
+          <div class="form-row">
+            <label>住所</label>
+            <input class="form-input" type="text" id="accessAddress" placeholder="例：大阪府八尾市大竹〇〇">
+          </div>
+          <div class="form-row">
+            <label>補足（駐車場など）</label>
+            <textarea class="form-input" id="accessPlaceNote" rows="2" placeholder="例：駐車場あり（無料）・駐輪場あり"></textarea>
+          </div>
+        </div>
+        <div class="card">
+          <h3>🚃 電車・バスでのアクセス</h3>
+          <div class="form-row">
+            <label>最寄り駅・バス停からの案内</label>
+            <textarea class="form-input" id="accessTrain" rows="3" placeholder="例：近鉄大阪線「河内山本駅」より徒歩20分&#10;近鉄大阪線「八尾駅」よりバス15分"></textarea>
+          </div>
+        </div>
+        <div class="card">
+          <h3>🚗 車でのアクセス</h3>
+          <div class="form-row">
+            <label>車でのアクセス案内</label>
+            <textarea class="form-input" id="accessCar" rows="2" placeholder="例：西名阪自動車道「法隆寺IC」より15分"></textarea>
+          </div>
+        </div>
+        <div class="card">
+          <h3>🌧️ 雨天・中止の場合</h3>
+          <div class="form-row">
+            <label>雨天・中止時の連絡方法</label>
+            <textarea class="form-input" id="accessRain" rows="2" placeholder="例：前日18時までにLINE・HPにてお知らせします"></textarea>
+          </div>
+        </div>
+        <div class="card">
+          <h3>🗺️ Googleマップ</h3>
+          <div class="form-row">
+            <label>GoogleマップのURL（埋め込み用）</label>
+            <input class="form-input" type="url" id="accessMapUrl" placeholder="https://www.google.com/maps/embed?pb=...">
+            <div style="font-size:11px;color:var(--text-light);margin-top:4px;">💡 Googleマップ → 「共有」→「地図を埋め込む」→ srcのURLをコピー</div>
+          </div>
+        </div>
+        <button class="save-btn" id="saveAccessBtn" onclick="saveAccess()">💾 保存してサイトに反映</button>
+      </div>
+
+      <!-- AI -->
       <div class="page" id="page-ai">
         <div class="page-title">🤖 AIアシスタント</div>
-        <div class="card"><h3>AIチャットはここに実装</h3></div>
+        <div class="ai-panel">
+          <div class="ai-head">
+            <div class="ai-avatar">🌿</div>
+            <div class="ai-head-text"><h3>プレーパーク更新AI</h3><p>話しかけるだけでサイトを更新できます</p></div>
+            <div class="ai-status"><div class="ai-dot"></div><span>稼働中</span></div>
+          </div>
+          <div class="chat-msgs" id="chatMsgs">
+            <div class="msg ai"><div class="msg-av">🌿</div><div class="msg-bub">こんにちは！プレーパーク八尾のAIアシスタントです🌳<br><br>イベント追加・お知らせ作成・アクセス更新など、日本語で話しかけてください！</div></div>
+          </div>
+          <div class="typing" id="typing"><div class="msg-av" style="background:var(--green-pale);">🌿</div><div class="typing-dots"><span></span><span></span><span></span></div></div>
+          <div class="quick-btns">
+            <button class="q-btn" onclick="qSend('次回イベントを追加したい')">📅 イベント追加</button>
+            <button class="q-btn" onclick="qSend('お知らせを投稿したい')">📢 お知らせ</button>
+            <button class="q-btn" onclick="qSend('動画を追加したい')">🎬 動画追加</button>
+            <button class="q-btn" onclick="qSend('アクセス情報を更新したい')">📍 アクセス更新</button>
+          </div>
+          <div class="chat-in">
+            <textarea class="chat-textarea" id="chatIn" placeholder="例：4月20日に木登りイベントを追加して" rows="1" onkeydown="handleKey(event)"></textarea>
+            <button class="send-btn" id="sendBtn" onclick="sendMsg()">➤</button>
+          </div>
+        </div>
       </div>
 
+      <!-- LOGS -->
+      <div class="page" id="page-logs">
+        <div class="page-title">📋 変更ログ</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button class="log-filter-btn active" onclick="filterLogs('',this)">すべて</button>
+            <button class="log-filter-btn" onclick="filterLogs('スライド',this)">🖼️ スライド</button>
+            <button class="log-filter-btn" onclick="filterLogs('プレーパーク',this)">🌿 About</button>
+            <button class="log-filter-btn" onclick="filterLogs('申込',this)">✏️ 申込</button>
+            <button class="log-filter-btn" onclick="filterLogs('申込者',this)">👥 申込者</button>
+          </div>
+          <button class="clear-log-btn" onclick="clearLogs()">🗑️ ログを消去</button>
+        </div>
+        <div id="logList"><div style="text-align:center;padding:40px;color:var(--text-light);">⏳ 読み込み中...</div></div>
+      </div>
+
+      <!-- SETTINGS -->
       <div class="page" id="page-settings">
         <div class="page-title">⚙️ 設定</div>
-        
         <div class="card">
           <h3>🔐 管理者アカウント</h3>
-          <div class="form-row"><label>新しいユーザー名</label><input class="form-input" type="text" id="newUser"></div>
-          <button class="save-btn">💾 更新</button>
+          <div class="form-row"><label>新しいユーザー名</label><input class="form-input" type="text" id="newUser" placeholder="新しいユーザー名"></div>
+          <div class="form-row"><label>新しいパスワード</label><input class="form-input" type="password" id="newPass" placeholder="新しいパスワード"></div>
+          <div class="form-row"><label>確認用パスワード</label><input class="form-input" type="password" id="newPass2" placeholder="もう一度入力"></div>
+          <button class="save-btn" onclick="saveAccount()">💾 アカウントを更新</button>
         </div>
-
         <div class="card">
           <h3>🔗 外部サービス連携</h3>
-          <div class="form-row"><label>📸 Instagram ID</label><input class="form-input" type="text" id="instaId"></div>
-          <button class="save-btn" onclick="saveServices()">💾 保存して反映</button>
+          <div class="form-row"><label>📸 Instagram アカウント名</label><input class="form-input" type="text" id="instaId" placeholder="@playpark_yao"><div style="font-size:11px;color:var(--text-light);margin-top:4px;">例：@playpark_yao　または フルURL</div></div>
+          <div class="form-row"><label>💬 LINE公式 URL</label><input class="form-input" type="url" id="lineUrl" placeholder="https://lin.ee/..."></div>
+          <div class="form-row"><label>🎬 YouTube チャンネル URL</label><input class="form-input" type="url" id="youtubeUrl" placeholder="https://www.youtube.com/@playpark_yao"></div>
+          <button class="save-btn" onclick="saveServices()">💾 保存してサイトに反映</button>
         </div>
-
-        <div class="card">
-          <h3>🖼️ サイトロゴ設定</h3>
-          <p style="font-size:12px;color:var(--text-light);margin-bottom:14px;">ヘッダーに表示されるメインロゴです。</p>
-          <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px;">
-            <div id="logoPreview" style="width:120px;height:60px;background:#eee;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid var(--border);">
-              <span style="font-size:10px;color:#aaa;">No Image</span>
-            </div>
-            <div style="flex:1;">
-              <div style="font-size:13px;font-weight:700;margin-bottom:4px;">現在のロゴ</div>
-              <div style="font-size:11px;color:var(--text-light);">推奨：横長 / 背景が透明なPNG</div>
-            </div>
-          </div>
-          <div class="upload-area" onclick="document.getElementById('logoFile').click()" style="padding:14px;">
-            📁 ロゴ画像を選択
-          </div>
-          <input type="file" id="logoFile" accept="image/*" style="display:none" onchange="uploadLogo(this.files)">
-          <button class="save-btn" style="margin-top:10px;background:#fdecea;color:var(--red);" onclick="clearLogo()">🗑️ ロゴを削除して文字に戻す</button>
-        </div>
-
         <div class="card">
           <h3>📲 PWAアイコン設定</h3>
-          <div class="upload-area">📁 アイコンを選ぶ</div>
+          <p style="font-size:12px;color:var(--text-light);margin-bottom:14px;">訪問者がホーム画面に追加したときに表示されるアイコンです。</p>
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px;">
+            <div id="pwaIconPreview" style="width:72px;height:72px;background:var(--green);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:36px;overflow:hidden;flex-shrink:0;">🌳</div>
+            <div style="flex:1;">
+              <div style="font-size:13px;font-weight:700;margin-bottom:4px;">現在のアイコン</div>
+              <div style="font-size:11px;color:var(--text-light);">推奨サイズ：512×512px以上の正方形</div>
+            </div>
+          </div>
+          <div class="upload-area" onclick="document.getElementById('pwaIconFile').click()" style="padding:14px;">
+            📁 アイコン画像を選ぶ
+          </div>
+          <input type="file" id="pwaIconFile" accept="image/*" style="display:none" onchange="uploadPwaIcon(this.files)">
+          <button class="save-btn" style="margin-top:10px;background:#fdecea;color:var(--red);" onclick="clearPwaIcon()">🗑️ デフォルトに戻す</button>
+          <div style="margin-top:12px;background:var(--green-pale);border-radius:10px;padding:12px;font-size:11px;color:var(--green);line-height:1.8;">
+            💡 アイコンを設定するとインストール時・ホーム画面でこの画像が使われます。<br>
+            変更後はGitHubにアップロードして反映してください。
+          </div>
         </div>
       </div>
+
+
+
+      <!-- INSTA POSTS PAGE -->
+      <div class="page" id="page-insta">
+        <div class="page-title">📸 インスタ投稿管理</div>
+        <p style="font-size:13px;color:var(--text-light);margin-bottom:16px;">Instagramの投稿URLや写真・キャプションを登録すると、サイトの「インスタ」タブに表示されます。</p>
+        <div class="card">
+          <h3>➕ 新しい投稿を追加</h3>
+          <div class="form-row">
+            <label>📸 投稿写真（タップして選択）</label>
+            <div id="instaImgPreview" style="width:100%;aspect-ratio:1;max-width:200px;background:var(--green-pale);border-radius:12px;margin-bottom:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:40px;cursor:pointer;" onclick="document.getElementById('instaImgFile').click()">📸</div>
+            <input type="file" id="instaImgFile" accept="image/*" style="display:none" onchange="previewInstaImg(this.files)">
+            <div style="font-size:11px;color:var(--text-light);">または</div>
+          </div>
+          <div class="form-row">
+            <label>🔗 Instagram投稿のURL（任意）</label>
+            <input class="form-input" type="url" id="instaPostUrl" placeholder="https://www.instagram.com/p/XXXXXXX/">
+          </div>
+          <div class="form-row">
+            <label>💬 キャプション（説明文）</label>
+            <textarea class="form-input" id="instaCaption" rows="3" placeholder="例：今日は焚き火体験をしました！子どもたちが夢中で楽しんでいました🔥"></textarea>
+          </div>
+          <div class="form-row">
+            <label>📅 投稿日</label>
+            <input class="form-input" type="date" id="instaDate">
+          </div>
+          <button class="save-btn" onclick="addInstaPost()">➕ 投稿を追加する</button>
+        </div>
+        <div class="card">
+          <h3>📋 登録済みの投稿</h3>
+          <div id="instaPostList"><div style="text-align:center;padding:30px;color:var(--text-light);">⏳ 読み込み中...</div></div>
+        </div>
+      </div>
+
+      <!-- SEO PAGE -->
+      <div class="page" id="page-seo">
+        <div class="page-title">🔍 SEO設定</div>
+        <div class="card">
+          <h3>🔍 検索エンジン設定</h3>
+          <p style="font-size:12px;color:var(--text-light);margin-bottom:16px;">Googleなどで検索されたときに表示される情報を設定します。</p>
+          <div class="form-row">
+            <label>ページタイトル（検索結果に表示される）</label>
+            <input class="form-input" type="text" id="seoTitle" placeholder="プレーパーク八尾 | 子どもの自然遊び（大阪府八尾市）" maxlength="60">
+            <div style="font-size:11px;color:var(--text-light);margin-top:4px;">推奨：30〜60文字 　現在: <span id="seoTitleCount">0</span>文字</div>
+          </div>
+          <div class="form-row">
+            <label>説明文（検索結果のタイトル下に表示される）</label>
+            <textarea class="form-input" id="seoDesc" rows="3" placeholder="大阪府八尾市で開催する子どもの自然遊び・プレーパーク。どろんこ・焚き火・木登りなど..." maxlength="120"></textarea>
+            <div style="font-size:11px;color:var(--text-light);margin-top:4px;">推奨：70〜120文字　現在: <span id="seoDescCount">0</span>文字</div>
+          </div>
+          <div class="form-row">
+            <label>キーワード（カンマ区切り）</label>
+            <input class="form-input" type="text" id="seoKeywords" placeholder="プレーパーク,八尾,子ども,自然遊び,焚き火,子育て">
+          </div>
+        </div>
+        <div class="card">
+          <h3>📱 SNS・LINEシェア設定</h3>
+          <p style="font-size:12px;color:var(--text-light);margin-bottom:16px;">LINEやInstagramでURLをシェアしたときに表示される情報です。</p>
+          <div class="form-row">
+            <label>シェア時のタイトル</label>
+            <input class="form-input" type="text" id="ogTitle" placeholder="プレーパーク八尾 | 子どもの自然遊び">
+          </div>
+          <div class="form-row">
+            <label>シェア時の説明文</label>
+            <textarea class="form-input" id="ogDesc" rows="2" placeholder="大阪府八尾市で開催する子どもの自然遊び・プレーパーク。月2回開催・参加無料。"></textarea>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>🏢 LocalBusiness 構造化データ</h3>
+          <p style="font-size:12px;color:var(--text-light);margin-bottom:4px;">Googleに「八尾市の地域団体」として認識させます。「八尾市 プレーパーク」などで地図検索に出やすくなります。</p>
+          <div style="background:var(--green-pale);border-radius:8px;padding:10px 12px;font-size:11px;color:var(--green);font-weight:700;margin-bottom:14px;">✅ 設定すると Google検索の知識パネルや地図検索に表示されやすくなります</div>
+          <div class="form-row">
+            <label>団体・組織名</label>
+            <input class="form-input" type="text" id="lbName" placeholder="プレーパーク八尾">
+          </div>
+          <div class="form-row">
+            <label>説明文</label>
+            <textarea class="form-input" id="lbDesc" rows="2" placeholder="大阪府八尾市で開催する子どもの自然遊び・プレーパーク。"></textarea>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div class="form-row">
+              <label>都道府県</label>
+              <input class="form-input" type="text" id="lbRegion" placeholder="大阪府">
+            </div>
+            <div class="form-row">
+              <label>市区町村</label>
+              <input class="form-input" type="text" id="lbCity" placeholder="八尾市">
+            </div>
+          </div>
+          <div class="form-row">
+            <label>住所（番地まで）</label>
+            <input class="form-input" type="text" id="lbAddress" placeholder="八尾市○○町1-2-3">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div class="form-row">
+              <label>電話番号（任意）</label>
+              <input class="form-input" type="tel" id="lbPhone" placeholder="072-XXX-XXXX">
+            </div>
+            <div class="form-row">
+              <label>メールアドレス（任意）</label>
+              <input class="form-input" type="email" id="lbEmail" placeholder="info@playpark-yao.jp">
+            </div>
+          </div>
+          <div class="form-row">
+            <label>開催曜日・時間（任意）</label>
+            <input class="form-input" type="text" id="lbHours" placeholder="土曜日 10:00〜14:00（月2回）">
+          </div>
+          <div class="form-row">
+            <label>入場料・参加費（任意）</label>
+            <input class="form-input" type="text" id="lbPrice" placeholder="無料">
+          </div>
+          <div id="lbPreview" style="display:none;background:#1e1e1e;border-radius:10px;padding:14px;margin:12px 0;font-size:11px;color:#9cdcfe;font-family:monospace;white-space:pre-wrap;overflow-x:auto;"></div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+            <button class="save-btn" style="background:var(--earth);" onclick="previewLocalBiz()">👁 プレビュー</button>
+            <button class="save-btn" id="saveLbBtn" onclick="saveLocalBiz()">💾 保存してサイトに反映</button>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="save-btn" id="saveSeoBtn" onclick="saveSeo()">💾 保存してサイトに反映</button>
+        </div>
+        <div style="margin-top:16px;background:#fff9c4;border-radius:10px;padding:14px;font-size:12px;color:#7b6000;line-height:1.8;">
+          💡 <strong>SEO効果を上げるには</strong><br>
+          ① 保存後GitHubにアップロード<br>
+          ② <a href="https://search.google.com/search-console" target="_blank" style="color:var(--green);">Google Search Console</a> に登録するとGoogleへの反映が早くなります（無料）
+        </div>
+      </div>
+
+      <!-- PHOTOS PAGE -->
+      <div class="page" id="page-photos">
+        <div class="page-title">📷 写真配置管理</div>
+        <p style="font-size:13px;color:var(--text-light);margin-bottom:20px;">サイトの各セクションに写真を配置できます。写真を選んで「保存」するだけで反映されます。</p>
+
+        <div class="card">
+          <h3>🏞️ トップ・次回イベント背景</h3>
+          <p style="font-size:12px;color:var(--text-light);margin-bottom:12px;">次回イベントカードの背景画像（設定するとより魅力的に）</p>
+          <div id="photo-next-event-preview" style="width:100%;aspect-ratio:16/5;background:linear-gradient(135deg,#3a7d44,#4a9ebe);border-radius:12px;margin-bottom:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;color:white;font-size:13px;">現在の表示（グラデーション）</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <div class="upload-area" style="flex:1;min-width:140px;" onclick="triggerPhotoUpload('next_event_bg')">📁 写真を選ぶ</div>
+            <button class="save-btn" style="background:#fdecea;color:var(--red);" onclick="clearPhoto('next_event_bg')">✕ 削除</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>🌿 「プレーパークって何？」背景</h3>
+          <p style="font-size:12px;color:var(--text-light);margin-bottom:12px;">Aboutセクションの背景画像</p>
+          <div id="photo-about-preview" style="width:100%;height:120px;background:var(--green-pale);border-radius:12px;margin-bottom:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;color:var(--text-light);font-size:13px;">現在の表示（薄緑）</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <div class="upload-area" style="flex:1;min-width:140px;" onclick="triggerPhotoUpload('about_bg')">📁 写真を選ぶ</div>
+            <button class="save-btn" style="background:#fdecea;color:var(--red);" onclick="clearPhoto('about_bg')">✕ 削除</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>📍 アクセスページの地図</h3>
+          <p style="font-size:12px;color:var(--text-light);margin-bottom:12px;">Googleマップの埋め込みURLまたは写真を設定します。</p>
+          <div class="form-row">
+            <label>GoogleマップのURL（iframeで埋め込み）</label>
+            <input class="form-input" type="url" id="mapUrl" placeholder="https://www.google.com/maps/embed?pb=...">
+            <div style="font-size:11px;color:var(--text-light);margin-top:4px;">💡 Googleマップで場所を検索 → 「共有」→「地図を埋め込む」→ srcの中のURLをコピー</div>
+          </div>
+          <button class="save-btn" id="saveMapBtn" onclick="saveMapUrl()">💾 地図を反映する</button>
+          <div style="margin-top:12px;border-top:1px solid var(--border);padding-top:12px;">
+            <label style="font-size:12px;font-weight:700;color:var(--green);display:block;margin-bottom:8px;">または写真で代替表示</label>
+            <div id="photo-map-preview" style="width:100%;height:120px;background:#d4edda;border-radius:12px;margin-bottom:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:32px;">🗺️</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <div class="upload-area" style="flex:1;min-width:140px;" onclick="triggerPhotoUpload('map_photo')">📁 写真を選ぶ</div>
+              <button class="save-btn" style="background:#fdecea;color:var(--red);" onclick="clearPhoto('map_photo')">✕ 削除</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>🏠 その他の写真</h3>
+          <p style="font-size:12px;color:var(--text-light);margin-bottom:14px;">サイト内の各場所に配置する写真を管理します。</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div style="background:#f8fbf8;border-radius:12px;padding:12px;border:1.5px solid var(--border);">
+              <div style="font-size:12px;font-weight:700;margin-bottom:8px;">📸 LINE誘導バナー背景</div>
+              <div id="photo-line-preview" style="height:60px;background:linear-gradient(135deg,#00B900,#06C755);border-radius:8px;margin-bottom:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;color:white;font-size:11px;">現在（緑）</div>
+              <div class="upload-area" style="padding:8px;font-size:11px;" onclick="triggerPhotoUpload('line_bg')">📁 変更</div>
+            </div>
+            <div style="background:#f8fbf8;border-radius:12px;padding:12px;border:1.5px solid var(--border);">
+              <div style="font-size:12px;font-weight:700;margin-bottom:8px;">🌳 フッター背景</div>
+              <div id="photo-footer-preview" style="height:60px;background:var(--green);border-radius:8px;margin-bottom:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;color:white;font-size:11px;">現在（緑）</div>
+              <div class="upload-area" style="padding:8px;font-size:11px;" onclick="triggerPhotoUpload('footer_bg')">📁 変更</div>
+            </div>
+          </div>
+        </div>
+        <input type="file" id="photoFileInput" accept="image/*" style="display:none" onchange="handlePhotoUpload(this.files)">
+      </div>
+
     </div>
   </div>
 </div>
-
-<div id="toast" class="toast">メッセージ</div>
+<div class="toast" id="toast"></div>
 
 <script>
-  // --- ページ切り替え ---
-  function showPage(pageId, btn) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('page-' + pageId).classList.add('active');
-    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+// ===== SUPABASE =====
+const SB_URL='https://ipzdgsodhcxhnpajfvrt.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlwemRnc29kaGN4aG5wYWpmdnJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNTgzNTcsImV4cCI6MjA4ODYzNDM1N30.b6ce95bLev-_6t2LidinKiRdn7VMV79iy9yBrz0db6k';
+const HDR={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'};
+
+async function sbSelect(table,filter=''){
+  const r=await fetch(`${SB_URL}/rest/v1/${table}${filter}`,{headers:HDR});
+  return r.json();
+}
+async function sbUpsert(table,data){
+  const r=await fetch(`${SB_URL}/rest/v1/${table}`,{method:'POST',headers:{...HDR,'Prefer':'resolution=merge-duplicates'},body:JSON.stringify(data)});
+  return r;
+}
+async function sbUpdate(table,data,filter){
+  const r=await fetch(`${SB_URL}/rest/v1/${table}?${filter}`,{method:'PATCH',headers:HDR,body:JSON.stringify(data)});
+  return r;
+}
+async function sbInsert(table,data){
+  const r=await fetch(`${SB_URL}/rest/v1/${table}`,{method:'POST',headers:{...HDR,'Prefer':'return=representation'},body:JSON.stringify(data)});
+  return r.json();
+}
+async function getSetting(key){
+  const rows=await sbSelect('site_settings',`?key=eq.${key}&select=value`);
+  return rows?.[0]?.value||null;
+}
+async function setSetting(key,value){
+  const r=await sbUpsert('site_settings',{key,value});
+  if(!r.ok){
+    const body=await r.text();
+    console.error('setSetting failed:',key,r.status,body);
+    throw new Error('保存失敗('+r.status+'): '+key);
   }
+  return r;
+}
+async function addLog(action,detail,icon='📝'){
+  await sbInsert('change_logs',{action,detail,icon,created_at:new Date().toISOString()});
+  if(document.getElementById('page-logs').classList.contains('active'))loadLogs();
+}
 
-  // --- トースト表示 ---
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
+// ===== AUTH (stored in supabase settings) =====
+// 認証情報（Supabaseに依存しない）
+// ===== ログイン（Supabase不使用・完全ローカル） =====
+const ADMIN_ID   = 'admin';
+const ADMIN_PASS = 'playpark2025';
+
+function doLogin(){
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  if(u === ADMIN_ID && p === ADMIN_PASS){
+    document.getElementById('loginError').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    initAll();
+  } else {
+    document.getElementById('loginError').style.display = 'block';
   }
+}
+function doLogout(){document.getElementById('loginScreen').style.display='flex';document.getElementById('app').style.display='none';}
+document.addEventListener('DOMContentLoaded',function(){
+  document.getElementById('loginBtn').addEventListener('click', doLogin);
+  document.getElementById('loginPass').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+  document.getElementById('loginUser').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+});
 
-  // --- ログイン処理 (簡易版) ---
-  function doLogin() {
-    const user = document.getElementById('loginUser').value;
-    const pass = document.getElementById('loginPass').value;
-    if(user === "admin" && pass === "admin") { // 実際のパスワードに書き換えてください
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('app').style.display = 'block';
-      initApp();
-    } else {
-      document.getElementById('loginError').style.display = 'block';
-    }
-  }
+function showSaving(){const el=document.getElementById('savingIndicator');el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2000);}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
+function showPage(name,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  if(btn)btn.classList.add('active');
 
-  function doLogout() {
-    location.reload();
-  }
+  if(name==='logs'){loadLogs();}
+  if(name==='insta'){loadInstaPostsAdmin();}
+  if(name==='access'){loadAccessPage();}
+  if(name==='settings'){loadPwaIconAdmin();loadServices();}
+  if(name==='news'){loadNewsAdmin();}
+  if(name==='videos'){loadVideosAdmin();}
+  if(name==='events'){loadEventsAdmin();}
+  if(name==='seo'){loadSeoPage();}
+  if(name==='photos'){loadPhotosPage();}
+  if(name==='settings'){loadServices();}
+}
 
-  // --- アプリ初期化 ---
-  function initApp() {
-    loadLogoSetting();
-    // 他の初期化処理
-  }
+async function initAll(){
+  await Promise.all([loadSlides(),loadAboutEditor(),loadApplyPage()]);
+}
 
-  // --- サイトロゴ関連の処理 ---
 
-  // 仮の保存・取得関数 (お使いのバックエンド/Storageに合わせて調整してください)
-  async function sbSaveSetting(key, value) {
-    return new Promise(resolve => {
-      localStorage.setItem(key, value); // デモ用にlocalStorageを使用
-      resolve();
-    });
-  }
-  async function sbGetSetting(key) {
-    return localStorage.getItem(key);
-  }
-
-  async function uploadLogo(files) {
-    if (!files || !files[0]) return;
-    const file = files[0];
-
-    if (file.size > 1024 * 1024) {
-      alert("1MB以下の画像にしてください。");
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      const base64Data = e.target.result;
-      document.getElementById('logoPreview').innerHTML = `<img src="${base64Data}" style="width:100%;height:100%;object-fit:contain;">`;
-
-      try {
-        await sbSaveSetting('site_logo', base64Data);
-        showToast("ロゴを保存しました！");
-      } catch (err) {
-        alert("保存に失敗しました。");
-      }
+// ===== 画像圧縮 =====
+function compressImage(file, maxWidth=800, quality=0.7){
+  return new Promise((resolve)=>{
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const img=new Image();
+      img.onload=()=>{
+        const canvas=document.createElement('canvas');
+        let w=img.width,h=img.height;
+        if(w>maxWidth){h=Math.round(h*maxWidth/w);w=maxWidth;}
+        canvas.width=w;canvas.height=h;
+        const ctx=canvas.getContext('2d');
+        ctx.drawImage(img,0,0,w,h);
+        resolve(canvas.toDataURL('image/jpeg',quality));
+      };
+      img.src=e.target.result;
     };
     reader.readAsDataURL(file);
-  }
+  });
+}
 
-  async function clearLogo() {
-    if (!confirm("ロゴを削除して文字表示に戻しますか？")) return;
-    try {
-      await sbSaveSetting('site_logo', '');
-      document.getElementById('logoPreview').innerHTML = '<span style="font-size:10px;color:#aaa;">No Image</span>';
-      showToast("ロゴを削除しました");
-    } catch (err) {
-      alert("削除に失敗しました。");
+// ===== SLIDES =====
+let currentSlides=[];
+async function loadSlides(){
+  const raw=await getSetting('slides');
+  currentSlides=raw?JSON.parse(raw):[{id:1,url:'',caption:'自然の中で自由に遊ぼう！'},{id:2,url:'',caption:'子どもたちの笑顔があふれる場所'},{id:3,url:'',caption:'親子で一緒に楽しもう'}];
+  renderSlidesUI();
+}
+function renderSlidesUI(){
+  const bgs=['#c8f0a0','#ffe082','#b2dfdb'];
+  document.getElementById('slidesGrid').innerHTML=currentSlides.map((s,i)=>`
+    <div class="slide-thumb">
+      ${s.url?`<img src="${s.url}" alt="">`:`<span style="font-size:28px;background:${bgs[i%bgs.length]};position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">🌿</span>`}
+      <button class="del-btn" onclick="deleteSlide(${i})">✕</button>
+      <div class="cap-ov">${s.caption||'キャプションなし'}</div>
+    </div>`).join('');
+  document.getElementById('captionEditor').innerHTML=currentSlides.map((s,i)=>`
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+      <span style="font-size:18px;">${s.url?'🖼️':'🌿'}</span>
+      <input class="form-input" type="text" id="cap-${i}" value="${s.caption||''}" placeholder="写真${i+1}の説明文">
+    </div>`).join('');
+}
+async function addSlides(files){
+  for(const file of Array.from(files)){
+    if(currentSlides.length>=6){showToast('写真は最大6枚までです');break;}
+    try{
+      showToast('📸 写真を圧縮中...');
+      const compressed=await compressImage(file,800,0.65);
+      currentSlides.push({id:Date.now(),url:compressed,caption:'新しい写真'});
+      renderSlidesUI();
+      await setSetting('slides',JSON.stringify(currentSlides));
+      await addLog('スライド追加',`写真を追加しました（現在${currentSlides.length}枚）`,'🖼️');
+      showToast('写真を追加しました ✅');showSaving();
+    }catch(e){
+      showToast('⚠️ 写真の追加に失敗しました');
+      console.error(e);
     }
   }
+}
+function deleteSlide(i){
+  if(!confirm('この写真を削除しますか？'))return;
+  currentSlides.splice(i,1);renderSlidesUI();
+  setSetting('slides',JSON.stringify(currentSlides)).then(()=>{
+    addLog('スライド削除',`写真を削除しました（残${currentSlides.length}枚）`,'🗑️');
+    showToast('写真を削除しました');showSaving();
+  });
+}
+async function saveCaptions(){
+  const btn=document.getElementById('saveCaptionsBtn');btn.disabled=true;btn.textContent='保存中...';
+  currentSlides.forEach((_,i)=>{const inp=document.getElementById('cap-'+i);if(inp)currentSlides[i].caption=inp.value;});
+  await setSetting('slides',JSON.stringify(currentSlides));
+  await addLog('キャプション更新','スライドのキャプションを更新しました','✏️');
+  renderSlidesUI();btn.disabled=false;btn.textContent='💾 保存してサイトに反映';
+  showToast('キャプションを保存しました ✅');showSaving();
+}
 
-  async function loadLogoSetting() {
-    const currentLogo = await sbGetSetting('site_logo');
-    if (currentLogo) {
-      document.getElementById('logoPreview').innerHTML = `<img src="${currentLogo}" style="width:100%;height:100%;object-fit:contain;">`;
+// ===== ABOUT =====
+let currentFeatures=[];
+async function loadAboutEditor(){
+  const raw=await getSetting('about_features');
+  currentFeatures=raw?JSON.parse(raw):[{icon:'🌿',title:'自然の中で自由に',body:'どろんこ・焚き火・木登り。自分でやりたいことを見つける場所'},{icon:'👨‍👩‍👧',title:'親子で参加',body:'保護者も一緒に楽しめる。地域のみんなとつながれます'},{icon:'🏕️',title:'月2回開催',body:'定期的に開催。継続して通える地域の居場所です'},{icon:'💚',title:'無料・低料金',body:'誰でも参加しやすい料金設定。補助制度もあります'}];
+  document.getElementById('aboutEditor').innerHTML=currentFeatures.map((f,i)=>`
+    <div class="feature-editor">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:8px;">特徴 ${i+1}</div>
+      <div class="feat-row"><input type="text" id="fi-${i}" value="${f.icon}" placeholder="絵文字" style="max-width:60px;text-align:center;"><input type="text" id="ft-${i}" value="${f.title}" placeholder="タイトル"></div>
+      <div class="feat-row"><input type="text" id="fb-${i}" value="${f.body}" placeholder="説明文（1〜2文）"></div>
+    </div>`).join('');
+}
+async function saveAbout(){
+  const btn=document.getElementById('saveAboutBtn');btn.disabled=true;btn.textContent='保存中...';
+  const feats=currentFeatures.map((_,i)=>({icon:document.getElementById('fi-'+i)?.value||'🌿',title:document.getElementById('ft-'+i)?.value||'',body:document.getElementById('fb-'+i)?.value||''}));
+  await setSetting('about_features',JSON.stringify(feats));
+  await addLog('プレーパーク紹介を更新','「プレーパークって何？」の内容を変更しました','🌿');
+  currentFeatures=feats;btn.disabled=false;btn.textContent='💾 保存してサイトに反映';
+  showToast('「プレーパークって何？」を保存しました ✅');showSaving();
+}
+
+// ===== APPLY =====
+async function loadApplyPage(){
+  const[isOpenRaw,formUrl,closedMsg]=await Promise.all([getSetting('apply_open'),getSetting('google_form_url'),getSetting('apply_closed_message')]);
+  const isOpen=isOpenRaw!=='false';
+  document.getElementById('googleFormUrl').value=formUrl||'';
+  document.getElementById('closedMessage').value=closedMsg||'現在申込を停止しています。次回開催情報をお待ちください。';
+  renderApplyStatusCard(isOpen);
+}
+function renderApplyStatusCard(isOpen){
+  document.getElementById('applyStatusCard').innerHTML=`
+    <div class="apply-status-card ${isOpen?'open':'closed'}">
+      <div style="font-size:40px;margin-bottom:8px;">${isOpen?'✅':'🚫'}</div>
+      <div style="font-size:16px;font-weight:900;color:${isOpen?'var(--green)':'var(--red)'};">${isOpen?'申込 受付中':'申込 停止中'}</div>
+      <div style="font-size:12px;color:var(--text-light);margin-top:4px;">${isOpen?'一般の方から申込を受け付けています':'申込フォームへのアクセスを停止しています'}</div>
+      <button class="toggle-apply-btn ${isOpen?'open':'closed'}" onclick="toggleApply(${isOpen})">
+        ${isOpen?'🚫 申込を停止する':'✅ 申込を再開する'}
+      </button>
+    </div>`;
+}
+async function toggleApply(isCurrentlyOpen){
+  const newState=!isCurrentlyOpen;
+  await setSetting('apply_open',String(newState));
+  await addLog('申込ステータス変更',`申込を${newState?'再開':'停止'}しました`,'✏️');
+  renderApplyStatusCard(newState);showToast(`申込を${newState?'再開':'停止'}しました`);showSaving();
+}
+async function saveFormUrl(){
+  const btn=document.getElementById('saveFormBtn');btn.disabled=true;btn.textContent='保存中...';
+  const url=document.getElementById('googleFormUrl').value.trim();
+  await setSetting('google_form_url',url);
+  await addLog('GoogleフォームURL設定',`URL: ${url||'（削除）'}`,'🔗');
+  btn.disabled=false;btn.textContent='💾 URLを保存・反映';
+  showToast('GoogleフォームのURLを保存しました ✅');showSaving();
+}
+async function saveClosedMsg(){
+  const btn=document.getElementById('saveMsgBtn');btn.disabled=true;btn.textContent='保存中...';
+  const msg=document.getElementById('closedMessage').value.trim();
+  await setSetting('apply_closed_message',msg);
+  await addLog('停止メッセージ更新','申込停止中のメッセージを更新しました','💬');
+  btn.disabled=false;btn.textContent='💾 保存する';
+  showToast('メッセージを保存しました ✅');showSaving();
+}
+
+
+
+// ===== LOGS =====
+let logFilter='';
+async function loadLogs(){
+  const filter=logFilter?`?action=like.*${logFilter}*&order=created_at.desc`:'?order=created_at.desc&limit=100';
+  const logs=await sbSelect('change_logs',filter);
+  if(!logs||!logs.length){document.getElementById('logList').innerHTML='<p style="text-align:center;color:var(--text-light);padding:40px;">変更ログはありません</p>';return;}
+  document.getElementById('logList').innerHTML=logs.map(l=>`
+    <div class="log-item">
+      <div class="log-icon">${l.icon||'📝'}</div>
+      <div style="flex:1;">
+        <div class="log-action">${l.action}</div>
+        <div class="log-detail">${l.detail}</div>
+        <div class="log-time">🕐 ${new Date(l.created_at).toLocaleString('ja-JP')}</div>
+      </div>
+    </div>`).join('');
+}
+function filterLogs(key,btn){
+  logFilter=key;
+  document.querySelectorAll('.log-filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');loadLogs();
+}
+async function clearLogs(){
+  if(!confirm('ログをすべて削除しますか？'))return;
+  await fetch(`${SB_URL}/rest/v1/change_logs`,{method:'DELETE',headers:{...HDR,'Prefer':'return=minimal'}});
+  loadLogs();showToast('ログを消去しました');
+}
+
+// ===== SETTINGS =====
+async function saveAccount(){
+  const u=document.getElementById('newUser').value.trim();
+  const p=document.getElementById('newPass').value;
+  const p2=document.getElementById('newPass2').value;
+  if(!u){showToast('ユーザー名を入力してください');return;}
+  if(p&&p!==p2){showToast('パスワードが一致しません');return;}
+  const newAuth={user:u,pass:p||currentAuth.pass};
+  await setSetting('admin_auth',JSON.stringify(newAuth));
+  currentAuth=newAuth;
+  await addLog('アカウント更新','管理者アカウント情報を更新しました','🔐');
+  showToast('アカウントを更新しました ✅');
+  document.getElementById('newUser').value='';document.getElementById('newPass').value='';document.getElementById('newPass2').value='';
+}
+async function loadServices(){
+  const raw=await getSetting('services');
+  if(!raw)return;
+  try{
+    const d=JSON.parse(raw);
+    if(d.instaId)document.getElementById('instaId').value=d.instaId;
+    if(d.lineUrl)document.getElementById('lineUrl').value=d.lineUrl;
+    if(d.youtubeUrl)document.getElementById('youtubeUrl').value=d.youtubeUrl;
+  }catch(e){}
+}
+async function saveServices(){
+  const data={
+    instaId:document.getElementById('instaId').value.trim(),
+    lineUrl:document.getElementById('lineUrl').value.trim(),
+    youtubeUrl:document.getElementById('youtubeUrl').value.trim()
+  };
+  await setSetting('services',JSON.stringify(data));
+  await addLog('外部サービス設定更新','Instagram/LINE/YouTubeの設定を更新しました','🔗');
+  showToast('設定を保存してサイトに反映しました ✅');showSaving();
+}
+
+// ===== AI CHAT =====
+const SYS=`あなたは「プレーパーク八尾」のウェブサイト管理AIアシスタントです。管理者の指示に従いHTMLコードを生成します。コードは\`\`\`htmlと\`\`\`で囲んでください。フレンドリーな日本語で答えてください。`;
+let chatHist=[];
+function addChatMsg(role,content){
+  const msgs=document.getElementById('chatMsgs');
+  const div=document.createElement('div');div.className='msg '+role;
+  const av=document.createElement('div');av.className='msg-av';av.textContent=role==='ai'?'🌿':'👤';
+  const bub=document.createElement('div');bub.className='msg-bub';
+  const parts=content.split(/(```html[\s\S]*?```|```[\s\S]*?```)/g);
+  parts.forEach(p=>{
+    if(p.startsWith('```')){const code=p.replace(/```html\n?|```\n?/g,'');const pre=document.createElement('pre');pre.textContent=code;bub.appendChild(pre);}
+    else if(p){const sp=document.createElement('p');sp.style.cssText='margin:0;white-space:pre-wrap;';sp.textContent=p;bub.appendChild(sp);}
+  });
+  div.appendChild(av);div.appendChild(bub);msgs.appendChild(div);msgs.scrollTop=99999;
+}
+async function sendMsg(){
+  const inp=document.getElementById('chatIn');const text=inp.value.trim();if(!text)return;
+  inp.value='';inp.style.height='auto';document.getElementById('sendBtn').disabled=true;
+  addChatMsg('user',text);chatHist.push({role:'user',content:text});
+  document.getElementById('typing').classList.add('show');document.getElementById('chatMsgs').scrollTop=99999;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system:SYS,messages:chatHist})});
+    const data=await res.json();
+    const reply=data.content?.map(b=>b.text||'').join('')||'エラーが発生しました。';
+    document.getElementById('typing').classList.remove('show');
+    chatHist.push({role:'assistant',content:reply});addChatMsg('ai',reply);
+    addLog('AIアシスタント使用',`「${text.slice(0,30)}」`,'🤖');
+  }catch(e){document.getElementById('typing').classList.remove('show');addChatMsg('ai','⚠️ 通信エラーが発生しました。');}
+  document.getElementById('sendBtn').disabled=false;
+}
+
+// ===== SEO =====
+async function loadSeoPage(){
+  loadLocalBiz();
+  const[title,desc,kw,ogTitle,ogDesc]=await Promise.all([
+    getSetting('seo_title'),getSetting('seo_desc'),getSetting('seo_keywords'),
+    getSetting('og_title'),getSetting('og_desc')
+  ]);
+  document.getElementById('seoTitle').value=title||'プレーパーク八尾 | 子どもの自然遊び・プレーパーク（大阪府八尾市）';
+  document.getElementById('seoDesc').value=desc||'大阪府八尾市で開催する子どもの自然遊び・プレーパーク。どろんこ・焚き火・木登りなど、自由な遊びを通じて子どもたちの育ちを支える地域の居場所です。月2回開催・参加無料。';
+  document.getElementById('seoKeywords').value=kw||'プレーパーク,八尾,八尾市,子ども,自然遊び,焚き火,木登り,子育て,遊び場,大阪';
+  document.getElementById('ogTitle').value=ogTitle||'プレーパーク八尾 | 子どもの自然遊び（大阪府八尾市）';
+  document.getElementById('ogDesc').value=ogDesc||'大阪府八尾市で開催する子どもの自然遊び・プレーパーク。月2回開催・参加無料。';
+  updateSeoCounters();
+}
+function updateSeoCounters(){
+  const t=document.getElementById('seoTitle');const d=document.getElementById('seoDesc');
+  if(t)document.getElementById('seoTitleCount').textContent=t.value.length;
+  if(d)document.getElementById('seoDescCount').textContent=d.value.length;
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  const t=document.getElementById('seoTitle');const d=document.getElementById('seoDesc');
+  if(t)t.addEventListener('input',updateSeoCounters);
+  if(d)d.addEventListener('input',updateSeoCounters);
+});
+async function saveSeo(){
+  const btn=document.getElementById('saveSeoBtn');
+  btn.disabled=true;btn.textContent='保存中...';
+  try{
+    const title=document.getElementById('seoTitle').value.trim();
+    const desc=document.getElementById('seoDesc').value.trim();
+    const kw=document.getElementById('seoKeywords').value.trim();
+    const ogTitle=document.getElementById('ogTitle').value.trim();
+    const ogDesc=document.getElementById('ogDesc').value.trim();
+    await setSetting('seo_title',title);
+    await setSetting('seo_desc',desc);
+    await setSetting('seo_keywords',kw);
+    await setSetting('og_title',ogTitle);
+    await setSetting('og_desc',ogDesc);
+    await addLog('SEO設定更新','タイトル・説明文・キーワードを更新しました','🔍');
+    showToast('SEO設定を保存しました ✅');showSaving();
+  }catch(e){
+    showToast('⚠️ 保存に失敗しました。もう一度お試しください。');
+    console.error('saveSeo error:',e);
+  }finally{
+    btn.disabled=false;btn.textContent='💾 保存してサイトに反映';
+  }
+}
+
+// ===== PHOTOS =====
+let currentPhotoTarget='';
+async function loadPhotosPage(){
+  const keys=['next_event_bg','about_bg','map_photo','map_url','line_bg','footer_bg'];
+  const vals=await Promise.all(keys.map(k=>getSetting('photo_'+k)));
+  keys.forEach((k,i)=>{
+    if(k==='map_url'){
+      document.getElementById('mapUrl').value=vals[i]||'';
+    }else if(vals[i]){
+      const prev=document.getElementById('photo-'+k.replace(/_/g,'-')+'-preview');
+      if(prev){prev.innerHTML=`<img src="${vals[i]}" style="width:100%;height:100%;object-fit:cover;">`;}
+    }
+  });
+}
+function triggerPhotoUpload(target){
+  currentPhotoTarget=target;
+  document.getElementById('photoFileInput').click();
+}
+async function handlePhotoUpload(files){
+  if(!files||!files[0])return;
+  try{
+    showToast('📸 写真を圧縮中...');
+    const url=await compressImage(files[0],800,0.65);
+    const key='photo_'+currentPhotoTarget;
+    await setSetting(key,url);
+    const previewId='photo-'+currentPhotoTarget.replace(/_/g,'-')+'-preview';
+    const prev=document.getElementById(previewId);
+    if(prev)prev.innerHTML=`<img src="${url}" style="width:100%;height:100%;object-fit:cover;">`;
+    await addLog('写真配置',`「${currentPhotoTarget}」に写真を設定しました`,'📷');
+    showToast('写真を配置しました ✅');showSaving();
+  }catch(e){
+    showToast('⚠️ 写真の配置に失敗しました');
+    console.error(e);
+  }
+  document.getElementById('photoFileInput').value='';
+}
+async function clearPhoto(target){
+  if(!confirm('この写真を削除しますか？'))return;
+  await setSetting('photo_'+target,'');
+  const previewId='photo-'+target.replace(/_/g,'-')+'-preview';
+  const prev=document.getElementById(previewId);
+  if(prev)prev.innerHTML='<span style="font-size:32px;color:var(--text-light);">🌿</span>';
+  await addLog('写真削除',`「${target}」の写真を削除しました`,'🗑️');
+  showToast('写真を削除しました');showSaving();
+}
+async function saveMapUrl(){
+  const btn=document.getElementById('saveMapBtn');btn.disabled=true;btn.textContent='保存中...';
+  const url=document.getElementById('mapUrl').value.trim();
+  await setSetting('photo_map_url',url);
+  await addLog('地図URL設定','アクセスページのGoogleマップURLを更新しました','📍');
+  btn.disabled=false;btn.textContent='💾 地図を反映する';
+  showToast('地図URLを保存しました ✅');showSaving();
+}
+
+
+
+// ===== INSTA POSTS MANAGEMENT =====
+let instaImgData = '';
+async function previewInstaImg(files){
+  if(!files||!files[0])return;
+  try{
+    showToast('📸 写真を圧縮中...');
+    instaImgData = await compressImage(files[0],800,0.65);
+    const prev = document.getElementById('instaImgPreview');
+    prev.innerHTML = `<img src="${instaImgData}" style="width:100%;height:100%;object-fit:cover;">`;
+    showToast('写真を読み込みました ✅');
+  }catch(e){
+    showToast('⚠️ 写真の読み込みに失敗しました');
+  }
+}
+async function loadInstaPostsAdmin(){
+  const raw = await getSetting('insta_posts');
+  const posts = raw ? JSON.parse(raw) : [];
+  const list = document.getElementById('instaPostList');
+  if(!posts.length){
+    list.innerHTML='<p style="text-align:center;color:var(--text-light);padding:20px;">まだ投稿がありません</p>';
+    return;
+  }
+  list.innerHTML = posts.map((p,i) => `
+    <div style="display:flex;gap:12px;align-items:flex-start;padding:12px;border:1.5px solid var(--border);border-radius:12px;margin-bottom:8px;">
+      ${p.imageUrl ? `<img src="${p.imageUrl}" style="width:60px;height:60px;object-fit:cover;border-radius:8px;flex-shrink:0;">` : '<div style="width:60px;height:60px;background:var(--green-pale);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;">📸</div>'}
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:12px;color:var(--text-light);margin-bottom:3px;">📅 ${p.date||'日付なし'}</div>
+        <div style="font-size:13px;line-height:1.5;margin-bottom:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.caption||'キャプションなし'}</div>
+        ${p.url?`<a href="${p.url}" target="_blank" style="font-size:11px;color:#dc2743;">投稿を見る →</a>`:''}
+      </div>
+      <button onclick="deleteInstaPost(${i})" style="background:#fdecea;color:var(--red);border:none;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer;flex-shrink:0;">削除</button>
+    </div>`).join('');
+}
+async function addInstaPost(){
+  const caption = document.getElementById('instaCaption').value.trim();
+  const url     = document.getElementById('instaPostUrl').value.trim();
+  const date    = document.getElementById('instaDate').value;
+  if(!caption && !instaImgData){ showToast('写真かキャプションを入力してください'); return; }
+  const raw   = await getSetting('insta_posts');
+  const posts = raw ? JSON.parse(raw) : [];
+  posts.unshift({ imageUrl: instaImgData, caption, url, date: date ? new Date(date).toLocaleDateString('ja-JP') : new Date().toLocaleDateString('ja-JP') });
+  await setSetting('insta_posts', JSON.stringify(posts));
+  await addLog('インスタ投稿追加', caption.slice(0,30)||'写真投稿', '📸');
+  // Reset form
+  instaImgData='';
+  document.getElementById('instaImgPreview').innerHTML='📸';
+  document.getElementById('instaCaption').value='';
+  document.getElementById('instaPostUrl').value='';
+  document.getElementById('instaDate').value='';
+  document.getElementById('instaImgFile').value='';
+  loadInstaPostsAdmin();
+  showToast('投稿を追加しました ✅'); showSaving();
+}
+async function deleteInstaPost(i){
+  if(!confirm('この投稿を削除しますか？'))return;
+  const raw   = await getSetting('insta_posts');
+  const posts = raw ? JSON.parse(raw) : [];
+  posts.splice(i,1);
+  await setSetting('insta_posts', JSON.stringify(posts));
+  await addLog('インスタ投稿削除','投稿を削除しました','🗑️');
+  loadInstaPostsAdmin();
+  showToast('投稿を削除しました');showSaving();
+}
+
+
+
+
+// ===== NEWS =====
+const TAG_MAP={event:{cls:'tag-event',label:'📅 イベント'},news:{cls:'tag-news',label:'📢 お知らせ'},report:{cls:'tag-report',label:'📷 活動報告'}};
+async function loadNewsAdmin(){
+  const raw = await getSetting('news_posts');
+  const posts = raw ? JSON.parse(raw) : [];
+  renderNewsList(posts);
+}
+function renderNewsList(posts){
+  const list = document.getElementById('newsList');
+  if(!posts.length){list.innerHTML='<p style="text-align:center;color:var(--text-light);padding:20px;">まだお知らせがありません</p>';return;}
+  list.innerHTML = posts.map((p,i)=>{
+    const tag = TAG_MAP[p.tag]||TAG_MAP.news;
+    const photos = p.images||[];
+    return `<div style="border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;">
+      ${photos.length ? `<div style="display:flex;gap:2px;height:100px;overflow:hidden;">
+        ${photos.map(img=>`<img src="${img}" style="flex:1;object-fit:cover;min-width:0;">`).join('')}
+      </div>` : ''}
+      <div style="padding:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+          <span class="post-tag ${tag.cls}" style="font-size:10px;font-weight:700;padding:2px 10px;border-radius:20px;display:inline-block;">${tag.label}</span>
+          <span style="font-size:10px;color:var(--text-light);">${p.date||''}</span>
+        </div>
+        <div style="font-size:14px;font-weight:700;margin-bottom:4px;">${p.title||''}</div>
+        <div style="font-size:12px;color:var(--text-light);margin-bottom:10px;">${(p.body||'').slice(0,60)}${(p.body||'').length>60?'...':''}</div>
+        <div style="display:flex;gap:6px;">
+          <button onclick="editNews(${i})" style="flex:1;background:var(--green-pale);color:var(--green);border:none;border-radius:8px;padding:8px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;cursor:pointer;">✏️ 編集</button>
+          <button onclick="deleteNews(${i})" style="flex:1;background:#fdecea;color:var(--red);border:none;border-radius:8px;padding:8px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;cursor:pointer;">🗑️ 削除</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+let newsImages = [];
+let newsEditingIndex = -1;
+
+async function previewNewsImgs(files){
+  const remaining = 3 - newsImages.length;
+  if(remaining <= 0){ showToast('写真は最大3枚までです'); return; }
+  const toAdd = Array.from(files).slice(0, remaining);
+  for(const file of toAdd){
+    try{
+      showToast('📸 写真を圧縮中...');
+      const compressed = await compressImage(file, 400, 0.75);
+      newsImages.push(compressed);
+    }catch(e){ showToast('⚠️ 写真の読み込みに失敗しました'); }
+  }
+  renderNewsImgPreviews();
+  document.getElementById('newsImgFiles').value='';
+}
+function renderNewsImgPreviews(){
+  const wrap = document.getElementById('newsImgPreviews');
+  if(!wrap) return;
+  wrap.innerHTML = newsImages.map((img,i)=>`
+    <div style="position:relative;width:80px;height:80px;">
+      <img src="${img}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;">
+      <button onclick="removeNewsImg(${i})" style="position:absolute;top:2px;right:2px;width:20px;height:20px;background:rgba(224,90,68,.9);color:white;border:none;border-radius:50%;font-size:11px;cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;">✕</button>
+    </div>`).join('');
+}
+function removeNewsImg(i){
+  newsImages.splice(i,1);
+  renderNewsImgPreviews();
+}
+
+function editNews(i){
+  getSetting('news_posts').then(raw=>{
+    const posts = raw ? JSON.parse(raw) : [];
+    const p = posts[i];
+    if(!p) return;
+    newsEditingIndex = i;
+    newsImages = p.images ? [...p.images] : [];
+    document.getElementById('newsTag').value   = p.tag   || 'news';
+    document.getElementById('newsTitle').value = p.title || '';
+    document.getElementById('newsBody').value  = p.body  || '';
+    // 日付を date input 形式に変換
+    if(p.rawDate){ document.getElementById('newsDate').value = p.rawDate; }
+    renderNewsImgPreviews();
+    const btn = document.getElementById('newsAddBtn');
+    if(btn){ btn.textContent='💾 変更を保存する'; btn.style.background='var(--sky-dark)'; }
+    const banner = document.getElementById('newsEditingBanner');
+    if(banner){ banner.style.display='flex'; document.getElementById('newsEditingLabel').textContent='✏️ 編集中：'+p.title; }
+    document.getElementById('newsTitle').scrollIntoView({behavior:'smooth',block:'center'});
+    showToast('編集モード：'+p.title);
+  });
+}
+function cancelNewsEdit(){
+  newsEditingIndex = -1;
+  newsImages = [];
+  document.getElementById('newsTag').value='news';
+  document.getElementById('newsTitle').value='';
+  document.getElementById('newsBody').value='';
+  document.getElementById('newsDate').value='';
+  renderNewsImgPreviews();
+  const btn = document.getElementById('newsAddBtn');
+  if(btn){ btn.textContent='➕ お知らせを追加する'; btn.style.background='var(--green)'; }
+  const banner = document.getElementById('newsEditingBanner');
+  if(banner) banner.style.display='none';
+  showToast('編集をキャンセルしました');
+}
+
+async function addNews(){
+  const title = document.getElementById('newsTitle').value.trim();
+  if(!title){showToast('タイトルを入力してください');return;}
+  const rawDate = document.getElementById('newsDate').value;
+  const post = {
+    tag:     document.getElementById('newsTag').value,
+    title,
+    body:    document.getElementById('newsBody').value.trim(),
+    rawDate: rawDate,
+    date:    rawDate ? new Date(rawDate).toLocaleDateString('ja-JP') : new Date().toLocaleDateString('ja-JP'),
+    images:  [...newsImages]
+  };
+  try{
+    const raw   = await getSetting('news_posts');
+    const posts = raw ? JSON.parse(raw) : [];
+    if(newsEditingIndex >= 0){
+      posts[newsEditingIndex] = post;
+      await setSetting('news_posts', JSON.stringify(posts));
+      await addLog('お知らせ更新', title, '✏️');
+      showToast('お知らせを更新しました ✅');
+    } else {
+      posts.unshift(post);
+      await setSetting('news_posts', JSON.stringify(posts));
+      await addLog('お知らせ追加', title, '📢');
+      // プッシュ通知を送信
+      sendPushNotification(
+        '📢 '+title,
+        (document.getElementById('newsBody').value||'').slice(0,80),
+        'https://playpark-yao.github.io/playpark-yao/news.html'
+      );
+      showToast('お知らせを追加しました ✅');
+    }
+    newsEditingIndex = -1;
+    newsImages = [];
+    document.getElementById('newsTag').value='news';
+    document.getElementById('newsTitle').value='';
+    document.getElementById('newsBody').value='';
+    document.getElementById('newsDate').value='';
+    renderNewsImgPreviews();
+    const btn = document.getElementById('newsAddBtn');
+    if(btn){ btn.textContent='➕ お知らせを追加する'; btn.style.background='var(--green)'; }
+    const banner = document.getElementById('newsEditingBanner');
+    if(banner) banner.style.display='none';
+    loadNewsAdmin();
+    showSaving();
+  }catch(e){showToast('⚠️ 保存に失敗しました');console.error(e);}
+}
+async function deleteNews(i){
+  if(!confirm('このお知らせを削除しますか？'))return;
+  try{
+    const raw   = await getSetting('news_posts');
+    const posts = raw ? JSON.parse(raw) : [];
+    posts.splice(i,1);
+    await setSetting('news_posts', JSON.stringify(posts));
+    await addLog('お知らせ削除','お知らせを削除しました','🗑️');
+    loadNewsAdmin();
+    showToast('削除しました');showSaving();
+  }catch(e){showToast('⚠️ 削除に失敗しました');}
+}
+
+// ===== VIDEOS =====
+function getYouTubeId(url){
+  const m=url.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/);
+  return m?m[1]:null;
+}
+async function loadVideosAdmin(){
+  const raw = await getSetting('video_posts');
+  const videos = raw ? JSON.parse(raw) : [];
+  renderVideoList(videos);
+}
+function renderVideoList(videos){
+  const list = document.getElementById('videoList');
+  if(!videos.length){list.innerHTML='<p style="text-align:center;color:var(--text-light);padding:20px;">まだ動画がありません</p>';return;}
+  list.innerHTML = videos.map((v,i)=>{
+    const vid = getYouTubeId(v.url||'');
+    const thumb = vid ? `<img src="https://img.youtube.com/vi/${vid}/mqdefault.jpg" style="width:80px;height:54px;object-fit:cover;border-radius:8px;flex-shrink:0;">` : '<div style="width:80px;height:54px;background:#eee;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;">🎬</div>';
+    return `<div style="display:flex;gap:10px;align-items:center;border:1.5px solid var(--border);border-radius:12px;padding:10px;margin-bottom:8px;">
+      ${thumb}
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:700;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${v.title||'タイトルなし'}</div>
+        <div style="font-size:11px;color:var(--text-light);">${(v.desc||'').slice(0,40)}</div>
+      </div>
+      <button onclick="deleteVideo(${i})" style="background:#fdecea;color:var(--red);border:none;border-radius:8px;padding:6px 10px;font-size:11px;cursor:pointer;flex-shrink:0;">削除</button>
+    </div>`;
+  }).join('');
+}
+async function addVideo(){
+  const url   = document.getElementById('videoUrl').value.trim();
+  const title = document.getElementById('videoTitle').value.trim();
+  if(!url){showToast('YouTubeのURLを入力してください');return;}
+  if(!getYouTubeId(url)){showToast('正しいYouTube URLを入力してください');return;}
+  const video = {url, title: title||'動画', desc: document.getElementById('videoDesc').value.trim()};
+  try{
+    const raw    = await getSetting('video_posts');
+    const videos = raw ? JSON.parse(raw) : [];
+    videos.unshift(video);
+    await setSetting('video_posts', JSON.stringify(videos));
+    await addLog('動画追加', title||url, '🎬');
+    document.getElementById('videoUrl').value='';
+    document.getElementById('videoTitle').value='';
+    document.getElementById('videoDesc').value='';
+    loadVideosAdmin();
+    showToast('動画を追加しました ✅');showSaving();
+  }catch(e){showToast('⚠️ 保存に失敗しました');console.error(e);}
+}
+async function deleteVideo(i){
+  if(!confirm('この動画を削除しますか？'))return;
+  try{
+    const raw    = await getSetting('video_posts');
+    const videos = raw ? JSON.parse(raw) : [];
+    videos.splice(i,1);
+    await setSetting('video_posts', JSON.stringify(videos));
+    await addLog('動画削除','動画を削除しました','🗑️');
+    loadVideosAdmin();
+    showToast('削除しました');showSaving();
+  }catch(e){showToast('⚠️ 削除に失敗しました');}
+}
+
+// ===== ACCESS =====
+async function loadAccessPage(){
+  const raw = await getSetting('access_info');
+  if(!raw) return;
+  try{
+    const d = JSON.parse(raw);
+    document.getElementById('accessPlace').value     = d.place     || '';
+    document.getElementById('accessAddress').value   = d.address   || '';
+    document.getElementById('accessPlaceNote').value = d.placeNote || '';
+    document.getElementById('accessTrain').value     = d.train     || '';
+    document.getElementById('accessCar').value       = d.car       || '';
+    document.getElementById('accessRain').value      = d.rain      || '';
+    document.getElementById('accessMapUrl').value    = d.mapUrl    || '';
+  }catch(e){}
+}
+async function saveAccess(){
+  const btn = document.getElementById('saveAccessBtn');
+  btn.disabled = true; btn.textContent = '保存中...';
+  try{
+    const data = {
+      place:     document.getElementById('accessPlace').value.trim(),
+      address:   document.getElementById('accessAddress').value.trim(),
+      placeNote: document.getElementById('accessPlaceNote').value.trim(),
+      train:     document.getElementById('accessTrain').value.trim(),
+      car:       document.getElementById('accessCar').value.trim(),
+      rain:      document.getElementById('accessRain').value.trim(),
+      mapUrl:    document.getElementById('accessMapUrl').value.trim()
+    };
+    await setSetting('access_info', JSON.stringify(data));
+    await addLog('アクセス情報更新', '開催場所・アクセス情報を更新しました', '📍');
+    showToast('アクセス情報を保存しました ✅'); showSaving();
+  }catch(e){
+    showToast('⚠️ 保存に失敗しました');
+    console.error(e);
+  }finally{
+    btn.disabled = false; btn.textContent = '💾 保存してサイトに反映';
+  }
+}
+
+// ===== EVENTS MANAGEMENT =====
+async function loadEventsAdmin(){
+  const raw = await getSetting('events_list');
+  const events = raw ? JSON.parse(raw) : getDefaultEvents();
+  renderEventList(events);
+  // 次回予告プレビュー更新
+  const prev = document.getElementById('nextEventPreviewText');
+  if(prev){
+    if(events.length){
+      const ev = events[0];
+      prev.innerHTML = `<div style="font-size:16px;font-weight:900;margin-bottom:6px;">${ev.name}</div>
+        <div style="font-size:12px;opacity:.9;">${ev.month||''} ${ev.day||''}日（${ev.weekday||''}）${ev.time?'　'+ev.time:''}</div>
+        <div style="font-size:12px;opacity:.9;">📍 ${ev.place||''}</div>`;
+    } else {
+      prev.innerHTML = '<div style="opacity:.7;">イベントがありません</div>';
     }
   }
-
-  function saveServices() {
-    showToast("設定を保存しました");
+}
+function getDefaultEvents(){
+  return [
+    {id:'e1',month:'APR',day:12,weekday:'土',color:'var(--green)',name:'春の自然探検あそび',place:'信貴山・大竹緑地',time:'10:00〜14:00',target:'3歳〜小学生（保護者同伴）',fee:'無料'},
+    {id:'e2',month:'APR',day:26,weekday:'土',color:'var(--sky-dark)',name:'焚き火と野外料理の日',place:'信貴山・大竹緑地',time:'10:30〜14:30',target:'5歳〜中学生',fee:'無料'}
+  ];
+}
+function renderEventList(events){
+  const list = document.getElementById('eventList');
+  if(!events.length){
+    list.innerHTML='<p style="text-align:center;color:var(--text-light);padding:20px;">まだイベントがありません</p>';
+    return;
   }
+  list.innerHTML = events.map((ev,i) => `
+    <div style="border:1.5px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden;">
+      <div style="display:flex;gap:12px;align-items:center;padding:12px;">
+        <div style="width:48px;height:48px;background:${ev.color||'var(--green)'};border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;flex-shrink:0;">
+          <div style="font-size:9px;font-weight:700;">${ev.month||''}</div>
+          <div style="font-size:18px;font-weight:900;line-height:1;">${ev.day||''}</div>
+          <div style="font-size:9px;">${ev.weekday||''}</div>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:14px;font-weight:900;margin-bottom:3px;">${ev.name||''}</div>
+          <div style="font-size:11px;color:var(--text-light);line-height:1.6;">
+            ${ev.place?'📍 '+ev.place+'<br>':''}
+            ${ev.time?'⏰ '+ev.time:''}
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;padding:0 12px 12px;">
+        <button onclick="editEvent(${i})" style="flex:1;background:var(--green-pale);color:var(--green);border:none;border-radius:8px;padding:8px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;cursor:pointer;">✏️ 編集</button>
+        <button onclick="deleteEvent(${i})" style="flex:1;background:#fdecea;color:var(--red);border:none;border-radius:8px;padding:8px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;cursor:pointer;">🗑️ 削除</button>
+      </div>
+    </div>`).join('');
+}
 
+let evBgImage='';
+let editingIndex = -1; // -1 = 新規追加、0以上 = 編集中のインデックス
+
+function editEvent(i){
+  // イベントデータを取得
+  getSetting('events_list').then(raw=>{
+    const events = raw ? JSON.parse(raw) : [];
+    const ev = events[i];
+    if(!ev) return;
+    editingIndex = i;
+    // フォームに値をセット
+    document.getElementById('evMonth').value   = ev.month   || '';
+    document.getElementById('evDay').value     = ev.day     || '';
+    document.getElementById('evWeekday').value = ev.weekday || '土';
+    document.getElementById('evColor').value   = ev.color   || 'var(--green)';
+    document.getElementById('evName').value    = ev.name    || '';
+    document.getElementById('evPlace').value   = ev.place   || '';
+    document.getElementById('evTime').value    = ev.time    || '';
+    document.getElementById('evTarget').value  = ev.target  || '';
+    document.getElementById('evFee').value     = ev.fee     || '';
+    document.getElementById('evItems').value   = ev.items   || '';
+    document.getElementById('evNotes').value   = ev.notes   || '';
+    document.getElementById('evExtra').value   = ev.extra   || '';
+    // 背景画像プレビュー
+    evBgImage = ev.bgImage || '';
+    const prev = document.getElementById('evImgPreview');
+    if(prev){
+      if(evBgImage){
+        prev.innerHTML=`<img src="${evBgImage}" style="width:100%;height:100%;object-fit:cover;">`;
+      }else{
+        prev.innerHTML='📸 タップして写真を選ぶ';
+        prev.style.background='linear-gradient(135deg,var(--green),var(--sky-dark))';
+      }
+    }
+    // ボタンを「更新」に変更
+    const btn = document.querySelector('#page-events .save-btn[onclick="addEvent()"]');
+    if(btn){
+      btn.textContent='💾 変更を保存する';
+      btn.style.background='var(--sky-dark)';
+    }
+    // 編集中バナーを表示
+    showEditingBanner(ev.name, i);
+    // フォームまでスクロール
+    document.getElementById('evName').scrollIntoView({behavior:'smooth', block:'center'});
+    showToast('編集モード：'+ev.name);
+  });
+}
+
+function showEditingBanner(name, i){
+  let banner = document.getElementById('editingBanner');
+  if(!banner){
+    banner = document.createElement('div');
+    banner.id = 'editingBanner';
+    banner.style.cssText='background:#fff9c4;border:2px solid var(--sun);border-radius:12px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;color:var(--earth);';
+    const addBtn = document.querySelector('#page-events .save-btn[onclick="addEvent()"]');
+    if(addBtn) addBtn.parentNode.insertBefore(banner, addBtn);
+  }
+  banner.innerHTML=`<span>✏️ 編集中：${name}</span><button onclick="cancelEdit()" style="background:none;border:1.5px solid var(--earth);border-radius:50px;padding:4px 12px;font-size:11px;font-family:'Zen Maru Gothic',sans-serif;cursor:pointer;color:var(--earth);">キャンセル</button>`;
+  banner.style.display='flex';
+}
+
+function cancelEdit(){
+  editingIndex = -1;
+  evBgImage = '';
+  // フォームリセット
+  ['evMonth','evDay','evName','evPlace','evTime','evTarget','evFee','evItems','evNotes','evExtra'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+  const prev = document.getElementById('evImgPreview');
+  if(prev){ prev.innerHTML='📸 タップして写真を選ぶ'; prev.style.background='linear-gradient(135deg,var(--green),var(--sky-dark))'; }
+  const btn = document.querySelector('#page-events .save-btn');
+  if(btn){ btn.textContent='➕ イベントを追加する'; btn.style.background='var(--green)'; }
+  const banner = document.getElementById('editingBanner');
+  if(banner) banner.style.display='none';
+  showToast('編集をキャンセルしました');
+}
+
+
+async function previewEvImg(files){
+  if(!files||!files[0])return;
+  try{
+    showToast('📸 写真を圧縮中...');
+    evBgImage = await compressImage(files[0],800,0.65);
+    const prev = document.getElementById('evImgPreview');
+    if(prev) prev.innerHTML=`<img src="${evBgImage}" style="width:100%;height:100%;object-fit:cover;">`;
+    showToast('写真を読み込みました ✅');
+  }catch(e){ showToast('⚠️ 写真の読み込みに失敗しました'); }
+}
+
+async function addEvent(){
+  const name  = document.getElementById('evName').value.trim();
+  if(!name){ showToast('イベント名を入力してください'); return; }
+  const ev = {
+    id:       'e'+Date.now(),
+    month:    document.getElementById('evMonth').value.trim().toUpperCase(),
+    day:      parseInt(document.getElementById('evDay').value)||1,
+    weekday:  document.getElementById('evWeekday').value,
+    color:    document.getElementById('evColor').value,
+    name,
+    place:    document.getElementById('evPlace').value.trim(),
+    time:     document.getElementById('evTime').value.trim(),
+    target:   document.getElementById('evTarget').value.trim(),
+    fee:      document.getElementById('evFee').value.trim(),
+    items:    document.getElementById('evItems').value.trim(),
+    notes:    document.getElementById('evNotes').value.trim(),
+    extra:    document.getElementById('evExtra').value.trim(),
+    bgImage:  evBgImage
+  };
+  try{
+    const raw    = await getSetting('events_list');
+    const events = raw ? JSON.parse(raw) : getDefaultEvents();
+    if(editingIndex >= 0){
+      // 編集モード：既存のイベントを上書き
+      events[editingIndex] = ev;
+      await setSetting('events_list', JSON.stringify(events));
+      await addLog('イベント更新', name, '✏️');
+      showToast('イベントを更新しました ✅');
+    } else {
+      // 新規追加
+      events.push(ev);
+      await setSetting('events_list', JSON.stringify(events));
+      await addLog('イベント追加', name, '📅');
+      // プッシュ通知を送信
+      sendPushNotification(
+        '📅 新しいイベント：'+name,
+        [ev.place?'📍 '+ev.place:'', ev.time?'⏰ '+ev.time:''].filter(Boolean).join(' '),
+        'https://playpark-yao.github.io/playpark-yao/events-list.html'
+      );
+      showToast('イベントを追加しました ✅');
+    }
+    // フォームリセット
+    editingIndex = -1;
+    evBgImage = '';
+    const previewEl = document.getElementById('evImgPreview');
+    if(previewEl){ previewEl.innerHTML='📸 タップして写真を選ぶ'; previewEl.style.background='linear-gradient(135deg,var(--green),var(--sky-dark))'; }
+    const fileEl = document.getElementById('evImgFile');
+    if(fileEl) fileEl.value='';
+    ['evMonth','evDay','evName','evPlace','evTime','evTarget','evFee','evItems','evNotes','evExtra'].forEach(id=>{
+      const el=document.getElementById(id); if(el) el.value='';
+    });
+    const btn = document.querySelector('#page-events .save-btn');
+    if(btn){ btn.textContent='➕ イベントを追加する'; btn.style.background='var(--green)'; }
+    const banner = document.getElementById('editingBanner');
+    if(banner) banner.style.display='none';
+    loadEventsAdmin();
+    showSaving();
+  }catch(e){
+    showToast('⚠️ 保存に失敗しました: '+e.message);
+    console.error(e);
+  }
+}
+
+async function deleteEvent(i){
+  if(!confirm('このイベントを削除しますか？'))return;
+  try{
+    const raw    = await getSetting('events_list');
+    const events = raw ? JSON.parse(raw) : [];
+    const name   = events[i]?.name||'';
+    events.splice(i,1);
+    await setSetting('events_list', JSON.stringify(events));
+    await addLog('イベント削除', name, '🗑️');
+    loadEventsAdmin();
+    showToast('イベントを削除しました'); showSaving();
+  }catch(e){
+    showToast('⚠️ 削除に失敗しました');
+  }
+}
+
+// ===== PWA PUSH NOTIFICATION SENDER =====
+async function sendPushNotification(title, body, url) {
+  // あなたのSupabase環境に合わせて設定
+  const EDGE_FUNCTION_URL = 'https://ipzdgsodhcxhnpajfvrt.supabase.co/functions/v1/clever-task';
+  const SB_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlwemRnc29kaGN4aG5wYWpmdnJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNTgzNTcsImV4cCI6MjA4ODYzNDM1N30.b6ce95bLev-_6t2LidinKiRdn7VMV79iy9yBrz0db6k';
+
+  console.log('通知送信を開始:', { title, body, url });
+
+  try {
+    const response = await fetch(EDGE_FUNCTION_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${SB_ANON_KEY}`
+      },
+      body: JSON.stringify({ title, body, url })
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`送信失敗: ${response.status} ${errorText}`);
+    }
+
+    const result = await response.json();
+    console.log('送信成功:', result);
+    showToast(`🔔 通知を送信しました（成功:${result.sent} / 失敗:${result.failed}）`);
+    
+    // ログにも記録
+    await addLog('プッシュ通知送信', `タイトル: ${title}`, '🔔');
+
+  } catch (error) {
+    console.error('通知送信エラー:', error);
+    showToast('⚠️ 通知の送信に失敗しました。コンソールを確認してください。');
+  }
+}  
+
+// 【緊急用】新しいVAPID鍵を生成してコンソールに表示する関数
+async function generateNewKeys() {
+  const keys = await crypto.subtle.generateKey({ name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify']);
+  const pub = await crypto.subtle.exportKey('raw', keys.publicKey);
+  const priv = await crypto.subtle.exportKey('pkcs8', keys.privateKey);
+  
+  const toBase64 = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  
+  console.log("=== 新しい鍵が生成されました ===");
+  console.log("新しい Public Key (index.htmlとSecretsへ):", toBase64(pub));
+  console.log("新しい Private Key (Secretsへ):", toBase64(priv));
+  alert("ブラウザのコンソール（F12）に新しい鍵を出力しました！");
+}
+// 実行（一度だけ動かせばOK）
+// generateNewKeys();
 </script>
 </body>
-</html>
+</html> 
