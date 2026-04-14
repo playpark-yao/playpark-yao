@@ -481,26 +481,22 @@
           <button class="save-btn" onclick="saveServices()">💾 保存してサイトに反映</button>
         </div>
         <div class="card">
-          <h3>📲 PWAアイコン設定</h3>
-          <p style="font-size:12px;color:var(--text-light);margin-bottom:14px;">訪問者がホーム画面に追加したときに表示されるアイコンです。</p>
-          <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px;">
-            <div id="pwaIconPreview" style="width:72px;height:72px;background:var(--green);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:36px;overflow:hidden;flex-shrink:0;">🌳</div>
-            <div style="flex:1;">
-              <div style="font-size:13px;font-weight:700;margin-bottom:4px;">現在のアイコン</div>
-              <div style="font-size:11px;color:var(--text-light);">推奨サイズ：512×512px以上の正方形</div>
-            </div>
-          </div>
-          <div class="upload-area" onclick="document.getElementById('pwaIconFile').click()" style="padding:14px;">
-            📁 アイコン画像を選ぶ
-          </div>
-          <input type="file" id="pwaIconFile" accept="image/*" style="display:none" onchange="uploadPwaIcon(this.files)">
-          <button class="save-btn" style="margin-top:10px;background:#fdecea;color:var(--red);" onclick="clearPwaIcon()">🗑️ デフォルトに戻す</button>
-          <div style="margin-top:12px;background:var(--green-pale);border-radius:10px;padding:12px;font-size:11px;color:var(--green);line-height:1.8;">
-            💡 アイコンを設定するとインストール時・ホーム画面でこの画像が使われます。<br>
-            変更後はGitHubにアップロードして反映してください。
-          </div>
-        </div>
-      </div>
+  　　　　<h3>📲 PWAアイコン設定</h3>
+  　　　　<p style="font-size:12px;color:var(--text-light);margin-bottom:14px;">ホーム画面アイコンやサイトのロゴマークとして反映されます。</p>
+  　　　　<div style="display:flex;align-items:center;gap:16px;margin-bottom:14px;">
+    　　　　<div id="pwaIconPreview" style="width:72px;height:72px;background:var(--green-pale);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:36px;overflow:hidden;flex-shrink:0;border:1px solid var(--border);">
+      　　　　🌳
+    　　　　</div>
+    　　　　<div style="flex:1;">
+      　　　　<div style="font-size:13px;font-weight:700;margin-bottom:4px;">現在のロゴ・アイコン</div>
+      　　　　<div style="font-size:11px;color:var(--text-light);">アップロードすると即座に反映されます</div>
+    　　　　</div>
+  　　　　</div>
+  　　　　<div class="upload-area" onclick="document.getElementById('pwaIconFile').click()" style="padding:14px;">
+    　　　　📁 新しい画像を選択して更新
+  　　　　</div>
+  　　　　<input type="file" id="pwaIconFile" accept="image/*" style="display:none" onchange="handlePwaIconUpload(this.files)">
+　　　　</div>
 
 
 
