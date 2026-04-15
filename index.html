@@ -444,9 +444,27 @@ async function sbGet(table,filter=''){const r=await fetch(`${SUPABASE_URL}/rest/
 async function sbGetSetting(key){const rows=await sbGet('site_settings',`?key=eq.${key}&select=value`);return rows?.[0]?.value||null;}
 
 // ===== INIT =====
-document.addEventListener('DOMContentLoaded',async()=>{
-  // loadInstaPosts() を呼び出さないようにします
-await Promise.all([loadSlides(),loadAbout(),loadApply(),loadDynamicSeo(),loadDynamicPhotos(),loadLocalBizSchema(),loadServices(),/* loadInstaPosts(), */loadEvents(),loadNextEvent(),loadAccessInfo(),loadPwaIcon()]);
+document.addEventListener('DOMContentLoaded', async () => {
+  // すべての読み込みを同時に開始します
+  await Promise.all([
+    loadSlides(),
+    loadAbout(),
+    loadApply(),
+    loadDynamicSeo(),
+    loadDynamicPhotos(),
+    loadLocalBizSchema(),
+    loadServices(),
+    loadEvents(),
+    loadNextEvent(),
+    loadAccessInfo(),
+    loadPwaIcon()
+  ]);
+  
+  // 個別読み込み
+  loadNews();
+  loadVideos();
+  initReveal();
+});
 
 // ===== SERVICES =====
 async function loadServices(){
@@ -632,8 +650,15 @@ if('serviceWorker' in navigator){
     try{swRegistration=await navigator.serviceWorker.register('./sw.js');if(localStorage.getItem('pushSubscribed')==='1'){const b=document.getElementById('notifyBtn');if(b){b.textContent='🔔 通知ON ✅';b.style.background='var(--green)';}}}catch(e){console.log('SW error:',e);}
   });
 }
-document.getElementById('menuBtn').addEventListener('click',()=>{document.getElementById('navDrawer').classList.add('open');document.getElementById('navOverlay').classList.add('open');});
-function closeMenu(){document.getElementById('navDrawer').classList.remove('open');document.getElementById('navOverlay').classList.remove('open');}
+document.getElementById('menuBtn').addEventListener('click',()=>{
+  document.getElementById('navDrawer').classList.add('open');
+  document.getElementById('navOverlay').classList.add('open');
+});
+
+function closeMenu(){
+  document.getElementById('navDrawer').classList.remove('open');
+  document.getElementById('navOverlay').classList.remove('open');
+}
 </script>
 </body>
 </html>
