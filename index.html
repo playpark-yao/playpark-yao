@@ -212,28 +212,31 @@
       <button class="tab-btn" onclick="switchTab('news',this)">📢 お知らせ</button>
       <button class="tab-btn" onclick="switchTab('videos',this)">🎬 動画</button>
     </div>
-    <div id="tab-instagram">
-      <div style="background:white;border-radius:16px;overflow:hidden;box-shadow:var(--shadow);">
-        <div style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);padding:12px 16px;display:flex;align-items:center;gap:10px;">
-          <span style="font-size:22px;">📸</span>
-          <div>
-            <div style="color:white;font-weight:900;font-size:14px;">@playpark_yao</div>
-            <div style="color:rgba(255,255,255,.8);font-size:11px;">プレーパーク八尾 Instagram</div>
-          </div>
-          <a href="https://www.instagram.com/playpark_yao" target="_blank" id="instaLink"
-             style="margin-left:auto;background:white;color:#dc2743;border-radius:50px;padding:6px 14px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">フォロー</a>
-        </div>
-        <div id="instaPostsWrap" style="padding:14px;display:flex;flex-direction:column;gap:10px;min-height:100px;">
-          <div style="text-align:center;padding:30px;color:var(--text-light);font-size:13px;">⏳ 読み込み中...</div>
-        </div>
-        <div style="padding:14px 16px;border-top:1.5px solid var(--green-pale);text-align:center;">
-          <a href="https://www.instagram.com/playpark_yao" target="_blank"
-             style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#f09433,#dc2743,#bc1888);color:white;border-radius:50px;padding:10px 22px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">
-            📸 Instagramをもっと見る
-          </a>
-        </div>
+  <div id="tab-instagram">
+  <div style="background:white;border-radius:16px;overflow:hidden;box-shadow:var(--shadow);">
+    <div style="background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);padding:12px 16px;display:flex;align-items:center;gap:10px;">
+      <span style="font-size:22px;">📸</span>
+      <div>
+        <div style="color:white;font-weight:900;font-size:14px;">@playpark_yao</div>
+        <div style="color:rgba(255,255,255,.8);font-size:11px;">プレーパーク八尾 Instagram</div>
       </div>
+      <a href="https://www.instagram.com/playpark_yao" target="_blank" id="instaLink"
+         style="margin-left:auto;background:white;color:#dc2743;border-radius:50px;padding:6px 14px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">フォロー</a>
     </div>
+
+    <div id="instaPostsWrap" style="padding:0; min-height:300px;">
+      <script src="https://cdn.lightwidget.com/widgets/lightwidget.js"></script>
+      <iframe src="//lightwidget.com/widgets/154defaa3792577ea65a6523aa9abdc7.html" scrolling="no" allowtransparency="true" class="lightwidget-widget" style="width:100%;border:0;overflow:hidden;"></iframe>
+    </div>
+    
+    <div style="padding:14px 16px;border-top:1.5px solid var(--green-pale);text-align:center;">
+      <a href="https://www.instagram.com/playpark_yao" target="_blank"
+         style="display:inline-flex;align-items:center;gap:6px;background:linear-gradient(135deg,#f09433,#dc2743,#bc1888);color:white;border-radius:50px;padding:10px 22px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">
+        📸 Instagramをもっと見る
+      </a>
+    </div>
+  </div>
+</div>
     <div id="tab-news" style="display:none;">
       <div style="text-align:right;margin-bottom:10px;">
         <a href="news.html" style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--green);text-decoration:none;font-weight:700;border:1.5px solid var(--green);border-radius:50px;padding:5px 14px;">📢 一覧を見る</a>
@@ -438,7 +441,8 @@ async function sbGetSetting(key){const rows=await sbGet('site_settings',`?key=eq
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded',async()=>{
-  await Promise.all([loadSlides(),loadAbout(),loadApply(),loadDynamicSeo(),loadDynamicPhotos(),loadLocalBizSchema(),loadServices(),loadInstaPosts(),loadEvents(),loadNextEvent(),loadAccessInfo(),loadPwaIcon()]);
+  // loadInstaPosts() は LightWidget（iframe）を使うので不要になりました
+  await Promise.all([loadSlides(),loadAbout(),loadApply(),loadDynamicSeo(),loadDynamicPhotos(),loadLocalBizSchema(),loadServices(),/* loadInstaPosts(), */loadEvents(),loadNextEvent(),loadAccessInfo(),loadPwaIcon()]);
   loadNews();loadVideos();initReveal();
 });
 
