@@ -53,7 +53,7 @@ async function setBadge(count) {
 
 // ===== プッシュ通知受信時 =====
 self.addEventListener('push', e => {
-  let data = { title: 'プレーパーク八尾', body: '新しいお知らせがあります', url: '/' };
+  let data = { title: '森のプレーパーク八尾', body: '【お知らせ】ページに新しい情報があります', url: '/' };
   try { data = e.data ? e.data.json() : data; } catch (err) {}
 
   const promiseChain = (async () => {
