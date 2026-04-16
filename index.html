@@ -6,7 +6,7 @@
   <title>プレーパーク八尾 | 子どもの自然遊び・プレーパーク（大阪府八尾市）</title>
 
   <!-- SEO -->
-  <meta name="description" content="大阪府八尾市で開催する子どもの自然遊び・プレーパーク。どろんこ・焚き火・木登りなど、自由な遊びを通じて子どもたちの育ちを支える地域の居場所です。月2回開催・参加無料。">
+  <meta name="description" content="大阪府八尾市で開催する子どもの自然遊び・プレーパーク。どろんこ・焚き火・木登りなど、自由な遊びを通じて子どもたちの育ちを支える地域の居場所です。月1回開催。">
   <meta name="keywords" content="プレーパーク,八尾,八尾市,子ども,自然遊び,焚き火,木登り,どろんこ,子育て,遊び場,大阪,居場所">
   <meta name="author" content="プレーパーク八尾">
   <meta name="robots" content="index, follow">
@@ -24,7 +24,7 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="プレーパーク八尾 | 子どもの自然遊び（大阪府八尾市）">
-  <meta name="twitter:description" content="大阪府八尾市で開催する子どもの自然遊び・プレーパーク。月2回開催・参加無料。">
+  <meta name="twitter:description" content="大阪府八尾市で開催する子どもの自然遊び・プレーパーク。月1回開催。">
 
   <!-- 構造化データ -->
   <script type="application/ld+json">
@@ -163,10 +163,10 @@
 <header>
 <a href="#top" class="logo" style="text-decoration: none; display: flex; align-items: center; gap: 10px;">
     <div style="width: 52px; height: 52px; background: white; border: 2px solid var(--green-pale); border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-      <img src="icon-192.png" alt="プレーパーク八尾ロゴ" style="width: 100%; height: 100%; object-fit: cover;">
+      <img src="icon-192.png" alt="森のプレーパーク八尾ロゴ" style="width: 100%; height: 100%; object-fit: cover;">
     </div>
     <div class="logo-text">
-      <div class="main" style="font-weight: 900; color: var(--green); font-size: 1.1rem; line-height: 1.2;">プレーパーク八尾</div>
+      <div class="main" style="font-weight: 900; color: var(--green); font-size: 1.1rem; line-height: 1.2;">森のプレーパーク八尾</div>
       <div class="sub" style="font-size: 0.65rem; color: var(--text-light); letter-spacing: 0.05em; font-weight: 700;">PLAY PARK YAO</div>
     </div>
   </a>
@@ -320,7 +320,7 @@
 </main>
 
 <footer>
-  <div class="footer-logo">🌳 プレーパーク八尾</div>
+  <div class="footer-logo">森のプレーパーク八尾</div>
   <p style="font-size:12px;opacity:.7;margin-bottom:12px;">子どもたちの自由な遊びを守る場所</p>
   <div class="footer-sns">
     <a href="#" class="sns-btn" id="footerInsta">📸</a><a href="#" class="sns-btn" id="footerLine">💬</a><a href="#" class="sns-btn" id="footerYoutube">🎬</a><a href="admin.html" class="sns-btn" style="opacity:0.3;font-size:16px;" title="管理者">⚙</a>
@@ -387,7 +387,7 @@ async function loadNextEvent(){
   if(!wrap)return;
   try{
     const raw=await sbGetSetting('events_list');
-    const defaults=[{month:'APR',day:12,weekday:'土',color:'var(--green)',name:'春の自然探検あそび',place:'信貴山・大竹緑地',time:'10:00〜14:00',target:'3歳〜小学生（保護者同伴）',fee:'無料'}];
+    const defaults=[{month:'APR',day:12,weekday:'土',color:'var(--green)',name:'春の自然探検あそび',place:'高安山・大竹緑地',time:'10:00〜14:00',target:'3歳〜小学生（保護者同伴）'}];
     const events=raw?JSON.parse(raw):defaults;
 
     // イベントがない場合（準備中の時）
@@ -500,7 +500,7 @@ async function loadEvents(){
   const wrap=document.getElementById('eventsList');if(!wrap)return;
   try{
     const raw=await sbGetSetting('events_list');
-    const defaultEvents=[{month:'APR',day:12,weekday:'土',color:'var(--green)',name:'春の自然探検あそび',place:'信貴山・大竹緑地',time:'10:00〜14:00',target:'3歳〜小学生（保護者同伴）',fee:'無料'},{month:'APR',day:26,weekday:'土',color:'var(--sky-dark)',name:'焚き火と野外料理の日',place:'信貴山・大竹緑地',time:'10:30〜14:30',target:'5歳〜中学生',fee:'無料'}];
+    const defaultEvents=[{month:'APR',day:12,weekday:'土',color:'var(--green)',name:'春の自然探検あそび',place:'高安山・大竹緑地',time:'10:00〜14:00',target:'3歳〜小学生（保護者同伴）'},{month:'APR',day:26,weekday:'土',color:'var(--sky-dark)',name:'焚き火と野外料理の日',place:'高安山・大竹緑地',time:'10:30〜14:30',target:'5歳〜中学生'}];
     const events=raw?JSON.parse(raw):defaultEvents;
     if(!events.length){wrap.innerHTML='<p style="text-align:center;color:var(--text-light);padding:20px;font-size:13px;">イベント情報を準備中です</p>';return;}
     const showEvents=events.slice(0,3);const moreEvents=events.length>3;
@@ -564,7 +564,7 @@ function slideNext(){goSlide(cur+1);}function slidePrev(){goSlide(cur-1);}
 // ===== ABOUT =====
 async function loadAbout(){
   const raw=await sbGetSetting('about_features');
-  const feats=raw?JSON.parse(raw):[{icon:'🌿',title:'自然の中で自由に',body:'どろんこ・焚き火・木登り。自分でやりたいことを見つける場所'},{icon:'👨‍👩‍👧',title:'親子で参加',body:'保護者も一緒に楽しめる。地域のみんなとつながれます'},{icon:'🏕️',title:'月2回開催',body:'定期的に開催。継続して通える地域の居場所です'},{icon:'💚',title:'無料・低料金',body:'誰でも参加しやすい料金設定。補助制度もあります'}];
+  const feats=raw?JSON.parse(raw):[{icon:'🌿',title:'自然の中で自由に',body:'どろんこ・焚き火・木登り。自分でやりたいことを見つける場所'},{icon:'👨‍👩‍👧',title:'親子で参加',body:'保護者も一緒に楽しめる。地域のみんなとつながれます'},{icon:'🏕️',title:'月1回開催',body:'定期的に開催。継続して通える地域の居場所です'},{icon:'💚',title:'低料金',body:'誰でも参加しやすい料金設定。'}];
   document.getElementById('featuresGrid').innerHTML=feats.map(f=>`<div class="feature-card reveal"><span class="feat-icon">${f.icon}</span><h4>${f.title}</h4><p>${f.body}</p></div>`).join('');
   initReveal();
 }
