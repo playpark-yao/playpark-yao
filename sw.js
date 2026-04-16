@@ -51,62 +51,69 @@ async function setBadge(count) {
   }
 }
 
-// ===== プッシュ通知の受信（バッジ対応） =====
+// ===== プッシュ通知受信時 =====
 self.addEventListener('push', e => {
-  let data = { title: '森のプレーパーク八尾', body: '新しいお知らせがあります', url: './index.html', badge: 1 };
-  if (e.data) {
-    try { data = e.data.json(); } catch (err) { data.body = e.data.text(); }
-  }
+  let data = { title: 'プレーパーク八尾', body: '新しいお知らせがあります', url: '/' };
+  try { data = e.data ? e.data.json() : data; } catch (err) {}
 
-  if (data.badge && 'setAppBadge' in navigator) {
-    navigator.setAppBadge(data.badge).catch(() => {});
-  }
+  const promiseChain = (async () => {
+    // 1. 現在表示されている通知のリストを取得
+    const notifications = await self.registration.getNotifications();
+    const newBadgeCount = notifications.length + 1;
 
-  const options = {
-    body: data.body,
-    icon: './icon-192.png',
-    badge: './icon-192.png',
-    data: { url: data.url || './index.html' },
-    tag: 'playpark-notification',
-    renotify: true,
-    requireInteraction: true 
-  };
+    // 2. バッジを更新 (現在の通知数 + 新しい通知1つ)
+    if ('setAppBadge' in self.navigator) {
+      await self.navigator.setAppBadge(newBadgeCount).catch(() => {});
+    }
 
-  e.waitUntil(self.registration.showNotification(data.title, options));
+    // 3. 通知を表示
+    return self.registration.showNotification(data.title, {
+      body: data.body,
+      icon: './icon-192.png',
+      badge: './icon-192.png', // Androidのステータスバー用アイコン
+      data: { url: data.url || '/' },
+      vibrate: [200, 100, 200],
+    });
+  })();
+
+  e.waitUntil(promiseChain);
 });
 
-// ===== 通知タップ時 → バッジ全消去してアプリを開く =====
+// バッジをクリアする共通関数
+async function clearAllBadges() {
+  // バッジをリセット
+  if ('clearAppBadge' in self.navigator) {
+    await self.navigator.clearAppBadge().catch(() => {});
+  }
+  // 全ての通知も消去する場合
+  const ns = await self.registration.getNotifications();
+  ns.forEach(n => n.close());
+}
+
+// ===== 通知タップ時 =====
 self.addEventListener('notificationclick', e => {
   e.notification.close();
   const url = e.notification.data?.url || '/';
- 
+
   e.waitUntil((async () => {
-    // バッジを0にリセット
-    badgeCount = 0;
-    await setBadge(0);
- 
-    // 全通知を消去
-    const notifications = await self.registration.getNotifications();
-    notifications.forEach(n => n.close());
- 
-    // アプリを開くかフォーカス
-    const cs = await clients.matchAll({ type:'window', includeUncontrolled:true });
+    await clearAllBadges(); // バッジと通知をクリア
+
+    // アプリを開く処理
+    const cs = await clients.matchAll({ type: 'window', includeUncontrolled: true });
     const c = cs.find(w => 'focus' in w);
     if (c) {
       await c.focus();
-      await c.navigate(url);
+      if (c.url !== url) await c.navigate(url);
     } else {
       await clients.openWindow(url);
     }
   })());
 });
  
-// ===== ページから「clearBadge」メッセージを受け取ったら消去 =====
+// ===== アプリ起動中などにメッセージを受け取って消去 =====
 self.addEventListener('message', e => {
   if (e.data === 'clearBadge') {
-    badgeCount = 0;
-    setBadge(0);
-    self.registration.getNotifications().then(ns => ns.forEach(n => n.close()));
+    e.waitUntil(clearAllBadges());
   }
 });
  
