@@ -37,9 +37,23 @@ self.addEventListener('fetch', e => {
   );
 });
 
+// ===== バッジカウント管理 =====
+let badgeCount = 0;
+ 
+async function setBadge(count) {
+  badgeCount = count;
+  if ('setAppBadge' in self.navigator) {
+    if (count > 0) {
+      await self.navigator.setAppBadge(count).catch(() => {});
+    } else {
+      await self.navigator.clearAppBadge().catch(() => {});
+    }
+  }
+}
+
 // ===== プッシュ通知の受信（バッジ対応） =====
 self.addEventListener('push', e => {
-  let data = { title: 'プレーパーク八尾', body: '新しいお知らせがあります', url: './index.html', badge: 1 };
+  let data = { title: '森のプレーパーク八尾', body: '新しいお知らせがあります', url: './index.html', badge: 1 };
   if (e.data) {
     try { data = e.data.json(); } catch (err) { data.body = e.data.text(); }
   }
@@ -61,16 +75,38 @@ self.addEventListener('push', e => {
   e.waitUntil(self.registration.showNotification(data.title, options));
 });
 
-// 通知クリック
+// ===== 通知タップ時 → バッジ全消去してアプリを開く =====
 self.addEventListener('notificationclick', e => {
   e.notification.close();
-  const urlToOpen = new URL(e.notification.data?.url || './index.html', self.location.origin).href;
-  e.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(windowClients => {
-      for (let client of windowClients) {
-        if (client.url === urlToOpen && 'focus' in client) return client.focus();
-      }
-      if (clients.openWindow) return clients.openWindow(urlToOpen);
-    })
-  );
+  const url = e.notification.data?.url || '/';
+ 
+  e.waitUntil((async () => {
+    // バッジを0にリセット
+    badgeCount = 0;
+    await setBadge(0);
+ 
+    // 全通知を消去
+    const notifications = await self.registration.getNotifications();
+    notifications.forEach(n => n.close());
+ 
+    // アプリを開くかフォーカス
+    const cs = await clients.matchAll({ type:'window', includeUncontrolled:true });
+    const c = cs.find(w => 'focus' in w);
+    if (c) {
+      await c.focus();
+      await c.navigate(url);
+    } else {
+      await clients.openWindow(url);
+    }
+  })());
 });
+ 
+// ===== ページから「clearBadge」メッセージを受け取ったら消去 =====
+self.addEventListener('message', e => {
+  if (e.data === 'clearBadge') {
+    badgeCount = 0;
+    setBadge(0);
+    self.registration.getNotifications().then(ns => ns.forEach(n => n.close()));
+  }
+});
+ 
