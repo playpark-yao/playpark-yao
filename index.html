@@ -220,7 +220,7 @@
         <span style="font-size:22px;">📸</span>
         <div>
           <div style="color:white;font-weight:900;font-size:14px;">@playpark_yao</div>
-          <div style="color:rgba(255,255,255,.8);font-size:11px;">プレーパーク八尾 Instagram</div>
+          <div style="color:rgba(255,255,255,.8);font-size:11px;">森のプレーパーク八尾 Instagram</div>
         </div>
         <a href="https://www.instagram.com/playpark_yao" target="_blank" id="instaLink"
            style="margin-left:auto;background:white;color:#dc2743;border-radius:50px;padding:6px 14px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">フォロー</a>
@@ -387,7 +387,7 @@ async function loadNextEvent(){
   if(!wrap)return;
   try{
     const raw=await sbGetSetting('events_list');
-    const defaults=[{month:'APR',day:12,weekday:'土',color:'var(--green)',name:'春の自然探検あそび',place:'高安山・大竹緑地',time:'10:00〜14:00',target:'3歳〜小学生（保護者同伴）'}];
+    const defaults=[{month:'APR',day:12,weekday:'土',color:'var(--green)',name:'春の自然探検あそび',place:'高安山・大竹緑地',time:'10:00〜14:00',target:'0歳〜小学生（保護者同伴）'}];
     const events=raw?JSON.parse(raw):defaults;
 
     // イベントがない場合（準備中の時）
@@ -500,7 +500,7 @@ async function loadEvents(){
   const wrap=document.getElementById('eventsList');if(!wrap)return;
   try{
     const raw=await sbGetSetting('events_list');
-    const defaultEvents=[{month:'APR',day:12,weekday:'土',color:'var(--green)',name:'春の自然探検あそび',place:'高安山・大竹緑地',time:'10:00〜14:00',target:'3歳〜小学生（保護者同伴）'},{month:'APR',day:26,weekday:'土',color:'var(--sky-dark)',name:'焚き火と野外料理の日',place:'高安山・大竹緑地',time:'10:30〜14:30',target:'5歳〜中学生'}];
+    const defaultEvents=[{month:'APR',day:12,weekday:'土',color:'var(--green)',name:'春の自然探検あそび',place:'高安山・大竹緑地',time:'10:00〜14:00',target:'0歳〜小学生（保護者同伴）'},{month:'APR',day:26,weekday:'土',color:'var(--sky-dark)',name:'焚き火と野外料理の日',place:'高安山・大竹緑地',time:'10:30〜14:30',target:'5歳〜中学生'}];
     const events=raw?JSON.parse(raw):defaultEvents;
     if(!events.length){wrap.innerHTML='<p style="text-align:center;color:var(--text-light);padding:20px;font-size:13px;">イベント情報を準備中です</p>';return;}
     const showEvents=events.slice(0,3);const moreEvents=events.length>3;
