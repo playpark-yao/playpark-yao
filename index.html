@@ -122,8 +122,28 @@
     .feature-card h4{font-size:13px;font-weight:900;color:var(--green);margin-bottom:4px;}
     .feature-card p{font-size:11px;color:var(--text-light);line-height:1.4;}
     .events-section{background:white;}
-    .event-item{background:var(--green-pale);border-radius:14px;padding:16px;display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;}
-    .event-date-block{min-width:54px;text-align:center;border-radius:12px;padding:8px 4px;color:white;}
+    .event-item {
+    background: var(--green-pale);
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start; /* 上揃えを維持 */
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+ }
+
+ .event-date-block {
+    /* ↓ ここに2行追加します */
+    flex-shrink: 0;         /* 日付ブロックが細く潰されるのを防ぐ */
+    height: fit-content;    /* 中身の文字に合わせて高さを固定する（伸び防止） */
+    
+    min-width: 54px;
+    text-align: center;
+    border-radius: 12px;
+    padding: 8px 4px;
+    color: white;
+ }
     .event-date-block .month{font-size:10px;font-weight:700;opacity:.85;}
     .event-date-block .day{font-size:28px;font-weight:900;line-height:1;}
     .event-date-block .weekday{font-size:11px;opacity:.85;}
