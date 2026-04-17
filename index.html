@@ -122,46 +122,8 @@
     .feature-card h4{font-size:13px;font-weight:900;color:var(--green);margin-bottom:4px;}
     .feature-card p{font-size:11px;color:var(--text-light);line-height:1.4;}
     .events-section{background:white;}
-    /* 1. 全体の枠組み（横並びを許可しつつ、はみ出た分を下へ） */
-.event-item {
-    background: var(--green-pale);
-    border-radius: 14px;
-    padding: 16px;
-    display: flex;
-    gap: 14px;
-    align-items: flex-start; /* 縦に伸びるのを防ぐ（上揃え） */
-    margin-bottom: 12px;
-    flex-wrap: wrap;         /* 詳細ボックスを下段に回すために必須 */
-}
-
-/* 2. 日付ブロック（サイズを固定して、形が崩れないようにする） */
-.event-date-block {
-    flex-shrink: 0;          /* 横幅が潰れるのを防ぐ */
-    width: 54px;             /* 横幅を固定（元と同じサイズ） */
-    text-align: center;
-    border-radius: 12px;
-    padding: 8px 4px;
-    color: white;
-}
-
-/* 3. 右側のタイトル・場所など（ズレを直す魔法の1行） */
-.event-details {
-    flex: 1;
-    min-width: 0;            /* ←これが重要！📍のズレや変な改行を直します */
-}
-
-/* 4. 白い詳細ボックス（左端から右端まで広がる） */
-#eventsList div[id^="detail-"] {
-    width: 100% !important;   /* 左の日付の下まで回り込ませて100%に */
-    margin-top: 12px;
-    padding: 16px;
-    background: white;
-    border-radius: 12px;
-    box-sizing: border-box;
-    font-size: 13px;
-    color: var(--text);
-    line-height: 1.6;
-}
+    .event-item{background:var(--green-pale);border-radius:14px;padding:16px;display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;}
+    .event-date-block{min-width:54px;text-align:center;border-radius:12px;padding:8px 4px;color:white;}
     .event-date-block .month{font-size:10px;font-weight:700;opacity:.85;}
     .event-date-block .day{font-size:28px;font-weight:900;line-height:1;}
     .event-date-block .weekday{font-size:11px;opacity:.85;}
@@ -561,37 +523,7 @@ async function loadEvents(){
       const textColor=hasBg?'color:white;':'';const subColor=hasBg?'color:rgba(255,255,255,0.85);':'color:var(--text-light);';
       const detailBg=hasBg?'background:rgba(255,255,255,0.15);border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.8;color:rgba(255,255,255,0.9);margin-top:8px;':'background:#f8fbf8;border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.8;color:var(--text-light);margin-top:8px;';
       const cardWrap=hasBg?`position:relative;overflow:hidden;background-image:url(${ev.bgImage});background-size:cover;background-position:center;`:'';
-      return `<div class="event-item reveal" style="${cardWrap}">
-  　　　${hasBg?'<div style="position:absolute;inset:0;background:rgba(0,0,0,0.45);border-radius:14px;z-index:0;"></div>':''}
-  
-  　　　<div class="event-date-block" style="position:relative;z-index:1;background:${hasBg?'rgba(255,255,255,0.2)':ev.color||'var(--green)'};${hasBg?'border:1.5px solid rgba(255,255,255,0.5);':''}">
-    　　　<div class="month" style="${subColor}">${ev.month||''}</div>
-    　　　<div class="day" style="${textColor}">${ev.day||''}</div>
-    　　　<div class="weekday" style="${subColor}">${ev.weekday||''}</div>
-  　　　</div>
-
-  　　　<div class="event-details" style="position:relative;z-index:1;flex:1;">
-    　　　<h4 style="${textColor}">${ev.name||''}</h4>
-    　　　<p style="${subColor}font-size:12px;line-height:1.7;margin-bottom:6px;">
-      　　　${[ev.place?'📍 '+ev.place:'',ev.time?'⏰ '+ev.time:'',ev.target?'👶 '+ev.target:'',ev.fee?'💰 '+ev.fee:''].filter(Boolean).join('<br>')}
-    　　　</p>
-    
-    　　　${(ev.items||ev.notes||ev.extra) ? `<button onclick="toggleEvDetail('${evId}',this)" style="font-size:11px;font-weight:700;color:${hasBg?'rgba(255,255,255,0.8)':'var(--text-light)'};background:none;border:none;cursor:pointer;padding:0;margin-bottom:6px;font-family:'Zen Maru Gothic',sans-serif;">▶ 詳細を見る</button>` : ''}
-    
-    　　　　<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
-      　　　　<button class="apply-link" onclick="openApply()" style="${hasBg?'border-color:white;color:white;background:rgba(255,255,255,0.15);':''}">✏️ 申し込む</button>
-    　　　</div>
-  　　　</div>
-
-  　　　${(ev.items||ev.notes||ev.extra) ? `
-    　　　<div id="${evId}" style="display:none; width:100%; position:relative; z-index:1;">
-      　　　<div style="${detailBg}">
-        　　　${ev.items?'🎒 <strong>準備物：</strong><br>'+nl2br(ev.items)+'<br>':''}
-        　　　${ev.notes?'⚠️ <strong>注意事項：</strong><br>'+nl2br(ev.notes)+'<br>':''}
-        　　　${ev.extra?'📝 <strong>補足：</strong><br>'+nl2br(ev.extra):''}
-      　　　</div>
-    　　　</div>` : ''}
-　　　</div>`;
+      return `<div class="event-item reveal" style="${cardWrap}">${hasBg?'<div style="position:absolute;inset:0;background:rgba(0,0,0,0.45);border-radius:14px;z-index:0;"></div>':''}<div class="event-date-block" style="position:relative;z-index:1;background:${hasBg?'rgba(255,255,255,0.2)':ev.color||'var(--green)'};${hasBg?'border:1.5px solid rgba(255,255,255,0.5);':''}"><div class="month" style="${subColor}">${ev.month||''}</div><div class="day" style="${textColor}">${ev.day||''}</div><div class="weekday" style="${subColor}">${ev.weekday||''}</div></div><div class="event-details" style="position:relative;z-index:1;flex:1;"><h4 style="${textColor}">${ev.name||''}</h4><p style="${subColor}font-size:12px;line-height:1.7;margin-bottom:6px;">${[ev.place?'📍 '+ev.place:'',ev.time?'⏰ '+ev.time:'',ev.target?'👶 '+ev.target:'',ev.fee?'💰 '+ev.fee:''].filter(Boolean).join('<br>')}</p>${(ev.items||ev.notes||ev.extra)?`<div id="${evId}" style="display:none;"><div style="${detailBg}">${ev.items?'🎒 <strong>準備物：</strong><br>'+nl2br(ev.items)+'<br>':''}${ev.notes?'⚠️ <strong>注意事項：</strong><br>'+nl2br(ev.notes)+'<br>':''}${ev.extra?'📝 <strong>補足：</strong><br>'+nl2br(ev.extra):''}</div></div><button onclick="toggleEvDetail('${evId}',this)" style="font-size:11px;font-weight:700;color:${hasBg?'rgba(255,255,255,0.8)':'var(--text-light)'};background:none;border:none;cursor:pointer;padding:0;margin-bottom:6px;font-family:'Zen Maru Gothic',sans-serif;">▶ 詳細を見る</button>`:''}<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;"><button class="apply-link" onclick="openApply()" style="${hasBg?'border-color:white;color:white;background:rgba(255,255,255,0.15);':''}">✏️ 申し込む</button></div></div></div>`;
     }).join('')+(moreEvents?`<div style="text-align:center;margin-top:8px;"><a href="events-list.html" style="display:inline-flex;align-items:center;gap:6px;background:var(--green);color:white;border-radius:50px;padding:10px 24px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">📅 イベントをもっと見る →</a></div>`:'');
     initReveal();
   }catch(e){wrap.innerHTML='<p style="text-align:center;color:var(--text-light);padding:20px;font-size:13px;">読み込みに失敗しました</p>';}
@@ -753,3 +685,5 @@ function closeMenu(){
 </script>
 </body>
 </html>
+
+
