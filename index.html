@@ -130,6 +130,20 @@
     .event-details h4{font-size:15px;font-weight:700;margin-bottom:4px;}
     .event-details p{font-size:12px;color:var(--text-light);line-height:1.5;}
     .apply-link{margin-top:8px;display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--green);text-decoration:none;border:1.5px solid var(--green);border-radius:50px;padding:4px 12px;cursor:pointer;background:none;font-family:'Zen Maru Gothic',sans-serif;}
+
+    /* ここから追加：イベント詳細（白色のボックス）の横幅と見た目 */
+    #eventsList div[id^="detail-"] {
+  　　width: 100%;           /* 横幅いっぱい */
+  　　margin: 10px 0;        /* 上下に余白 */
+  　　padding: 16px;         /* ボックス内側の余白 */
+  　　background: white;     /* 背景を白にする */
+  　　border-radius: 12px;   /* 角を丸くする */
+  　　box-sizing: border-box; /* 余白を幅に含める設定 */
+  　　font-size: 13px;       /* 文字の大きさ */
+  　　color: var(--text);    /* 文字の色 */
+  　　line-height: 1.6;      /* 行間 */
+　　}
+    
     .apply-main-section{background:var(--green-pale);}
     .access-section{background:linear-gradient(160deg,#f5eadb,#ffe8c8);}
     .map-wrap{background:#d4edda;border-radius:14px;height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:40px;gap:8px;margin-bottom:20px;overflow:hidden;}
