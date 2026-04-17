@@ -122,28 +122,46 @@
     .feature-card h4{font-size:13px;font-weight:900;color:var(--green);margin-bottom:4px;}
     .feature-card p{font-size:11px;color:var(--text-light);line-height:1.4;}
     .events-section{background:white;}
-    .event-item {
+    /* 1. 全体の枠組み（横並びを許可しつつ、はみ出た分を下へ） */
+.event-item {
     background: var(--green-pale);
     border-radius: 14px;
     padding: 16px;
     display: flex;
     gap: 14px;
-    align-items: flex-start; /* 上揃えを維持 */
+    align-items: flex-start; /* 縦に伸びるのを防ぐ（上揃え） */
     margin-bottom: 12px;
-    flex-wrap: wrap;
- }
+    flex-wrap: wrap;         /* 詳細ボックスを下段に回すために必須 */
+}
 
- .event-date-block {
-    /* ↓ ここに2行追加します */
-    flex-shrink: 0;         /* 日付ブロックが細く潰されるのを防ぐ */
-    height: fit-content;    /* 中身の文字に合わせて高さを固定する（伸び防止） */
-    
-    min-width: 54px;
+/* 2. 日付ブロック（サイズを固定して、形が崩れないようにする） */
+.event-date-block {
+    flex-shrink: 0;          /* 横幅が潰れるのを防ぐ */
+    width: 54px;             /* 横幅を固定（元と同じサイズ） */
     text-align: center;
     border-radius: 12px;
     padding: 8px 4px;
     color: white;
- }
+}
+
+/* 3. 右側のタイトル・場所など（ズレを直す魔法の1行） */
+.event-details {
+    flex: 1;
+    min-width: 0;            /* ←これが重要！📍のズレや変な改行を直します */
+}
+
+/* 4. 白い詳細ボックス（左端から右端まで広がる） */
+#eventsList div[id^="detail-"] {
+    width: 100% !important;   /* 左の日付の下まで回り込ませて100%に */
+    margin-top: 12px;
+    padding: 16px;
+    background: white;
+    border-radius: 12px;
+    box-sizing: border-box;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+}
     .event-date-block .month{font-size:10px;font-weight:700;opacity:.85;}
     .event-date-block .day{font-size:28px;font-weight:900;line-height:1;}
     .event-date-block .weekday{font-size:11px;opacity:.85;}
