@@ -554,6 +554,10 @@ async function loadEvents(){
       　　　</div>
     　　　</div>` : ''}
 　　　</div>`;
+    }).join('')+(moreEvents?`<div style="text-align:center;margin-top:8px;"><a href="events-list.html" style="display:inline-flex;align-items:center;gap:6px;background:var(--green);color:white;border-radius:50px;padding:10px 24px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">📅 イベントをもっと見る →</a></div>`:'');
+    initReveal();
+  }catch(e){wrap.innerHTML='<p style="text-align:center;color:var(--text-light);padding:20px;font-size:13px;">読み込みに失敗しました</p>';}
+}
 
 // ===== DYNAMIC SEO =====
 async function loadLocalBizSchema(){try{const raw=await sbGetSetting('lb_jsonld');if(!raw)return;const old=document.getElementById('ld-localbiz');if(old)old.remove();const s=document.createElement('script');s.type='application/ld+json';s.id='ld-localbiz';s.textContent=raw;document.head.appendChild(s);}catch(e){}}
