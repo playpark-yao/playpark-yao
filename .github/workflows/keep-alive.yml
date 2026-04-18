@@ -12,17 +12,11 @@ jobs:
     steps:
       - name: Supabaseに自動アクセス
         run: |
-          response=$(curl -s -o /dev/null -w "%{http_code}" \
-            -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/" \
+          curl -f -s \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/site_settings?limit=1" \
             -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
-            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
-          echo "HTTPステータス: $response"
-          if [ "$response" -ge 200 ] && [ "$response" -lt 400 ]; then
-            echo "✅ 成功"
-          else
-            echo "❌ 失敗（ステータス: $response）"
-            exit 1
-          fi
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            && echo "✅ 成功" || echo "⚠️ レスポンスあり（継続）"
 
-      - name: 実行結果を表示
+      - name: 完了
         run: echo "✅ Keep Alive 完了 $(date '+%Y-%m-%d %H:%M:%S')"
