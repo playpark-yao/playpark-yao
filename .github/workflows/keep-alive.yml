@@ -1,0 +1,28 @@
+name: Supabase Keep Alive
+
+on:
+  schedule:
+    - cron: '0 0 * * 1,4'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Supabaseに自動アクセス
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
+          echo "HTTPステータス: $response"
+          if [ "$response" -ge 200 ] && [ "$response" -lt 400 ]; then
+            echo "✅ 成功"
+          else
+            echo "❌ 失敗（ステータス: $response）"
+            exit 1
+          fi
+
+      - name: 実行結果を表示
+        run: echo "✅ Keep Alive 完了 $(date '+%Y-%m-%d %H:%M:%S')"
