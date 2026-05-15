@@ -6,7 +6,7 @@
   <title>プレーパーク八尾 | 子どもの自然遊び・プレーパーク（大阪府八尾市）</title>
 
   <!-- SEO -->
-  <meta name="description" content="大阪府八尾市で開催する子どもの自然遊び・プレーパーク。どろんこ・焚き火・木登りなど、自由な遊びを通じて子どもたちの育ちを支える地域の居場所です。月2回開催・参加無料。">
+  <meta name="description" content="大阪府八尾市で開催する子どもの自然遊び・プレーパーク。どろんこ・焚き火・木登りなど、自由な遊びを通じて子どもたちの育ちを支える地域の居場所です。月1回開催。">
   <meta name="keywords" content="プレーパーク,八尾,八尾市,子ども,自然遊び,焚き火,木登り,どろんこ,子育て,遊び場,大阪,居場所">
   <meta name="author" content="プレーパーク八尾">
   <meta name="robots" content="index, follow">
@@ -24,7 +24,7 @@
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="プレーパーク八尾 | 子どもの自然遊び（大阪府八尾市）">
-  <meta name="twitter:description" content="大阪府八尾市で開催する子どもの自然遊び・プレーパーク。月2回開催・参加無料。">
+  <meta name="twitter:description" content="大阪府八尾市で開催する子どもの自然遊び・プレーパーク。月1回開催。">
 
   <!-- 構造化データ -->
   <script type="application/ld+json">
@@ -122,7 +122,15 @@
     .feature-card h4{font-size:13px;font-weight:900;color:var(--green);margin-bottom:4px;}
     .feature-card p{font-size:11px;color:var(--text-light);line-height:1.4;}
     .events-section{background:white;}
-    .event-item{background:var(--green-pale);border-radius:14px;padding:16px;display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;}
+    .event-item {
+    background: var(--green-pale);
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    flex-wrap: wrap; /* ← これが重要！ */
+    gap: 14px;
+    align-items: flex-start;
+}
     .event-date-block{min-width:54px;text-align:center;border-radius:12px;padding:8px 4px;color:white;}
     .event-date-block .month{font-size:10px;font-weight:700;opacity:.85;}
     .event-date-block .day{font-size:28px;font-weight:900;line-height:1;}
@@ -130,6 +138,20 @@
     .event-details h4{font-size:15px;font-weight:700;margin-bottom:4px;}
     .event-details p{font-size:12px;color:var(--text-light);line-height:1.5;}
     .apply-link{margin-top:8px;display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--green);text-decoration:none;border:1.5px solid var(--green);border-radius:50px;padding:4px 12px;cursor:pointer;background:none;font-family:'Zen Maru Gothic',sans-serif;}
+
+    /* ここから追加：イベント詳細（白色のボックス）の横幅と見た目 */
+    #eventsList div[id^="detail-"] {
+  　　width: 100%;           /* 横幅いっぱい */
+  　　margin: 10px 0;        /* 上下に余白 */
+  　　padding: 16px;         /* ボックス内側の余白 */
+  　　background: white;     /* 背景を白にする */
+  　　border-radius: 12px;   /* 角を丸くする */
+  　　box-sizing: border-box; /* 余白を幅に含める設定 */
+  　　font-size: 13px;       /* 文字の大きさ */
+  　　color: var(--text);    /* 文字の色 */
+  　　line-height: 1.6;      /* 行間 */
+　　}
+    
     .apply-main-section{background:var(--green-pale);}
     .access-section{background:linear-gradient(160deg,#f5eadb,#ffe8c8);}
     .map-wrap{background:#d4edda;border-radius:14px;height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:40px;gap:8px;margin-bottom:20px;overflow:hidden;}
@@ -161,11 +183,13 @@
 <body>
 
 <header>
-  <a href="#top" class="logo">
-    <div class="logo-icon">🌳</div>
+<a href="#top" class="logo" style="text-decoration: none; display: flex; align-items: center; gap: 10px;">
+    <div style="width: 52px; height: 52px; background: white; border: 2px solid var(--green-pale); border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+      <img src="icon-192.png" alt="森のプレーパーク八尾ロゴ" style="width: 100%; height: 100%; object-fit: cover;">
+    </div>
     <div class="logo-text">
-      <div class="main">プレーパーク八尾</div>
-      <div class="sub">PLAY PARK YAO</div>
+      <div class="main" style="font-weight: 900; color: var(--green); font-size: 1.1rem; line-height: 1.2;">森のプレーパーク八尾</div>
+      <div class="sub" style="font-size: 0.65rem; color: var(--text-light); letter-spacing: 0.05em; font-weight: 700;">PLAY PARK YAO</div>
     </div>
   </a>
   <div class="header-actions">
@@ -198,7 +222,7 @@
     <div class="next-event reveal" id="nextEventCard">
       <div class="event-label">📣 次回予告</div>
       <div id="nextEventContent"><div class="loading-spinner">⏳ 読み込み中...</div></div>
-      <div class="apply-status-wrap" id="applyStatusWrap"><div class="loading-spinner">⏳ 読み込み中...</div></div>
+      <div class="apply-status-wrap" id="applyStatusWrap"></div>
     </div>
   </section>
 
@@ -218,7 +242,7 @@
         <span style="font-size:22px;">📸</span>
         <div>
           <div style="color:white;font-weight:900;font-size:14px;">@playpark_yao</div>
-          <div style="color:rgba(255,255,255,.8);font-size:11px;">プレーパーク八尾 Instagram</div>
+          <div style="color:rgba(255,255,255,.8);font-size:11px;">森のプレーパーク八尾 Instagram</div>
         </div>
         <a href="https://www.instagram.com/playpark_yao" target="_blank" id="instaLink"
            style="margin-left:auto;background:white;color:#dc2743;border-radius:50px;padding:6px 14px;font-size:12px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">フォロー</a>
@@ -286,7 +310,7 @@
     <div id="accessInfoWrap">
       <div class="access-item reveal"><span class="ai">📍</span><div><h5>開催場所</h5><p>八尾市○○公園（大阪府八尾市）</p></div></div>
       <div class="access-item reveal"><span class="ai">🚃</span><div><h5>電車・バス</h5><p>近鉄「八尾駅」より徒歩15分</p></div></div>
-      <div class="access-item reveal"><span class="ai">🌧️</span><div><h5>雨天の場合</h5><p>前日18時までにLINE・HPにてお知らせします</p></div></div>
+      <div class="access-item reveal"><span class="ai">🌧️</span><div><h5>雨天の場合</h5><p>前日までにHPにてお知らせします</p></div></div>
     </div>
   </section>
 
@@ -311,14 +335,14 @@
 
   <section class="line-section" id="line">
     <div style="font-size:48px;margin-bottom:8px;">💬</div>
-    <h3>公式LINEで最新情報をGET</h3>
-    <p>次回予告・キャンセル情報・活動レポートを<br>LINEでお届けします！</p>
+    <h3>公式LINE</h3>
+    <p>質問・キャンセルなどはLINEからお願いします</p>
     <a href="https://lin.ee/XXXXXXX" target="_blank" class="btn-line-lg" id="lineMainBtn">💬 友だち追加（無料）</a>
   </section>
 </main>
 
 <footer>
-  <div class="footer-logo">🌳 プレーパーク八尾</div>
+  <div class="footer-logo">森のプレーパーク八尾</div>
   <p style="font-size:12px;opacity:.7;margin-bottom:12px;">子どもたちの自由な遊びを守る場所</p>
   <div class="footer-sns">
     <a href="#" class="sns-btn" id="footerInsta">📸</a><a href="#" class="sns-btn" id="footerLine">💬</a><a href="#" class="sns-btn" id="footerYoutube">🎬</a><a href="admin.html" class="sns-btn" style="opacity:0.3;font-size:16px;" title="管理者">⚙</a>
@@ -385,9 +409,16 @@ async function loadNextEvent(){
   if(!wrap)return;
   try{
     const raw=await sbGetSetting('events_list');
-    const defaults=[{month:'APR',day:12,weekday:'土',color:'var(--green)',name:'春の自然探検あそび',place:'信貴山・大竹緑地',time:'10:00〜14:00',target:'3歳〜小学生（保護者同伴）',fee:'無料'}];
+    const defaults=[{month:'APR',day:12,weekday:'土',color:'var(--green)',name:'春の自然探検あそび',place:'高安山・大竹緑地',time:'10:00〜14:00',target:'0歳〜小学生（保護者同伴）'}];
     const events=raw?JSON.parse(raw):defaults;
-    if(!events.length){wrap.innerHTML='<p style="opacity:.8;">イベント情報を準備中です</p>';return;}
+
+    // イベントがない場合（準備中の時）
+    if(!events.length){
+      // 文字は空（削除）にし、ボタンだけを表示する
+      wrap.innerHTML=`<p></p><a href="#events" style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;background:rgba(255,255,255,0.2);color:white;border:1.5px solid rgba(255,255,255,0.5);border-radius:50px;padding:8px 16px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">📋 詳細を見る →</a>`;
+      return;
+    }
+
     const ev=events[0];
     wrap.innerHTML=`<h3>${ev.name||''}</h3><div class="event-meta">${ev.month&&ev.day?`<span>📅 ${ev.month} ${ev.day}日（${ev.weekday||''}）${ev.time?'　'+ev.time:''}</span>`:''}</div><a href="#events" style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;background:rgba(255,255,255,0.2);color:white;border:1.5px solid rgba(255,255,255,0.5);border-radius:50px;padding:8px 16px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">📋 詳細を見る →</a>`;
     if(ev.bgImage&&card){card.style.backgroundImage=`url(${ev.bgImage})`;card.style.backgroundSize='cover';card.style.backgroundPosition='center';}
@@ -444,9 +475,27 @@ async function sbGet(table,filter=''){const r=await fetch(`${SUPABASE_URL}/rest/
 async function sbGetSetting(key){const rows=await sbGet('site_settings',`?key=eq.${key}&select=value`);return rows?.[0]?.value||null;}
 
 // ===== INIT =====
-document.addEventListener('DOMContentLoaded',async()=>{
-  // loadInstaPosts() を呼び出さないようにします
-await Promise.all([loadSlides(),loadAbout(),loadApply(),loadDynamicSeo(),loadDynamicPhotos(),loadLocalBizSchema(),loadServices(),/* loadInstaPosts(), */loadEvents(),loadNextEvent(),loadAccessInfo(),loadPwaIcon()]);
+document.addEventListener('DOMContentLoaded', async () => {
+  // すべての読み込みを同時に開始します
+  await Promise.all([
+    loadSlides(),
+    loadAbout(),
+    loadApply(),
+    loadDynamicSeo(),
+    loadDynamicPhotos(),
+    loadLocalBizSchema(),
+    loadServices(),
+    loadEvents(),
+    loadNextEvent(),
+    loadAccessInfo(),
+    loadPwaIcon()
+  ]);
+  
+  // 個別読み込み
+  loadNews();
+  loadVideos();
+  initReveal();
+});
 
 // ===== SERVICES =====
 async function loadServices(){
@@ -473,7 +522,7 @@ async function loadEvents(){
   const wrap=document.getElementById('eventsList');if(!wrap)return;
   try{
     const raw=await sbGetSetting('events_list');
-    const defaultEvents=[{month:'APR',day:12,weekday:'土',color:'var(--green)',name:'春の自然探検あそび',place:'信貴山・大竹緑地',time:'10:00〜14:00',target:'3歳〜小学生（保護者同伴）',fee:'無料'},{month:'APR',day:26,weekday:'土',color:'var(--sky-dark)',name:'焚き火と野外料理の日',place:'信貴山・大竹緑地',time:'10:30〜14:30',target:'5歳〜中学生',fee:'無料'}];
+    const defaultEvents=[{month:'APR',day:12,weekday:'土',color:'var(--green)',name:'春の自然探検あそび',place:'高安山・大竹緑地',time:'10:00〜14:00',target:'0歳〜小学生（保護者同伴）'},{month:'APR',day:26,weekday:'土',color:'var(--sky-dark)',name:'焚き火と野外料理の日',place:'高安山・大竹緑地',time:'10:30〜14:30',target:'5歳〜中学生'}];
     const events=raw?JSON.parse(raw):defaultEvents;
     if(!events.length){wrap.innerHTML='<p style="text-align:center;color:var(--text-light);padding:20px;font-size:13px;">イベント情報を準備中です</p>';return;}
     const showEvents=events.slice(0,3);const moreEvents=events.length>3;
@@ -482,8 +531,35 @@ async function loadEvents(){
       const textColor=hasBg?'color:white;':'';const subColor=hasBg?'color:rgba(255,255,255,0.85);':'color:var(--text-light);';
       const detailBg=hasBg?'background:rgba(255,255,255,0.15);border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.8;color:rgba(255,255,255,0.9);margin-top:8px;':'background:#f8fbf8;border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.8;color:var(--text-light);margin-top:8px;';
       const cardWrap=hasBg?`position:relative;overflow:hidden;background-image:url(${ev.bgImage});background-size:cover;background-position:center;`:'';
-      return `<div class="event-item reveal" style="${cardWrap}">${hasBg?'<div style="position:absolute;inset:0;background:rgba(0,0,0,0.45);border-radius:14px;z-index:0;"></div>':''}<div class="event-date-block" style="position:relative;z-index:1;background:${hasBg?'rgba(255,255,255,0.2)':ev.color||'var(--green)'};${hasBg?'border:1.5px solid rgba(255,255,255,0.5);':''}"><div class="month" style="${subColor}">${ev.month||''}</div><div class="day" style="${textColor}">${ev.day||''}</div><div class="weekday" style="${subColor}">${ev.weekday||''}</div></div><div class="event-details" style="position:relative;z-index:1;flex:1;"><h4 style="${textColor}">${ev.name||''}</h4><p style="${subColor}font-size:12px;line-height:1.7;margin-bottom:6px;">${[ev.place?'📍 '+ev.place:'',ev.time?'⏰ '+ev.time:'',ev.target?'👶 '+ev.target:'',ev.fee?'💰 '+ev.fee:''].filter(Boolean).join('<br>')}</p>${(ev.items||ev.notes||ev.extra)?`<div id="${evId}" style="display:none;"><div style="${detailBg}">${ev.items?'🎒 <strong>準備物：</strong><br>'+nl2br(ev.items)+'<br>':''}${ev.notes?'⚠️ <strong>注意事項：</strong><br>'+nl2br(ev.notes)+'<br>':''}${ev.extra?'📝 <strong>補足：</strong><br>'+nl2br(ev.extra):''}</div></div><button onclick="toggleEvDetail('${evId}',this)" style="font-size:11px;font-weight:700;color:${hasBg?'rgba(255,255,255,0.8)':'var(--text-light)'};background:none;border:none;cursor:pointer;padding:0;margin-bottom:6px;font-family:'Zen Maru Gothic',sans-serif;">▶ 詳細を見る</button>`:''}<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;"><button class="apply-link" onclick="openApply()" style="${hasBg?'border-color:white;color:white;background:rgba(255,255,255,0.15);':''}">✏️ 申し込む</button></div></div></div>`;
-    }).join('')+(moreEvents?`<div style="text-align:center;margin-top:8px;"><a href="events-list.html" style="display:inline-flex;align-items:center;gap:6px;background:var(--green);color:white;border-radius:50px;padding:10px 24px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">📅 イベントをもっと見る →</a></div>`:'');
+      return `<div class="event-item reveal" style="${cardWrap}">
+  ${hasBg?'<div style="position:absolute;inset:0;background:rgba(0,0,0,0.45);border-radius:14px;z-index:0;"></div>':''}
+  
+  <div class="event-date-block" style="position:relative;z-index:1;background:${hasBg?'rgba(255,255,255,0.2)':ev.color||'var(--green)'};${hasBg?'border:1.5px solid rgba(255,255,255,0.5);':''}">
+    <div class="month" style="${subColor}">${ev.month||''}</div>
+    <div class="day" style="${textColor}">${ev.day||''}</div>
+    <div class="weekday" style="${subColor}">${ev.weekday||''}</div>
+  </div>
+
+  <div class="event-details" style="position:relative;z-index:1;flex:1;min-width:0;">
+    <h4 style="${textColor}">${ev.name||''}</h4>
+    <p style="${subColor}font-size:12px;line-height:1.7;margin-bottom:6px;">
+      ${[ev.place?'📍 '+ev.place:'',ev.time?'⏰ '+ev.time:'',ev.target?'👶 '+ev.target:'',ev.fee?'💰 '+ev.fee:''].filter(Boolean).join('<br>')}
+    </p>
+    ${(ev.items||ev.notes||ev.extra)?`<button onclick="toggleEvDetail('${evId}',this)" style="font-size:11px;font-weight:700;color:${hasBg?'rgba(255,255,255,0.8)':'var(--text-light)'};background:none;border:none;cursor:pointer;padding:0;margin-bottom:6px;font-family:'Zen Maru Gothic',sans-serif;">▶ 詳細を見る</button>`:''}
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
+      <button class="apply-link" onclick="openApply()" style="${hasBg?'border-color:white;color:white;background:rgba(255,255,255,0.15);':''}">✏️ 申し込む</button>
+    </div>
+  </div>
+
+  ${(ev.items||ev.notes||ev.extra)?`
+    <div id="${evId}" style="display:none; width:100%; position:relative; z-index:1;">
+      <div style="${detailBg}">
+        ${ev.items?'🎒 <strong>準備物：</strong><br>'+nl2br(ev.items)+'<br>':''}
+        ${ev.notes?'⚠️ <strong>注意事項：</strong><br>'+nl2br(ev.notes)+'<br>':''}
+        ${ev.extra?'📝 <strong>補足：</strong><br>'+nl2br(ev.extra):''}
+      </div>
+    </div>`:''}
+</div>`;}).join('')+(moreEvents?`<div style="text-align:center;margin-top:8px;"><a href="events-list.html" style="display:inline-flex;align-items:center;gap:6px;background:var(--green);color:white;border-radius:50px;padding:10px 24px;font-size:13px;font-family:'Zen Maru Gothic',sans-serif;font-weight:700;text-decoration:none;">📅 イベントをもっと見る →</a></div>`:'');
     initReveal();
   }catch(e){wrap.innerHTML='<p style="text-align:center;color:var(--text-light);padding:20px;font-size:13px;">読み込みに失敗しました</p>';}
 }
@@ -510,7 +586,7 @@ async function loadDynamicPhotos(){
     const mapWrap=document.querySelector('.map-wrap');
     if(mapWrap){
       if(mapUrl){mapWrap.innerHTML=`<iframe src="${mapUrl}" allowfullscreen loading="lazy"></iframe>`;}
-      else if(mapPhoto){mapWrap.innerHTML=`<img src="${mapPhoto}" onclick="openLightbox('${mapPhoto}')" style="width:100%;height:100%;object-fit:cover;cursor:pointer;" title="タップで拡大">`;}
+      else if(mapPhoto){mapWrap.innerHTML=`<img src="${mapPhoto}" onclick="openLightbox('${mapPhoto}')" style="width:100%;height:auto; max-height:400px; object-fit:cover;cursor:pointer;" title="タップで拡大">`;}
     }
   }catch(e){}
 }
@@ -537,7 +613,7 @@ function slideNext(){goSlide(cur+1);}function slidePrev(){goSlide(cur-1);}
 // ===== ABOUT =====
 async function loadAbout(){
   const raw=await sbGetSetting('about_features');
-  const feats=raw?JSON.parse(raw):[{icon:'🌿',title:'自然の中で自由に',body:'どろんこ・焚き火・木登り。自分でやりたいことを見つける場所'},{icon:'👨‍👩‍👧',title:'親子で参加',body:'保護者も一緒に楽しめる。地域のみんなとつながれます'},{icon:'🏕️',title:'月2回開催',body:'定期的に開催。継続して通える地域の居場所です'},{icon:'💚',title:'無料・低料金',body:'誰でも参加しやすい料金設定。補助制度もあります'}];
+  const feats=raw?JSON.parse(raw):[{icon:'🌿',title:'自然の中で自由に',body:'どろんこ・焚き火・木登り。自分でやりたいことを見つける場所'},{icon:'👨‍👩‍👧',title:'親子で参加',body:'保護者も一緒に楽しめる。地域のみんなとつながれます'},{icon:'🏕️',title:'月1回開催',body:'定期的に開催。継続して通える地域の居場所です'},{icon:'💚',title:'低料金',body:'誰でも参加しやすい料金設定。'}];
   document.getElementById('featuresGrid').innerHTML=feats.map(f=>`<div class="feature-card reveal"><span class="feat-icon">${f.icon}</span><h4>${f.title}</h4><p>${f.body}</p></div>`).join('');
   initReveal();
 }
@@ -632,8 +708,16 @@ if('serviceWorker' in navigator){
     try{swRegistration=await navigator.serviceWorker.register('./sw.js');if(localStorage.getItem('pushSubscribed')==='1'){const b=document.getElementById('notifyBtn');if(b){b.textContent='🔔 通知ON ✅';b.style.background='var(--green)';}}}catch(e){console.log('SW error:',e);}
   });
 }
-document.getElementById('menuBtn').addEventListener('click',()=>{document.getElementById('navDrawer').classList.add('open');document.getElementById('navOverlay').classList.add('open');});
-function closeMenu(){document.getElementById('navDrawer').classList.remove('open');document.getElementById('navOverlay').classList.remove('open');}
+document.getElementById('menuBtn').addEventListener('click',()=>{
+  document.getElementById('navDrawer').classList.add('open');
+  document.getElementById('navOverlay').classList.add('open');
+});
+
+function closeMenu(){
+  document.getElementById('navDrawer').classList.remove('open');
+  document.getElementById('navOverlay').classList.remove('open');
+}
 </script>
 </body>
 </html>
+
